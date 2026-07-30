@@ -1,0 +1,62 @@
+
+body {
+	font-family: Helvetica;
+	font-size: 13px;
+	line-height: 20px;
+	color: #666;
+	background: #ffffff; 
+}
+
+h1, h2, h3 {
+	font-family: Helvetica;
+	font-weight: bold;
+	letter-spacing: -1px;
+	color: black;
+}
+	h1 { 
+		font-size: 24px;
+		text-align:left; 
+	}
+	
+	h2 { 
+		font-size: 18px;
+		text-align: right; 	
+		margin: 40px 0 0 0;
+	}
+		h2 a {
+			color: #000;
+		}
+	h3 {
+		font-size: 16px;
+		text-align: left;
+	}
+
+	h3.columnhead {
+		border-top: 1px solid #000;
+        }	
+
+	h3.columnminor {
+		border-top: 1px solid #000;
+		margin-top: 24px; 
+        }
+	
+	#header h3 {
+		border:none;
+		line-height:24px;
+		margin: 8px 0 0 0;
+		}
+		
+	#header h1, #header h2, #header h3 {
+		color: #aaaaaa; 
+		}
+		
+		#header {
+	/*	background-image: url('/web/20160529091153im_/http://www.cs.bath.ac.uk/~gam23/img/littlegreypatch.gif'); */
+		margin-bottom: 16px;
+		}
+
+#silly {
+background:rgb(273,73,47); 
+    color:white
+}
+ #silly:hover {background: black; color: black;}

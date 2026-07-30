@@ -1,0 +1,1330 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2025-03-10 Mon 20:55 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Taylor expansion for Imperative Programs</title>
+<meta name="author" content="Guy McCusker (joint work in progress with Pierre Clairambault and Lionel Vaux-Auclair)" />
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<style>pre.src {background-color: #303030; color: #e5e5e5;}</style>
+<link rel="stylesheet" type="text/css" href="mystyle.css" />
+<style type="text/css">body {color: white; background: black;}</style>
+<div style="display: none"> \(
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Bool}{\mathbb{B}}
+\newcommand{\Unit}{\mathbb{U}}
+\newcommand{\Locations}{\mathbb{L}}
+\newcommand{\sem}[1]{{[\![#1]\!]}}
+\newcommand{\bag}[1]{[#1]}
+\newcommand{\emptyword}{\varepsilon}
+\newcommand{\inddef}{::=}
+\newcommand{\eqdef}{:=}
+\newcommand{\rM}{m}
+\newcommand{\rN}{n}
+\newcommand{\vX}{x}
+\newcommand{\cC}{c}
+\newcommand{\cD}{d}
+\newcommand{\bN}{\vec{\rN}}
+\newcommand{\iI}{\intConst{i}}
+\newcommand{\lL}{l}
+\newcommand{\rBool}{\mathbf{B}}
+\newcommand{\rNat}{\mathbf{N}}
+\newcommand{\rUnit}{\mathbf{U}}
+\newcommand{\rFun}{\rightarrow}
+\newcommand{\rSkip}{\mathsf{skip}}
+\newcommand{\rTrue}{\mathsf{tt}}
+\newcommand{\rFalse}{\mathsf{ff}}
+\newcommand{\rZero}{\mathbf{0}}
+\newcommand{\bZero}{\vec{\rZero}}
+\newcommand{\intConst}[1]{\underline{#1}}
+\newcommand{\intZero}{\intConst{0}}
+\newcommand{\rConst}[1]{#1}
+\newcommand{\rVar}[1]{#1}
+\newcommand{\rLoc}[1]{#1}
+\newcommand{\rTerm}[1]{#1}
+\newcommand{\rTrace}[1]{#1}
+\newcommand{\rAbs}[2]{\lambda \rVar{#1}.\rTerm{#2}}
+\newcommand{\rApp}[2]{\rTerm{#1 #2}}
+\newcommand{\rVec}[1]{\rTerm{\vec{#1}}}
+\newcommand{\rSeq}{\mathbin{;}}
+\newcommand{\rAssign}[2]{\rLoc{#1}\mathbin{:=}\rTerm{#2}}
+\newcommand{\rGet}[1]{\rTerm{\mathop{!}#1}}
+\newcommand{\rAssert}[2]{\rTerm{\mathsf{assert}_{\rConst{#1}}{#2}}}
+\newcommand{\rPred}[1]{\rTerm{\mathsf{pred}~#1}}
+\newcommand{\rSucc}[1]{\rTerm{\mathsf{succ}~#1}}
+\newcommand{\rIter}[3]{\mathsf{do}_{#1}~{#2}~\mathsf{then}~{#3}}
+\newcommand{\opWrite}[1]{\mathsf{w}(#1)}
+\newcommand{\opRead}[1]{\mathsf{r}(#1)}
+\newcommand{\allValidTr}{\mathrm{Val}}
+\newcommand{\validTr}[2]{\mathrm{Val}(#1,#2)}
+\newcommand{\tracePr}[2]{#1\mathbin\upharpoonright#2}
+\newcommand{\rSub}[3]{{#1}\vbrackets{#2/#3}}
+\newcommand{\oSub}[3]{{#1}\vbraces{#2/#3}}
+\newcommand{\oRI}{\opRead{i}}
+\newcommand{\oWI}{\opWrite{i}}
+\newcommand{\oOp}{op}
+
+
+% Types
+\newcommand{\sType}[1]{#1}
+\newcommand{\sBool}{\mathbf{B}}
+\newcommand{\sNat}{\mathbf{N}}
+\newcommand{\sUnit}{\mathbf{U}}
+\newcommand{\sFun}{\rightarrow} % probably want something else
+\newcommand{\sGround}{\mathbf{X}}
+% Judgements
+\newcommand{\sTypes}[4]{#1\vdash^{#2} \sTerm{#3}:\sType{#4}}
+
+% Variables and Locations
+\newcommand{\sVars}{\mathbf{V}}
+\newcommand{\sLocs}{\mathbf{L}}
+
+% Terms
+\newcommand{\sTerm}[1]{#1}
+\newcommand{\sConst}[1]{#1}
+\newcommand{\sVar}[1]{#1}
+\newcommand{\sLoc}[1]{#1}
+\newcommand{\sSkip}{\sTerm{\mathsf{skip}}}
+\newcommand{\sTrue}{\sTerm{\mathsf{tt}}}
+\newcommand{\sFalse}{\sTerm{\mathsf{ff}}}
+\newcommand{\sAbs}[2]{\lambda \sVar{#1}.\sTerm{#2}}
+\newcommand{\sApp}[2]{\sTerm{#1 #2}}
+\newcommand{\sAssign}[2]{\sLoc{#1}:=\sTerm{#2}}
+\newcommand{\sDeref}[1]{\mathop{!}\sTerm{#1}}
+\newcommand{\sIf}[3]{\sTerm{\mathop{\mathsf{if}}#1\mathbin{\mathsf{then}}#2\mathbin{\mathsf{else}}#3}}
+\newcommand{\sWhile}[2]{\sTerm{\mathop{\mathsf{while}}#1\mathbin{\mathsf{do}}#2}}
+\newcommand{\sIsZero}[1]{\sTerm{\mathop{\mathsf{isZero}}#1}}
+\newcommand{\sSucc}[1]{\sTerm{\mathop{\mathsf{succ}}#1}}
+\newcommand{\sPred}[1]{\sTerm{\mathop{\mathsf{pred}}#1}}
+\newcommand{\sSeq}[2]{\sTerm{#1 \mathbin{;} #2}}
+\newcommand{\sNew}[2]{\sTerm{\mathop{\mathsf{new}}}#1\mathbin{\sTerm{\mathsf{in}}}\sTerm{#2}}
+
+\newcommand{\sReduces}{\longrightarrow}
+\newcommand{\sConfig}[2]{\sTerm{#1},#2}
+\newcommand{\sSubs}[3]{\sTerm{#1}[\sTerm{#3}/\sVar{#2}]}
+\newcommand{\sUpd}[3]{#1[#2\mapsto #3]}
+
+\newcommand{\statePr}[2]{#1\upharpoonright #2}
+
+\newcommand{\rFeed}[3]{#1\langle #3/#2\rangle}
+\newcommand{\trT}{t}
+
+\)</div>
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Taylor expansion for Imperative Programs</h1>
+<div id="outline-container-org8d1f733" class="outline-2">
+<h2 id="org8d1f733">Taylor Expansion of Lambda Terms</h2>
+<div class="outline-text-2" id="text-org8d1f733">
+<p>
+Ehrhard and Regnier [2003] introduced the <i>Differential Lambda Calculus</i> and with it the <i>Taylor expansion of lambda-terms</i>.
+</p>
+
+<p>
+\[
+P x = \sum_{n=0}^\infty \frac{1}{n!} (\mathsf{D}^n P \cdot x^n) 0
+\]
+</p>
+
+<p>
+\(\mathsf{D}^n P \cdot x^n\) represents a version of \(P\) <i>linearly applied</i> to \(n\) occurrences of its argument. 
+</p>
+
+<p>
+The <i>fully developed</i> Taylor expansion &#x2014; in which subterms are recursively expanded &#x2014; can be seen as an infinite sum of <i>linear</i> terms drawn from a <i>resource calculus</i>.
+</p>
+</div>
+<div id="outline-container-orgce66b43" class="outline-3">
+<h3 id="orgce66b43">Differential lambda-calculus</h3>
+<div class="outline-text-3" id="text-orgce66b43">
+<p>
+This has led to a great deal of further developments, including:
+</p>
+<ul class="org-ul">
+<li>abstract categorical theory of <i>differential</i> and <i>tangent</i> categories [Cockett et al]</li>
+<li>comparisons with G&ouml;del&rsquo;s <i>Dialectica</i> interpretation [Kerjean, Pedrot]</li>
+<li>redevelopment of the classical theory of lambda-calculus using Taylor expansion [Barbarossa, Manzonetto]</li>
+<li>the 2024 Alonzo Church Award!</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgc55153b" class="outline-3">
+<h3 id="orgc55153b">In this talk:</h3>
+<div class="outline-text-3" id="text-orgc55153b">
+<ul class="org-ul">
+<li>Some curiosity-driven exploration of resource calculus and Taylor expansion</li>
+<li>A new view on imperative programs</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-org903a5d1" class="outline-2">
+<h2 id="org903a5d1">Resource Calculus</h2>
+<div class="outline-text-2" id="text-org903a5d1">
+<p>
+The resource calculus replaces regular application of lambda-terms \(MN\) with a resource-sensitive application:
+</p>
+
+\begin{eqnarray*}
+ m, n & ::= & x \mid \lambda x.m \mid m \vec{n} \\
+  \vec{n} & ::= & [n_1, \ldots, n_k] \quad\quad \mbox{a finite multiset of terms}
+\end{eqnarray*}
+
+<p>
+Intuition: execution of \(MN\) is like execution of \(M[N,\ldots,N]\) for <i>some</i> number of copies of \(N\).
+</p>
+</div>
+<div id="outline-container-org61e218c" class="outline-3">
+<h3 id="org61e218c">Resource calculus reduction</h3>
+<div class="outline-text-3" id="text-org61e218c">
+<p>
+\[
+(\lambda x.m)\vec{n} \rightarrow_\beta m[\vec{n}/x]
+\]
+</p>
+
+<p>
+Linear substitution generates a <i>sum</i> of terms:
+</p>
+
+\begin{eqnarray*}
+  x[\vec{n}/x] & = & \left\{\begin{array}{rl}
+                           n & \text{if }\vec{n} = [n]\\
+                           \rZero& \text{otherwise}
+                     \end{array}\right. \\
+  y[\vec{n}/x] & = & \left\{\begin{array}{rl}
+                           y & \text{if }\vec{n} = []\\
+                           \rZero& \text{otherwise}
+                     \end{array}\right. \\
+  (\lambda y.m)[\vec{n}/x] & = & \lambda y.m[\vec{n}/x]\\
+  (m\vec{p})[\vec{n}/x] & = & \sum_{\vec n = \vec{n_1} \uplus \vec{n_2}} m[\vec{n_1}/x]\vec{p}[\vec{n_2}/x]\\
+  ([p_1,\ldots,p_k])[\vec{n}/x] & = & \sum_{\vec n = \vec{n_1} \uplus \ldots \uplus \vec{n_k}} [p_1[\vec{n_1}/x], \ldots, p_k[\vec{n_k}/x]]
+\end{eqnarray*}
+</div>
+</div>
+<div id="outline-container-orgf00ba71" class="outline-3">
+<h3 id="orgf00ba71">Resource calculus behaviour</h3>
+<div class="outline-text-3" id="text-orgf00ba71">
+<p>
+Reduction is <i>strongly normalizing</i> and (locally) <i>confluent</i>. 
+</p>
+
+<p>
+Terms can experience <i>starvation</i> e.g.
+\[
+ (\lambda x. x[x]) ([\lambda x.x[x], \lambda x.x [x]]) \rightarrow (\lambda x.x[x])(\lambda x.x[x]) \rightarrow \rZero
+\]
+</p>
+
+<p>
+<i>Surfeit</i> also destroys a term:
+\[
+ (\lambda x. x[x]) ([\lambda x.x[x], \lambda x.x [x], \lambda x.x [x]]) \rightarrow \rZero
+\]
+</p>
+
+<p>
+All syntactic operations can be extended to sums via <i>linearity</i>. This includes preservation of \(\rZero\), so any zero that appears destroys the whole term.
+</p>
+</div>
+</div>
+<div id="outline-container-orgf718f9f" class="outline-3">
+<h3 id="orgf718f9f">Taylor Expansion</h3>
+<div class="outline-text-3" id="text-orgf718f9f">
+<p>
+The Taylor expansion of a lambda-term is now readily defined:
+</p>
+
+\begin{eqnarray*}
+\mathbf{T}(x) & = & x \\
+\mathbf{T}(\lambda x. M) & = & \lambda x. \mathbf{T}(M)\\
+\mathbf{T}(MN) & = & \sum_k \mathbf{T}(M)[\mathbf{T}(N)^k]
+\end{eqnarray*}
+</div>
+</div>
+<div id="outline-container-org4b910d6" class="outline-3">
+<h3 id="org4b910d6">Key result: B&ouml;hm commutation</h3>
+<div class="outline-text-3" id="text-org4b910d6">
+<p>
+Ehrhard and Regnier demonstrated that normalised Taylor expansions coincide with Taylor-expanded B&ouml;hm trees:
+\[
+ NF(\mathbf{T}(M)) = \mathbf{T}(\mathbf{BT}(M)). 
+\]
+</p>
+
+<p>
+So equivalence of Taylor expansions is the same as equivalence of B&ouml;hm trees.
+</p>
+
+<p>
+Barbarossa and Manzonetto [2020] used this to redevelop several classical lambda-calculus results using Taylor expansions.
+</p>
+
+<p>
+Taylor expansion provides a powerful new approximation theory for the lambda-calculus. 
+</p>
+</div>
+</div>
+<div id="outline-container-org8eab9fd" class="outline-3">
+<h3 id="org8eab9fd">A semanticist&rsquo;s view: Relational Semantics</h3>
+<div class="outline-text-3" id="text-org8eab9fd">
+<p>
+These ideas grew from <i>quantitative semantics</i> of lambda-calculus and linear logic [Girard 1988].
+</p>
+
+<p>
+The simplest variant of quantitative semantics is the <i>relational model</i>:
+</p>
+<ul class="org-ul">
+<li>types = sets</li>
+<li>\(\sem{A\rightarrow B} = \mathbf{M}_f \sem{A} \times \sem{B}\)</li>
+<li>terms \(x:A \vdash M: B\) = relations between \(\mathbf{M}_f A\) and \(B\)</li>
+</ul>
+
+<p>
+E.g.
+\[
+\sem{x:\mathbf{Z} \vdash x - x:\mathbf{Z}} = \{ ([n,m], n-m) \mid n,m \in \mathbf{Z}\}. 
+\]
+</p>
+
+<p>
+In function application, the argument can provide multiple inputs to the function.
+</p>
+
+<p>
+For closed terms:
+\[
+ \sem{MN} = \{ b \mid ([a_1, \ldots, a_k], b) \in \sem{M}, a_1, \ldots, a_k \in \sem{N} \}.
+\]
+Note that all inputs are drawn from \(\sem{N}\) and the order does not matter. 
+</p>
+
+<p>
+cf. \(\mathbf{T}(M)[\mathbf{T}(N)^k]. \)
+</p>
+
+<p>
+Resource terms provide finer control over the contents of the input bags. 
+</p>
+
+<p>
+Interpretation of resource calculus terms:
+</p>
+<ul class="org-ul">
+<li>closed term of type \(A\) = subset of \(A\)</li>
+<li>bag of closed terms of type \(A\) = subset of \(\mathbf{M}_f A\).</li>
+</ul>
+
+<p>
+\[
+ \sem{[M_1, \ldots, M_n]} = \{ [m_1, \ldots, m_n] \mid m_i \in \sem{M_i} \}
+\]
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orgc5ada10" class="outline-2">
+<h2 id="orgc5ada10">A noncommutative resource calculus?</h2>
+<div class="outline-text-2" id="text-orgc5ada10">
+<p>
+A (natural?) question: can we adapt the resource calculus and associated theory to a <i>noncommutative</i> setting, replacing <i>multisets</i> with <i>lists</i>?
+</p>
+
+<p>
+(We remark that Ong and Tsukada [2017] introduced a &ldquo;rigid&rdquo; resource calculus &#x2014; using lists, but subject to permutations; we abandon the permutations and embrace the fixed ordering that results.)
+</p>
+
+<p>
+The syntax looks the same as before, thanks to the magic of overloading. 
+</p>
+
+\begin{eqnarray*}
+ m, n & ::= & x \mid \lambda x.m \mid m \vec{n} \\
+  \vec{n} & ::= & [n_1, \ldots, n_k] \quad\quad \mbox{a finite list of terms}
+\end{eqnarray*}
+
+<p>
+\[
+(\lambda x.m)\vec{n} \rightarrow_\beta m[\vec{n}/x]
+\]
+</p>
+
+<p>
+What is the substitution?
+</p>
+</div>
+<div id="outline-container-org5c083f7" class="outline-3">
+<h3 id="org5c083f7">Noncommutative substitution</h3>
+<div class="outline-text-3" id="text-org5c083f7">
+\begin{eqnarray*}
+  x[\vec{n}/x] & = & \left\{\begin{array}{rl}
+                           n & \text{if }\vec{n} = [n]\\
+                           \rZero& \text{otherwise}
+                     \end{array}\right. \\
+  y[\vec{n}/x] & = & \left\{\begin{array}{rl}
+                           y & \text{if }\vec{n} = []\\
+                           \rZero& \text{otherwise}
+                     \end{array}\right. \\
+  (\lambda y.m)[\vec{n}/x] & = & \lambda y.m[\vec{n}/x]\\
+  (m\vec{p})[\vec{n}/x] & = & \sum_{\vec n = \vec{n_1} \cdot \vec{n_2}} m[\vec{n_1}/x]\vec{p}[\vec{n_2}/x]\\
+  ([p_1,\ldots,p_k])[\vec{n}/x] & = & \sum_{\vec n = \vec{n_1} \cdot \ldots \cdot \vec{n_k}} [p_1[\vec{n_1}/x], \ldots, p_k[\vec{n_k}/x]]
+\end{eqnarray*}
+</div>
+</div>
+<div id="outline-container-orgd499ef7" class="outline-3">
+<h3 id="orgd499ef7">But confluence fails</h3>
+<div class="outline-text-3" id="text-orgd499ef7">
+<p>
+Confluence is immediately problematic:
+</p>
+
+
+
+<div id="orgb6141a6" class="figure">
+<p><img src="confluence.png" alt="confluence.png" />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org4b3c232" class="outline-3">
+<h3 id="org4b3c232">A heavy-handed solution</h3>
+<div class="outline-text-3" id="text-org4b3c232">
+<p>
+We can avoid this situation by restricting our syntax.
+</p>
+
+<p>
+A <i>linear</i> application rule
+</p>
+
+<p>
+\[
+ \frac{\Gamma \vdash m \quad \Delta \vdash n_i, i = 1, \ldots, k}{\Gamma, \Delta \vdash m[n_1, \ldots, n_k]}
+\]
+prevents variables from occurring in both function and argument.
+</p>
+
+<p>
+The resulting calculus is very boring: just linear lambda-calculus. But it is confluent!
+</p>
+</div>
+</div>
+<div id="outline-container-org008af0a" class="outline-3">
+<h3 id="org008af0a">Solution (more interesting)</h3>
+<div class="outline-text-3" id="text-org008af0a">
+<p>
+Perhaps we can restore some interesting computations to the calculus by adding a <i>sequencing</i> construct
+\[
+ m \rSeq n 
+\]
+with an <i>additive</i> style rule
+\[
+ \frac{\Gamma \vdash m \quad \Gamma \vdash n}{\Gamma \vdash m \rSeq n}
+\]
+</p>
+</div>
+</div>
+<div id="outline-container-org93f82bc" class="outline-3">
+<h3 id="org93f82bc">A noncommutative resource calculus</h3>
+<div class="outline-text-3" id="text-org93f82bc">
+<p>
+We can add <i>constants</i> and <i>conditionals</i> to obtain a noncommutative resource calculus. 
+</p>
+
+<p>
+\[
+  \rM, \rN \inddef \vX \mid \cC \mid \rAbs{\vX}{\rM} \mid
+  \rApp{\rM}{\bN} \mid \rM \rSeq \rN \mid \rAssert{\cC}{\rM}
+\]
+</p>
+</div>
+</div>
+<div id="outline-container-orge7940c1" class="outline-3">
+<h3 id="orge7940c1">Linear substitution</h3>
+<div class="outline-text-3" id="text-orge7940c1">
+<p>
+Linear substitution now works as expected.
+</p>
+
+<p>
+Multiple occurrences of a variable are always separated by \(\rSeq\) or occur in separate parts of a list: there is a well-defined order.
+</p>
+
+<p>
+Linear substitution respects this order.
+</p>
+</div>
+</div>
+<div id="outline-container-org44949e7" class="outline-3">
+<h3 id="org44949e7">Resource calculus reductions</h3>
+<div class="outline-text-3" id="text-org44949e7">
+<p>
+\[
+(\lambda x.m)\vec{n} \rightarrow_\beta m[\vec{n}/x]  \quad\quad \rSkip \rSeq m \rightarrow m
+\]
+</p>
+
+<p>
+\[
+\frac{m \rightarrow m'}{m \rSeq n \rightarrow m' \rSeq n} \quad\quad
+\frac{n \rightarrow n'}{m \rSeq n \rightarrow m \rSeq n'} \quad\quad
+\]
+</p>
+
+<p>
+\[
+ \rAssert{\cC}{\cC} \rightarrow \rSkip \quad\quad \rAssert{\cC}{\cD} \rightarrow \rZero
+\]
+</p>
+
+<p>
+Note that we can encode conditionals via assertions and formal sums:
+</p>
+
+<p>
+\[
+\rAssert{\rTrue}{B} \rSeq M + \rAssert{\rFalse}{B}\rSeq N
+\]
+behaves like if-then-else. 
+</p>
+
+<p>
+This looks promising&#x2026; What could it be good for?
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org35dfc43" class="outline-2">
+<h2 id="org35dfc43">Relational Semantics of Imperative Programs</h2>
+<div class="outline-text-2" id="text-org35dfc43">
+<p>
+Reddy [1996] pioneered a relational semantics of <i>imperative</i> programs.
+</p>
+
+<p>
+His model replaces the multisets of the familiar relational model of linear logic with lists: a non-commutative relational semantics.
+</p>
+</div>
+<div id="outline-container-orgf697eba" class="outline-3">
+<h3 id="orgf697eba">Syntactic Control of Interference</h3>
+<div class="outline-text-3" id="text-orgf697eba">
+<p>
+Reynolds [1981] introduced <i>syntactic control of interference</i> (SCI) as an approach to control of <i>aliasing</i> in imperative programming.
+</p>
+
+<p>
+Key idea: functions and their arguments should not share identifiers.
+</p>
+
+<p>
+Reynolds used this property to ensure that distinct identifiers never <i>interfere</i>; this enables cleaner reasoning about programs.
+</p>
+
+<p>
+Nowadays we see this as a <i>linear (or affine) type system</i>.
+</p>
+
+<p>
+SCI is a restricted <i>Idealized Algol</i>. It has an important place in the development of programming language theory.
+</p>
+
+<ul class="org-ul">
+<li>O&rsquo;Hearn&rsquo;s PhD thesis on SCI led him to notice the phenomenon <i>doubly-closed categories</i></li>
+<li>&#x2026; which led to Bunched Implications</li>
+<li>&#x2026; and hence to Separation Logic &#x2014; with Reynolds.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org050a890" class="outline-3">
+<h3 id="org050a890">Basic SCI</h3>
+<div class="outline-text-3" id="text-org050a890">
+<p>
+Basic SCI is a higher-order imperative programming language with local variables and an affine type system.
+</p>
+
+<p>
+Types:
+</p>
+\begin{eqnarray*}
+  \sGround & \inddef & \sUnit \mid\sBool \mid \sNat  \quad\quad \text{unit, Booleans, natural numbers}\\ 
+  \sType{A} & \inddef &\sGround  \mid \sType{A} \sFun \sType{B}
+\end{eqnarray*}
+
+<p>
+Constants:
+\[
+  \sConst{k} \inddef \sSkip \mid \sTrue \mid \sFalse \mid \sConst{i} 
+\]
+</p>
+
+<p>
+Syntax:
+</p>
+
+\begin{eqnarray*}
+  M, N, P  & \inddef &  x \mid \sAbs{x^A}{M} \mid \sApp{M}{N} \\
+  &  \mid  &  \sAssign{l}{M} \mid  \sDeref{l} \mid \sSeq{M}{N} \mid \sWhile{M}{N}  \mid \sNew{l}{M} \\
+  & \mid &  \sConst{k} \mid \sIsZero{M} \mid \sPred{M} \mid \sSucc{M} \mid \sIf{M}{N}{P} \\
+\end{eqnarray*}
+
+<p>
+\(l\) ranges over an infinite set of <i>locations</i>.
+</p>
+
+<p>
+Note that there is no recursion: a function cannot call itself because
+\[
+ f(f(\ldots)) 
+\]
+violates the linearity constraint.
+</p>
+
+<p>
+Type judgements \( \sTypes{\Gamma}{L}{M}{A} \):
+</p>
+
+<p>
+\[
+\frac{\sTypes{\Gamma}{L}{M}{A \sFun B} \quad\quad  \sTypes{\Delta}{L'}{N}{A}} {\sTypes{\Gamma,\Delta}{L,L'}{\sApp{M}{N}}{B}}
+\]
+</p>
+
+<p>
+\[
+\frac{\sTypes{\Gamma}{L}{M}{\sUnit} \quad\quad \sTypes{\Gamma}{L}{N}{\sGround}}{\sTypes{\Gamma}{L}{\sSeq{M}{N}}{\sGround}}
+\]
+</p>
+
+<p>
+\[
+\frac{\sTypes{\Gamma}{L,l}{M}{\sGround}}
+{\sTypes{\Gamma}{L}{\sNew{l}{M}}{\sGround}}
+\]
+</p>
+</div>
+</div>
+<div id="outline-container-orgdeeb0e5" class="outline-3">
+<h3 id="orgdeeb0e5">Operational semantics</h3>
+<div class="outline-text-3" id="text-orgdeeb0e5">
+<p>
+This language can be given a small-step operational semantics:
+\[
+ M, \sigma \rightarrow M', \sigma'
+\]
+where \(\sigma, \sigma'\) are <i>states</i>: functions from locations to integers.
+</p>
+
+<p>
+Key reductions:
+\[
+ (\lambda x.M)N, \sigma \rightarrow M[N/x], \sigma
+\]
+</p>
+
+<p>
+\[
+\sAssign{l}{i}, \sigma \rightarrow \sSkip,\sUpd{\sigma}{l}{i}
+\]
+</p>
+
+<p>
+\[
+\sDeref{l},\sigma \rightarrow \sigma(i), \sigma
+\]
+</p>
+
+<p>
+\[
+\sNew{l}{M}, \sigma \rightarrow M, \sUpd{\sigma}{l}{0}
+\]
+</p>
+
+<p>
+In the last case the set of available locations grows to include \(l\). 
+</p>
+</div>
+</div>
+<div id="outline-container-org1c6955e" class="outline-3">
+<h3 id="org1c6955e">Reddy&rsquo;s model</h3>
+<div class="outline-text-3" id="text-org1c6955e">
+<ul class="org-ul">
+<li>Types = sets</li>
+<li>\(\sem{A \rightarrow B} = \sem{A}^* \times \sem{B}\)</li>
+<li>Terms \(x:A \vdash M:B\) = relations between \(A^*\) and \(B\)</li>
+</ul>
+
+<p>
+The <i>unit type</i> \(\sUnit\) is modelled as a singleton set \(\{*\}\).
+</p>
+
+<p>
+Locations are treated as variables of a special type \(\sVars\), modelled as the set of possible <i>read</i> and <i>write</i> actions. 
+\[
+ \{ \oRI \mid i \in \sNat \} \cup   \{ \oWI \mid i \in \sNat \}
+\]
+</p>
+
+<p>
+The term
+</p>
+
+<p>
+\[f:\sUnit \rightarrow \sUnit \vdash^{l} \sSeq{f(\sAssign{l}{\sDeref{l}+1})}{\sDeref{l}}: \sNat
+\]
+is interpreted as a relation with entries such as
+</p>
+
+\begin{array}{ccccc}
+ \sUnit & \rightarrow & \sUnit, & \sVars & \vdash & \sNat \\
+ f: [([**], & & *)],  & l: [\opRead{i},\opWrite{i+1},\opRead{j},\opWrite{j+1},\opRead{k}], & & k 
+\end{array}
+</div>
+</div>
+<div id="outline-container-org9733447" class="outline-3">
+<h3 id="org9733447">Semantics of application</h3>
+<div class="outline-text-3" id="text-org9733447">
+<p>
+As in the relational model of lambda-calculus, the semantics of application of closed terms is easy to describe:
+\[
+ \sem{MN} = \{ b \mid ([a_1, \ldots, a_k], b) \in \sem{M}, a_1, \ldots, a_k \in \sem{N} \}.
+\]
+</p>
+</div>
+</div>
+<div id="outline-container-orga1961fb" class="outline-3">
+<h3 id="orga1961fb">Semantics of local variables</h3>
+<div class="outline-text-3" id="text-orga1961fb">
+<p>
+Semantics of local variable application is similar!
+</p>
+
+<p>
+Given
+\[
+\Gamma \vdash^{l} M:\sGround
+\]
+we have
+\[
+\sem{\vdash^{\emptyset}\sNew{l}{M}} = \{ (s,b) \mid (s,t,b) \in \sem{M}, t\text{ is a valid state trace}\}
+\]
+</p>
+
+<p>
+Recalling our example:
+</p>
+\begin{array}{ccccc}
+ \sUnit & \rightarrow & \sUnit, & \sVars & \vdash & \sNat \\
+ f: [([**], & & *)],  & l: [\opRead{i},\opWrite{i+1},\opRead{j},\opWrite{j+1},\opRead{k}], & & k 
+\end{array}
+
+<p>
+After allocation of \(l\) as a local variable, the only elements in play are those with valid state traces
+</p>
+\begin{array}{ccccc}
+ \sUnit & \rightarrow & \sUnit, & \sVars & \vdash & \sNat \\
+ f: [([**], & & *)],  & l: [\opRead{0},\opWrite{1},\opRead{1},\opWrite{2},\opRead{k}], & & 2 
+\end{array}
+<p>
+and the final semantics is
+</p>
+\begin{array}{ccccc}
+ \sUnit & \rightarrow & \sUnit & \vdash & \sNat \\
+ f: [([**], & & *)] & & 2 
+\end{array}
+</div>
+</div>
+<div id="outline-container-org309c425" class="outline-3">
+<h3 id="org309c425">A fully abstract relational model</h3>
+<div class="outline-text-3" id="text-org309c425">
+<p>
+Reddy [1996] described a refined version of this model using the technology of <i>coherence spaces</i>.
+</p>
+
+<p>
+It was later shown [M 2002] that this model is <i>fully abstract</i> for SCI: equality in the model coincides with operational equivalence. 
+</p>
+</div>
+</div>
+<div id="outline-container-org8b9831c" class="outline-3">
+<h3 id="org8b9831c">Imperative  Taylor expansion?</h3>
+<div class="outline-text-3" id="text-org8b9831c">
+<p>
+We&rsquo;ll now see how to extend our noncommutative resource calculus to incorporate the ideas from Reddy&rsquo;s model.
+</p>
+
+<p>
+The corresponding &ldquo;Taylor expansion&rdquo; will map SCI terms to sums of resource terms, following the ideas of Reddy&rsquo;s interpretation.
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org095a250" class="outline-2">
+<h2 id="org095a250">Imperative resource terms</h2>
+<div class="outline-text-2" id="text-org095a250">
+<p>
+Resource calculus (reminder):
+\[
+  \rM, \rN \inddef \vX \mid \cC \mid \rAbs{\vX}{\rM} \mid
+  \rApp{\rM}{\bN} \mid \rM \rSeq \rN \mid \rAssert{\cC}{\rM}
+\]
+</p>
+
+<p>
+To this we add assignment and lookup operations:
+\[
+  \rM, \rN \inddef \ldots \mid \rGet{\lL} \mid \rAssign{\lL}{i} 
+\]
+</p>
+
+<p>
+Note that the more general \(\rAssign{\lL}{\rM}\) can be encoded via sums and asserts as
+\[
+ \sum_i \rAssert{i}{\rM}\rSeq \rAssign{\lL}{i}
+\]
+</p>
+</div>
+<div id="outline-container-orgeacede5" class="outline-3">
+<h3 id="orgeacede5">Imperative resource reductions</h3>
+<div class="outline-text-3" id="text-orgeacede5">
+<p>
+We add no more reductions to the calculus!
+</p>
+
+<p>
+The calculus is <i>strongly normalizing</i> and (locally) confluent.
+</p>
+
+<p>
+So how does it model state? Via the Taylor expansion of local variables. 
+</p>
+</div>
+</div>
+<div id="outline-container-org62521ac" class="outline-3">
+<h3 id="org62521ac">Semantics of local variables</h3>
+<div class="outline-text-3" id="text-org62521ac">
+<p>
+Following Reddy&rsquo;s semantics, we define an operation of linear substitution of state-events into terms.
+</p>
+
+<p>
+State events are sequences of operations:
+\[
+  \oOp \inddef \oWI \mid \oRI
+\]
+</p>
+
+<p>
+Given a <i>trace</i> \(\trT\) &#x2014; a sequence of these operations &#x2014; and a location \(l\), we define the substitution
+\[
+ \rFeed{m}{\lL}{\trT}
+\]
+on resource terms.
+</p>
+
+<p>
+This substitution represents the result of term \(m\), executed in an environment where location \(l\) insists on performing the trace \(\trT\).
+</p>
+
+<p>
+(Compare this to a linear application to a fixed list of inputs.)
+</p>
+
+<p>
+The key cases:
+\[
+  \rFeed{(\rGet{\lL'})}{\lL}{\trT}\eqdef\left\{\begin{array}{rl}
+    i&\text{if $\trT=\oRI$ and $\lL=\lL'$}    \\
+    \rGet{\lL'}&\text{if $\trT=\emptyword$ and $\lL\not=\lL'$}    \\
+    \rZero&\text{otherwise}
+  \end{array}\right.
+\]
+</p>
+
+<p>
+\[
+  \rFeed{(\rAssign{\lL'}{i})}{\lL}{\trT}\eqdef\left\{\begin{array}{rl}
+    \rSkip&\text{if $\trT=\oWI$ and $\lL=\lL'$}  \\
+    \rAssign{\lL'}{i}&\text{if $\trT=\emptyword$ and $\lL\not=\lL'$} \\
+    \rZero&\text{otherwise}
+  \end{array}\right.
+\]
+</p>
+
+<p>
+\[
+  \rFeed{\cC}{\lL}{\trT}\eqdef\left\{\begin{array}{rl}
+    \cC&\text{if $\trT=\emptyword$} \\
+    \rZero&\text{otherwise}
+\end{array}\right.
+\]
+\[
+  \rFeed{x}{\lL}{\trT}\eqdef\left\{\begin{array}{rl}
+    x&\text{if $\trT=\emptyword$}    \\
+    \rZero&\text{otherwise}
+  \end{array}\right.
+\]
+\[
+  \rFeed{(\rAbs{\vX}{\rM})}{\lL}{\trT}\eqdef \rAbs{\vX}{\rFeed{\rM}{\lL}{\trT}}
+\]
+\[  
+  \rFeed{(\rApp{\rM}{\bN})}{\lL}{\trT}\eqdef\left\{\begin{array}{rl}
+    \rApp{\rFeed{\rM}{\lL}{\trT}}{\bN}&\text{if $\lL$ is a location of $\rM$} \\
+    \rApp{\rM}{\rFeed{\bN}{\lL}{\trT}}&\text{if $\lL$ is a location of $\rN$}
+  \end{array}\right.
+\]
+\[
+  \rFeed{\bag{\rM_1,\ldots,\rM_k}}{\lL}{\trT}\eqdef
+  \sum_{\trT=t_1\cdots t_k}\bag{\rFeed{\rM_1}{\lL}{t_1},\dotsc,\rFeed{\rM_k}{\lL}{t_k}}
+\]
+\[
+  \rFeed{(\rM\rSeq \rN)}{\lL}{\trT}\eqdef
+  \sum_{\trT=t_1 t_2}\rFeed{\rM}{\lL}{t_1}\rSeq \rFeed{\rN}{\lL}{t_2}
+\]
+\[
+  \rFeed{(\rAssert{\cC}{\rM})}{\lL}{\trT}\eqdef \rAssert{\cC}{\rFeed{\rM}{\lL}{\trT}}
+\]
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org3c53cd1" class="outline-2">
+<h2 id="org3c53cd1">Imperative Taylor Expansion</h2>
+<div class="outline-text-2" id="text-org3c53cd1">
+<p>
+We are ready to give the Taylor expansion of SCI terms.
+</p>
+
+<p>
+A term \(M\) will be taken to a formal sum \(\mathbf{T}(M)\) of resource terms.
+</p>
+
+<p>
+For the lambda-calculus part, the definition appears identical to Ehrhard and Regnier&rsquo;s:
+</p>
+\begin{eqnarray*}
+\mathbf{T}(x) & = & x \\
+\mathbf{T}(\lambda x. M) & = & \lambda x. \mathbf{T}(M)\\
+\mathbf{T}(MN) & = & \sum_k \mathbf{T}(M)[\mathbf{T}(N)^k]
+\end{eqnarray*}
+
+<p>
+It is <i>not</i> the same &#x2014; it is much dumber!
+</p>
+<ul class="org-ul">
+<li>we work with lists rather than multisets</li>
+<li>in the application \(MN\) there are no identifiers in common between \(M\) and \(N\)</li>
+</ul>
+
+<p>
+Arithmetic and conditionals are handled using sequencing, assert, and sums:
+</p>
+\begin{eqnarray*}
+\mathbf{T}(\sPred{M}) & = & \rAssert{0}{\mathbf{T}(M)}\rSeq 0 \\ & + & 
+\sum_{i\in\N}\rAssert{i+1}{\mathbf{T}(M)}\rSeq i\\
+\mathbf{T}(\sSucc{M})& = & 
+  \sum_{i\in\N}\rAssert{i}{\mathbf{T}(M)}\rSeq i+1 \\
+\mathbf{T}(\sIf{M}{N}{P}) & = &
+  \rAssert{\rTrue}{\mathbf{T}(M)}\rSeq\mathbf{T}(N) \\ & + & 
+  \rAssert{\rFalse}{\mathbf{T}(M)}\rSeq\mathbf{T}(P)
+\end{eqnarray*}
+
+<p>
+Basic imperative constructs:
+</p>
+\begin{eqnarray*}
+\mathbf{T}(\sSeq{M}{N}) & = & \mathbf{T}(M)\rSeq\mathbf{T}(N)\\
+\mathbf{T}(\rGet{l}) & = & \rGet{l}\\
+\mathbf{T}(\sAssign{l}{M}) & = &
+  \sum_{i\in\N}\rAssert{i}{\mathbf{T}(M)}\rSeq\rAssign{l}{i}
+\end{eqnarray*}
+
+<p>
+Variable allocation is expanded via substitution of all possible valid traces:
+\[
+  \mathbf{T}(\sNew{\lL}{M}) = \sum_{\trT\in\allValidTr} \rFeed{\mathbf{T}(M)}{\lL}{\trT}. 
+\]
+</p>
+</div>
+</div>
+<div id="outline-container-org615a48d" class="outline-2">
+<h2 id="org615a48d">Example</h2>
+<div class="outline-text-2" id="text-org615a48d">
+<p>
+Consider the term
+\[
+ f: \sUnit \rightarrow \sUnit \vdash^l \sSeq{f(\sAssign{l}{\sDeref{l}+1})}{\sDeref{l}}:\sNat
+\]
+</p>
+
+<p>
+The first terms of its Taylor expansion are
+</p>
+\begin{array}{cl}
+& &  f([])\rSeq \rGet{l} \\
+& + &  \sum_i f[\rAssert{i}{\rGet{l}}\rSeq \rAssign{l}{i+1}] \rSeq \rGet{l}\\
+& + &  \sum_{i,j} f[\rAssert{i}{\rGet{l}}\rSeq \rAssign{l}{i+1}, \rAssert{j}{\rGet{l}}\rSeq \rAssign{l}{j+1}] \rSeq \rGet{l}\\
+& + & \ldots 
+\end{array}
+
+<p>
+(after simplifying some assertions.)
+</p>
+
+<p>
+To compute the expansion of
+\[
+ f: \sUnit \rightarrow \sUnit \vdash^{\emptyset} \sNew{l}{\sSeq{f(\sAssign{l}{\sDeref{l}+1})}{\sDeref{l}}}:\sNat
+\]
+we perform all valid trace substitutions, and discard any \(\rZero\)s that arise. 
+</p>
+
+<p>
+When \(f\) does not invoke its argument, the location is left unchanged:
+\[
+\sum_{\trT\in\allValidTr} \rFeed{(f([])\rSeq \rGet{l})}{l}{\trT} = \sum_{t = \opRead{0}} \rFeed{(f([])\rSeq \rGet{l})}{l}{\trT} = 
+f[]; 0 
+\]
+</p>
+
+<p>
+When \(f\) invokes its argument once, the location is incremented once:
+\[
+\sum_{\trT\in\allValidTr} \rFeed{(\sum_i f[\rAssert{i}{\rGet{l}}\rSeq \rAssign{l}{i+1}] \rSeq \rGet{l})}{l}{\trT} =
+\sum_i f[\rAssert{i}{0}\rSeq\rSkip]\rSeq 1
+\]
+</p>
+
+<p>
+Discarding failed asserts, this is
+\[
+f[\rAssert{0}{0}\rSeq\rSkip]\rSeq 1
+\]
+which reduces to
+\[
+f[\rSkip]\rSeq 1
+\]
+</p>
+
+<p>
+When \(f\) invokes its argument once, the location is incremented twice:
+</p>
+\begin{eqnarray*}
+& & \sum_{\trT\in\allValidTr} \rFeed{(\sum_{i,j} f[\rAssert{i}{\rGet{l}}\rSeq \rAssign{l}{i+1},
+\rAssert{j}{\rGet{l}}\rSeq \rAssign{l}{j+1}] \rSeq \rGet{l})}{l}{\trT} \\
+& = &
+\sum_{\trT\in\allValidTr} \sum_{i,j} f[\rAssert{i}{0}\rSeq \rSkip,
+\rAssert{j}{i+1}\rSeq \rSkip] \rSeq j+1 \\
+\end{eqnarray*}
+
+<p>
+This is equal to
+\[
+f[\rAssert{0}{0}\rSeq \rSkip, \rAssert{1}{1} \rSeq\rSkip] \rSeq 2
+\]
+which reduces to
+\[
+f[\rSkip,\rSkip]\rSeq 2
+\]
+</p>
+</div>
+</div>
+<div id="outline-container-orga82ab64" class="outline-2">
+<h2 id="orga82ab64">Soundness</h2>
+<div class="outline-text-2" id="text-orga82ab64">
+<p>
+The Taylor expansion accurately reflects the operational semantics of SCI:
+</p>
+<div class="theorem" id="org13e3a36">
+<p>
+If \(M, \sigma \rightarrow M', \sigma'\) then for every \(t' \in \validTr{\sigma'}{-}\) and every
+\(m' \in \mathbf{T}(M')\), there is \(m \in \mathbf{T}(M)\) and \(t \in \validTr{\sigma}{-}\) such that
+\[
+NF(\rFeed{m}{L}{t}) = NF(\rFeed{m'}{L'}{t'}). 
+\]
+</p>
+
+</div>
+
+<p>
+This is proved by straightforward induction.
+</p>
+</div>
+<div id="outline-container-org75d6008" class="outline-3">
+<h3 id="org75d6008">Adequacy</h3>
+<div class="outline-text-3" id="text-org75d6008">
+<p>
+We can prove an adequacy result: if the Taylor expansion of a closed program is non-zero, the program terminates.
+</p>
+<div class="theorem" id="org982ba95">
+<p>
+For a program \(\vdash^{\emptyset}M:\sUnit\), if \(NF(\mathbf{T}(M)) \not = \rZero\) then \(M, \sigma \rightarrow^* \sSkip, \sigma'\), where \(\sigma\) is the unique state on no locations and \(\sigma'\) is some state. 
+</p>
+
+</div>
+
+<p>
+The proof is a typical logical relations argument. 
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org3f38b01" class="outline-2">
+<h2 id="org3f38b01">Summary</h2>
+<div class="outline-text-2" id="text-org3f38b01">
+<p>
+We introduced a noncommutative <i>resource calculus</i> which serves as a target of a Taylor expansion of imperative programs.
+</p>
+
+<p>
+The calculus is confluent, strongly normalizing, and has no reduction rules for handling imperative behaviour!
+</p>
+
+<p>
+Normal forms of the calculus can be seen as basic bricks of <i>approximants</i> to SCI programs.
+</p>
+<ul class="org-ul">
+<li>not discussed: eta-long normal forms denote single elements of Reddy&rsquo;s relational model</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org1f04900" class="outline-2">
+<h2 id="org1f04900">Directions</h2>
+<div class="outline-text-2" id="text-org1f04900">
+<ul class="org-ul">
+<li>Can we characterise Taylor equivalence? What does it mean for \(NF(\mathbf{T}(M)) = NF(\mathbf{T}(N))\)?</li>
+<li>Passive types: Reynolds&rsquo;s SCI allowed sharing of identifiers bound to phrases which do not write to the store. Can we develop a hybrid list/multiset resource calculus to incorporate these?</li>
+<li>Beyond SCI: can we handle full Idealized Algol similarly? Game semantics provides models of Algol, and the models are differential categories.</li>
+<li>Would like to understand the relationship between this account of state and others e.g. algebraic effects</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Guy McCusker (joint work in progress with Pierre Clairambault and Lionel Vaux-Auclair)</p>
+<p class="date">Created: 2025-03-10 Mon 20:55</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

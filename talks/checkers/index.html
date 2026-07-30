@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Interaction Improvement</title>
+<meta name="author" content="Guy McCusker"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="./reveal.js/dist/reveal.css"/>
+
+<link rel="stylesheet" href="./reveal.js/dist/theme/serif.css" id="theme"/>
+<link rel="stylesheet" href="./reveal.js/plugin/highlight/zenburn.css"/>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<div style="display: none"> \(
+\newcommand{\sem}[1]{{[\![#1]\!]}}
+\newcommand{\obs}[1]{\mathsf{obs}(#1)}
+\newcommand{\lectx}{\sqsubseteq^{\mathrm{ctx}}}
+\newcommand{\leden}{\sqsubseteq^{\mathrm{den}}}
+\newcommand{\leimp}{\sqsubseteq^{\mathrm{imp}}}
+\newcommand{\lepwc}{\sqsubseteq^{\mathrm{pwc}}}
+\newcommand{\BT}[1]{\mathsf{BT}(#1)}
+\newcommand{\interact}{\bullet\circ}
+\newcommand{\intred}{\stackrel{\interact}{\rightarrow}}
+\)</div>
+<link rel="stylesheet" type="text/css" href="mystyle.css" />
+<style type="text/css">body {color: black; background: white;}</style>
+<style type="text/css">pre {background: #ccdddd;}</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide" data-background=""./checkers_calc_highdef.jpg"">
+<h2>Interaction Improvement</h2><h4>Guy McCusker</h4><h5>joint work with Adrienne Lancelot, Giulio Manzonetto, Gabriele Vanoni <br/> Birmingham, May 2026</h5>
+</section>
+<section>
+<section id="slide-1">
+<h2 id="1"><span class="section-number-2">1.</span> Denotational semantics and observations</h2>
+<p>
+This talk is about characterizing the preorder on &lambda;-terms induced by a model &mdash; the relational semantics &mdash; as an operationally defined <i>contextual preorder</i>.
+</p>
+
+<p>
+We&rsquo;ll see that the relational semantics corresponds to a quantitative <i>improvement order</i>. 
+</p>
+</section>
+<section id="slide-1-1">
+<h3 id="1-1"><span class="section-number-3">1.1.</span> Operational semantics</h3>
+<p>
+Reduction relation:
+\[
+ M \rightarrow N~\text{and its transitive closure}~M \rightarrow^{*} N
+\]
+</p>
+
+<p>
+Use this to define a notion of <i>observation</i> \(\obs{M}\).
+</p>
+
+<p>
+Examples:
+</p>
+<ul>
+<li>\(M \rightarrow^* 0\) in some typed language with constants</li>
+<li>\(M \rightarrow^* \mathsf{hnf}\)  (aka \(M\) is <i>solvable</i> in untyped &lambda;-calculus)</li>
+
+</ul>
+
+<p>
+From this we define a contextual preorder: \(M \lectx N\) means
+\[
+\text{for all contexts}~C[-]. \obs{C[M]} \subseteq \obs{C[N]}
+\]
+</p>
+</section>
+<section id="slide-1-2">
+<h3 id="1-2"><span class="section-number-3">1.2.</span> Denotational semantics</h3>
+<p>
+Interpret programs as mathematical entities:
+</p>
+
+<p>
+for a program phrase \(M\), its interpretation is \(\sem{M}\).
+</p>
+
+<p>
+Typically \(\sem{M}\) is some kind of function
+</p>
+<ul>
+<li>continuous functions between complete partial orders</li>
+<li>homomorphisms of some algebraic structure</li>
+
+</ul>
+
+<p>
+We&rsquo;ll mostly consider the case where \(\sem{M}\) is a <i>relation</i>.
+</p>
+
+<p>
+Other kinds of models exist, e.g. game semantics. 
+</p>
+</section>
+<section id="slide-1-3">
+<h3 id="1-3"><span class="section-number-3">1.3.</span> Denotational preorder</h3>
+<p>
+If the universe of interpretations carries a natural partial order, we obtain a <i>denotational</i> preorder on programs:
+\[
+M \leden N \Leftrightarrow \sem{M} \sqsubseteq \sem{N}. 
+\]
+</p>
+</section>
+<section id="slide-1-4">
+<h3 id="1-4"><span class="section-number-3">1.4.</span> Observations in denotational semantics</h3>
+<p>
+Typically, denotational models also allow us to make &ldquo;observations&rdquo;: for example
+</p>
+<ul>
+<li>denotational evaluation to values e.g. \(0 \in \sem{M}\)</li>
+<li>denotational <i>definedness</i>: \(\sem{M} \not = \perp\)</li>
+
+</ul>
+
+<p>
+We usually expect that the denotational partial order preserves observations i.e.
+\[
+ \sem{M} \sqsubseteq \sem{N} \Rightarrow \obs{\sem{M}} \subseteq \obs{\sem{N}}. 
+\]
+</p>
+</section>
+<section id="slide-1-5">
+<h3 id="1-5"><span class="section-number-3">1.5.</span> Operational/denotational correspondence properties</h3>
+<div class="outline-text-3" id="text-1-5">
+</div>
+</section>
+<section id="slide-1-5-1">
+<h4 id="1-5-1"><span class="section-number-4">1.5.1.</span> Observational soundness</h4>
+<p>
+\[
+ \obs{M} \subseteq \obs{\sem{M}}
+\]
+</p>
+
+<p>
+Typically easy to prove. It sometimes follows readily from  <i>reduction invariance</i>
+\[
+ M \rightarrow N \quad \Rightarrow \quad \sem{M} = \sem{N}. 
+\]
+plus simple facts about the semantics of normal forms. 
+</p>
+</section>
+<section id="slide-1-5-2">
+<h4 id="1-5-2"><span class="section-number-4">1.5.2.</span> Computational adequacy</h4>
+<p>
+\[
+\obs{\sem{M}} \subseteq \obs{M}. 
+\]
+</p>
+
+<p>
+This says that the operational semantics is <i>adequate</i> to generate all observations predicted by the model.
+</p>
+</section>
+<section id="slide-1-5-3">
+<h4 id="1-5-3"><span class="section-number-4">1.5.3.</span> Inequational soundness</h4>
+<p>
+\[
+ M \leden N \Rightarrow M \lectx N. 
+\]
+</p>
+
+<p>
+This follows from the observational soundness and adequacy properties, provided the denotational semantics is <i>compositional</i> and <i>monotone</i>.
+</p>
+</section>
+<section id="slide-1-5-4">
+<h4 id="1-5-4"><span class="section-number-4">1.5.4.</span> Completeness</h4>
+<p>
+\[
+ M \lectx N \Rightarrow M \leden N 
+\]
+</p>
+
+<p>
+This property is notoriously difficult to establish for many kinds of programming language. For PCF this is the famous <i>full abstraction problem</i>.
+</p>
+
+<p>
+In the &lambda;-calculus, the situation is different. 
+</p>
+</section>
+</section>
+<section>
+<section id="slide-2">
+<h2 id="2"><span class="section-number-2">2.</span> Lambda calculus and B&ouml;hm trees</h2>
+<p>
+\[
+ M ::= x \mid MM \mid \lambda x.M  \quad\quad (\lambda x.M)N \rightarrow_\beta M[N/x]
+\]
+</p>
+
+
+<p>
+In the pure &lambda;-calculus there is another important class of preorders based on <i>B&ouml;hm-trees</i>. 
+</p>
+
+<p>
+If \(M\rightarrow^* \lambda x_{1}\ldots x_{n}.y\,M_{1}\cdots M_{k}\):
+</p>
+
+
+<div class="org-center">
+
+<div id="org59faeff" class="figure">
+<p><img src="bohmtree.png" alt="bohmtree.png" width="70%" />
+</p>
+</div>
+</div>
+
+<p>
+Otherwise, \(M\) is head diverging: \( \BT{M} = \bot.\)
+</p>
+</section>
+<section id="slide-2-1">
+<h3 id="2-1"><span class="section-number-3">2.1.</span> Bohm preorder</h3>
+
+<div id="org73c7c35" class="figure">
+<p><img src="bohmorder.png" alt="bohmorder.png" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-3">
+<h2 id="3"><span class="section-number-2">3.</span> B&ouml;hm preorder up to extensionality</h2>
+<p>
+We also define two extensions:
+</p>
+<ul>
+<li>\(M \sqsubseteq_{\mathbf{B}\eta} N\) means that the B&ouml;hm tree of \(M\) is contained in that of \(N\) <i>up to &eta;-conversion</i></li>
+<li>\(M \sqsubseteq_{\mathbf{B}\eta^{\text{red}}} N\) means that the B&ouml;hm tree of \(M\) is contained in that of \(N\) <i>up to &eta;-reduction</i></li>
+
+</ul>
+
+<p>
+\[
+ x \not \sqsubseteq_{\mathbf{B}} \lambda y. xy \quad  \lambda y. xy \not \sqsubseteq_{\mathbf{B}} x
+\]
+\[
+ x \sqsubseteq_{\mathbf{B}\eta} \lambda y. xy \quad  \lambda y. xy  \sqsubseteq_{\mathbf{B}\eta} x
+\]
+\[
+ x \not \sqsubseteq_{\mathbf{B}\eta^{\text{red}}} \lambda y. xy \quad  \lambda y. xy \sqsubseteq_{\mathbf{B}\eta^{\text{red}}} x
+\]
+</p>
+</section>
+<section id="slide-3-1">
+<h3 id="3-1"><span class="section-number-3">3.1.</span> \(D_\infty\) models</h3>
+<p>
+In the standard domain-theoretic models of &lambda;-calculus &ndash; the so-called \(D_\infty\) models &ndash; we have the correspondence
+\[
+ \sem{M} \not = \bot \Leftrightarrow M\rightarrow^*\mathsf{hnf}. 
+\]
+</p>
+
+<p>
+Taking a contextual preorder based on observing reduction to head normal form, we get
+\[
+ M \leden N \Rightarrow M \lectx N. 
+\]
+</p>
+
+</section>
+<section>
+<p>
+We also have
+\[
+ M \sqsubseteq_{\mathbf{B}\eta} N \Rightarrow M \leden N. 
+\]
+</p>
+
+<p>
+The &ldquo;B&ouml;hm-out&rdquo; technique (Hyland (<a href="#/slide-bibliography">1976</a>)) builds contexts that distinguish terms with distinct B&ouml;hm-trees:
+\[
+ M \not \sqsubseteq_{\mathbf{B}\eta} N \Rightarrow \exists C[-]. C[M] \rightarrow^*\mathsf{hnf}~\text{but}~C[N]\not\rightarrow^*\mathsf{hnf}
+\]
+</p>
+
+<p>
+Therefore
+\[
+ \sem{M} \sqsubseteq \sem{N} \Leftrightarrow M \lectx N. 
+\]
+</p>
+</section>
+</section>
+<section>
+<section id="slide-4">
+<h2 id="4"><span class="section-number-2">4.</span> Relational semantics</h2>
+<p>
+This talk is about the <i>relational semantics</i> of the &lambda;-calculus.
+</p>
+
+<p>
+Relational semantics grew from Girard&rsquo;s <i>quantitative semantics</i> (<a href="#/slide-bibliography">1988</a>)
+and can be seen as a simple model of linear logic (<a href="#/slide-bibliography">Girard, 1987</a>). 
+</p>
+</section>
+<section id="slide-4-1">
+<h3 id="4-1"><span class="section-number-3">4.1.</span> A Cartesian closed category of relations</h3>
+<p>
+Our model will interpret programs as certain kinds of <i>relations</i>. They can be seen as morphisms of a cartesian closed category defined by:
+</p>
+<ul>
+<li>objects: sets</li>
+<li>morphisms \(A\rightarrow B\): relations from \(\mathbf{M}_f(A)\) to \(B\)</li>
+
+</ul>
+
+<p>
+Here \(\mathbf{M}_f(A)\) is the set of <i>finite multisets</i> drawn from \(A\).
+</p>
+
+<p>
+The model is a <i>reflexive object</i> in this category. 
+</p>
+
+<p>
+However, the model is easier to explain in the form of a <i>non-idempotent intersection type</i> system.
+</p>
+</section>
+<section id="slide-4-2">
+<h3 id="4-2"><span class="section-number-3">4.2.</span> Relational semantics as a type system</h3>
+<p>
+Idea: give a system of <i>type derivations</i> yielding judgements of the form
+\[
+ x_1: \mu_1, \ldots, x_n:\mu_n \vdash M: \alpha
+\]
+The denotation of a term is the set of its valid typings.
+</p>
+
+<p>
+In this case, each &ldquo;type&rdquo; \(\mu_i\) is a multiset of types, so we get something akin to the morphisms in the category described above.
+</p>
+</section>
+<section id="slide-4-3">
+<h3 id="4-3"><span class="section-number-3">4.3.</span> Intersection types</h3>
+<div>
+\begin{array}{rcll}
+  \alpha  & ::=  & a \mid \mu \rightarrow \alpha \\
+  \mu  & ::=  & [\alpha_1, \ldots, \alpha_n] & n \geq 0\\
+\end{array}
+
+</div>
+
+<p>
+\[
+\frac{}{x:[\alpha] \vdash x:\alpha}~\text{ax} \quad\quad
+\frac{\Gamma_i \vdash M: \alpha_i~~(i \in I~\text{finite})}{\uplus_{i \in I}\Gamma_i \vdash M: [\alpha_i]_{i \in I}}~\text{many}
+\]
+</p>
+
+<p>
+\[
+\frac{\Gamma, x:\mu \vdash M: \alpha}{\Gamma \vdash \lambda x.M: \mu \rightarrow \alpha}~\lambda
+\quad\quad
+\frac{\Gamma \vdash M: \mu \rightarrow \alpha \quad \Delta \vdash N: \mu}
+{\Gamma \uplus \Delta \vdash MN : \alpha}~\text{@}
+\]
+</p>
+</section>
+<section id="slide-4-4">
+<h3 id="4-4"><span class="section-number-3">4.4.</span> Facts about the type system</h3>
+<ul>
+<li class="fragment appear">A term may have many types: the types are <i>elements of the denotational semantics</i> rather than traditional types</li>
+<li class="fragment appear">A term in head normal form trivially has a type. For example
+\[
+   x: [] \rightarrow [] \rightarrow a \vdash x M N : a
+  \]
+Note that a term such as \( x \Omega\) has a type, though \(\Omega\) does not.</li>
+<li class="fragment appear">Subject reduction and expansion hold</li>
+
+</ul>
+</section>
+<section id="slide-4-5">
+<h3 id="4-5"><span class="section-number-3">4.5.</span> Subject reduction / expansion</h3>
+<p>
+If \( M \rightarrow_\beta N \) then
+\[
+ \Gamma \vdash M: \alpha \Leftrightarrow \Gamma \vdash N:\alpha
+\]
+</p>
+
+<p>
+Taking \(\sem{M}\) to be the set of typings of \(M\), this says:
+\[
+\text{if}~M\rightarrow_\beta N~\text{then}~\sem{M} = \sem{N}. 
+\]
+</p>
+</section>
+<section id="slide-4-6">
+<h3 id="4-6"><span class="section-number-3">4.6.</span> Quantitative aspects</h3>
+<p>
+This model has <i>quantitative</i> content: the multisets count something. But what?
+</p>
+<p class="fragment (appear)">
+They keep track of how many times an argument is used: for example we can type
+\[
+f: [[\alpha] \rightarrow [\alpha'] \rightarrow \alpha] \vdash \lambda x. f~x~x:[\alpha, \alpha']\rightarrow \alpha.
+\]
+</p>
+<p class="fragment (appear)">
+The <i>many</i> rule means that these multiplicities are also seen in <i>derivations</i>. 
+\[
+ \cfrac{\cfrac{\vdots}{f: [[\alpha] \rightarrow [\alpha'] \rightarrow \alpha] \vdash \lambda x. f~x~x:[\alpha, \alpha']\rightarrow \alpha}\quad \cfrac{\vdash M: \alpha \quad \vdash M: \alpha'}{\vdash M: [\alpha,\alpha']}}{f: [[\alpha] \rightarrow [\alpha'] \rightarrow \alpha]\vdash (\lambda x. f~x~x) M: \alpha }~@
+\]
+The function uses \(M\) twice, so we need <i>two</i> derivations of \(M\).
+</p>
+<p class="fragment (appear)">
+Though substitution may duplicate or discard <i>terms</i>, it does not duplicate or discard their <i>type derivations</i>.
+</p>
+</section>
+<section id="slide-4-7">
+<h3 id="4-7"><span class="section-number-3">4.7.</span> Quantitative subject reduction</h3>
+<p>
+Type derivations track more quantitative information than the types: a typing of \((\lambda x. M)N\) contains <i>exactly one more @-rule</i> than the matching typing of \(M[N/x]\).
+</p>
+
+<p>
+So for <i>head reductions</i>
+\[
+ \lambda x_1 \ldots x_n. R~M_1 \ldots M_k  \rightarrow_h \lambda x_1 \ldots x_n. R'~M_1 \ldots M_k 
+\]
+we have a <i>quantitative subject reduction</i> theorem. 
+</p>
+
+<div class="theorem" id="orgfd162a0">
+<p>
+If \(M \rightarrow_h N\) and \(\Gamma \vdash M:\alpha\) with a typing derivation containing \(k\) instances of the @-rule, then \(\Gamma \vdash N:\alpha\) with a derivation containing \(k-1\) instances of the @-rule.
+</p>
+
+</div>
+
+<p>
+The restriction to head reductions is essential : for example \(x \Omega \rightarrow_\beta x \Omega\), but this is never a head reduction. 
+</p>
+
+<div class="theorem" id="orgacb3cb5">
+<p>
+A term \(M\) has a head normal form if and only if it has a type in this system. Therefore
+\[
+\sem{M} \not = \emptyset \Leftrightarrow M \rightarrow^* \mathsf{hnf}. 
+\]
+</p>
+
+</div>
+</section>
+<section id="slide-4-8">
+<h3 id="4-8"><span class="section-number-3">4.8.</span> Understanding the relational preorder</h3>
+<p>
+We now know:
+ \[ \text{if}~\sem{M} \subseteq \sem{N}~\text{then for all}~C[-]. C[M]\rightarrow^* \mathsf{hnf} \Rightarrow C[N]\rightarrow^* \mathsf{hnf}\]
+and hence the denotational order implies the extensional B&ouml;hm-tree order 
+\[ M \sqsubseteq_{\mathbf{B}\eta} N\]
+</p>
+
+<p>
+The converse is not true. For example \(x \sqsubseteq_{\mathbf{B}\eta} \lambda y. x y \) but
+\[
+ x : [a] \vdash x: a \quad\quad   x : [a] \not\vdash \lambda y. x y: a \quad 
+\]
+</p>
+
+</section>
+<section>
+
+<p>
+In fact thanks to Breuvart, Manzonetto and Ruoppolo (<a href="#/slide-bibliography">2018</a>) we know that
+</p>
+
+<ul>
+<li>\(\sem{M} \subseteq \sem{N}\) &hArr; \(M \sqsubseteq_{\mathbf{B}\eta^{\text{red}}} N\)</li>
+
+</ul>
+
+<p>
+But these are all <i>qualitative</i>. Where have the quantities gone? Can we recover a contextual ordering by paying attention to quantities?
+</p>
+</section>
+</section>
+<section>
+<section id="slide-5">
+<h2 id="5"><span class="section-number-2">5.</span> Improvement orders</h2>
+<p>
+Sands introduced the idea of a contextual <i>improvement</i> order.
+</p>
+
+<p>
+Idea: observe not just what happens but how long it takes.
+</p>
+
+<p>
+For example: observe the <i>length</i> of a head-reduction sequence.
+</p>
+
+<p>
+We write \( M \Downarrow^k \) if \(M\) reduces to hnf in \(k\) head reduction steps.
+</p>
+
+<p>
+Then we can define <i>improvement</i>: \(M \leimp N \) iff 
+\[
+ \text{for all contexts}~C[-]. C[M]\Downarrow^k \Rightarrow \exists k'\leq k. C[N]\Downarrow^{k'}
+\]
+</p>
+
+<p>
+\(N\) does the same things as \(M\) in fewer steps.
+</p>
+
+</section>
+<section>
+
+<p>
+Note that an order that counts reductions <i>cannot</i> be the order induced by a denotational semantics that is sound for beta-reduction.
+</p>
+
+<p>
+(There are very few denotational models of improvement orders as a result. One exception is Ghica&rsquo;s <i>slot games</i> (<a href="#/slide-bibliography">2005</a>)). 
+</p>
+
+<p>
+So our plan to use this idea to capture the relational order must fail. Yet here we are&hellip; 
+</p>
+</section>
+</section>
+<section>
+<section id="slide-6">
+<h2 id="6"><span class="section-number-2">6.</span> Checkers calculus</h2>
+<p>
+Accattoli et al. (<a href="#/slide-bibliography">2025</a>) introduced the <i>checkers calculus</i>.
+</p>
+
+<p>
+Idea: distinguish <i>internal reductions</i> of a term from <i>interactions</i> with its context. 
+</p>
+
+
+
+<div class="org-center">
+
+<div id="org2644791" class="figure">
+<p><img src="contextual.png" alt="contextual.png" width="60%" class="fragment (appear)" />
+</p>
+</div>
+</div>
+</section>
+<section id="slide-6-1">
+<h3 id="6-1"><span class="section-number-3">6.1.</span> Checkers syntax</h3>
+<p>
+Terms are labelled with two badges: \(\bullet\) for &ldquo;internal&rdquo; and \(\circ\) for &ldquo;external&rdquo;.
+\[
+ M, N ::= x \mid \lambda_\bullet x. M \mid \lambda_\circ x. M \mid M \bullet N \mid M \circ N
+\]
+</p>
+
+<p>
+Silent reductions:
+\[
+ (\lambda_\bullet x.M)\bullet N \rightarrow M[N/x]  \quad  (\lambda_\circ x.M)\circ N \rightarrow M[N/x] 
+\]
+</p>
+
+<p>
+Interaction reductions:
+\[
+ (\lambda_\bullet x.M)\circ N \stackrel{\interact}{\rightarrow} M[N/x]  \quad  (\lambda_\circ x.M)\bullet N \stackrel{\interact}{\rightarrow} M[N/x] 
+\]
+</p>
+
+<p>
+We can embed the ordinary &lambda;-calculus by using \(\bullet\) for every label. Every reduction would be silent.
+</p>
+
+<p>
+The fun starts when we embed a \(\bullet\)-labelled term in a \(\circ\)-labelled context. 
+</p>
+</section>
+<section id="slide-6-2">
+<h3 id="6-2"><span class="section-number-3">6.2.</span> Example</h3>
+<p>
+Two versions of the identity function in the context \(- \circ  (\lambda_\circ x.x) \).
+</p>
+
+
+
+<div>
+\begin{eqnarray*}
+(\lambda_\bullet x. x) \circ (\lambda_\circ x.x) & \intred & \lambda_\circ x.x
+\end{eqnarray*}
+
+</div>
+
+<div class="fragment (appear)">
+\begin{eqnarray*}
+ (\lambda_\bullet x. \lambda_\bullet y. x \bullet y) \circ (\lambda_\circ x.x) & \intred & \lambda_\bullet y. (\lambda_\circ x.x) \bullet y \\
+ & \intred & \lambda_\bullet y. y
+\end{eqnarray*}
+
+</div>
+
+<p class="fragment (appear)">
+Note that eta-expansion increases the number of interaction steps, and also changes the labelling of the result. 
+</p>
+</section>
+<section id="slide-6-3">
+<h3 id="6-3"><span class="section-number-3">6.3.</span> Checkers improvement ordering</h3>
+<p>
+We can now define an appropriate improvement ordering for terms of this calculus.
+</p>
+
+<p>
+We observe the <i>number of interaction steps</i> in a head-reduction sequence.
+</p>
+
+<p>
+We write \( M \Downarrow^k \) if \(M\) reduces to hnf in \(k\) head interaction steps.
+</p>
+
+<p>
+Then we can define <i>improvement</i>: \(M \leimp N \) iff 
+\[
+ \text{for all contexts}~C[-]. C[M]\Downarrow^k \Rightarrow \exists k'\leq k. C[N]\Downarrow^{k'}
+\]
+</p>
+
+<p>
+\(N\) does the same things as \(M\) in fewer interaction steps.
+</p>
+
+</section>
+<section>
+
+<p>
+For a regular &lambda;-term labelled with \(\bullet\) throughout, <i>all steps are silent</i>.
+</p>
+
+<p>
+Terms that are &beta;-equivalent will be equivalent in this preorder.
+</p>
+
+<p>
+But our example shows that \(\circ\)-labelled contexts can distinguish between &eta;-convertible terms: &eta;-reduction seems to deliver improvement.
+</p>
+
+<p>
+<b>Conjecture</b> The interaction improvement preorder on &lambda;-terms coincides with the relational preorder.
+</p>
+
+<p>
+<b>First step</b> If \(M \leimp N\) then \(M \sqsubseteq_{\mathbf{B}\eta^{\text{red}}} N\) (and hence \(\sem{M} \subseteq \sem{N}\) in the relational semantics). 
+</p>
+
+<p>
+Proved via syntactic methods akin to Hyland&rsquo;s B&ouml;hm-out technique.
+</p>
+
+<p>
+For the converse we will refine the relational semantics. 
+</p>
+</section>
+</section>
+<section>
+<section id="slide-7">
+<h2 id="7"><span class="section-number-2">7.</span> Checkers semantics</h2>
+<p>
+We annotate the types:
+</p>
+<div>
+\begin{array}{rcll}
+  \alpha  & ::=  & a \mid \mu \stackrel{\bullet}{\rightarrow} \alpha \mid \mu \stackrel{\circ}{\rightarrow} \alpha \\
+  \mu  & ::=  & [\alpha_1, \ldots, \alpha_n] & n \geq 0\\
+\end{array}
+
+</div>
+<p>
+and the judgements:
+\[
+ \Gamma \vdash^k M : \alpha
+\]
+</p>
+
+</section>
+<section>
+
+<p>
+Judgement annotations track the number of interaction applications:
+\[
+\frac{}{x:[\alpha] \vdash^0 x:\alpha}~\text{ax} \quad\quad
+\frac{\Gamma_i \vdash^{k_i} M: \alpha_i~~(i \in I~\text{finite})}{\uplus_{i \in I}\Gamma_i \vdash^{\sum_i k_i} M: [\alpha_i]_{i \in I}}~\text{many}
+\]
+</p>
+
+<p>
+\[
+\frac{\Gamma, x:\mu \vdash^k M: \alpha}{\Gamma \vdash^k \lambda_{\bullet/\circ} x.M: \mu \stackrel{\bullet/\circ}{\rightarrow} \alpha}~\lambda
+\]
+</p>
+
+<p>
+\[
+\frac{\Gamma \vdash^k M: \mu \stackrel{\bullet}{\rightarrow} \alpha \quad \Delta \vdash^{k'} N: \mu}
+{\Gamma \uplus \Delta \vdash^{k+k'} M \bullet N : \alpha}~\text{@-silent}
+\]
+</p>
+
+<p>
+\[
+\frac{\Gamma \vdash^k M: \mu \stackrel{\bullet}{\rightarrow} \alpha \quad \Delta \vdash^{k'} N: \mu}
+{\Gamma \uplus \Delta \vdash^{k+k'+1} M \circ N : \alpha}~\text{@-interact}
+\]
+(plus rules exchanging \(\bullet\) with \(\circ\)).
+</p>
+</section>
+<section id="slide-7-1">
+<h3 id="7-1"><span class="section-number-3">7.1.</span> Examples</h3>
+<p>
+In the plain relational semantics we have the following typings for identity-like terms
+\[
+ \vdash \lambda x. x: [[a] \rightarrow a] \rightarrow [a] \rightarrow a
+\]
+\[
+ \vdash \lambda x. \lambda y. x y: [[a] \rightarrow a] \rightarrow [a] \rightarrow a
+\]
+</p>
+
+<p class="fragment appear">
+In the checkers calculus we have:
+\[
+ \vdash^0 \lambda_\bullet x. x : [[a] \stackrel{\bullet}{\rightarrow} a] \stackrel{\bullet}{\rightarrow} [a] \stackrel{\bullet}{\rightarrow} a
+ \quad\quad
+ \vdash^0 \lambda_\bullet x. \lambda_\bullet y. x \bullet y :
+ [[a] \stackrel{\bullet}{\rightarrow} a] \stackrel{\bullet}{\rightarrow} [a] \stackrel{\bullet}{\rightarrow} a
+\]
+\[
+ \vdash^0 \lambda_\bullet x. x : [[a] \stackrel{\circ}{\rightarrow} a] \stackrel{\bullet}{\rightarrow} [a] \stackrel{\circ}{\rightarrow} a
+ \quad\quad
+\vdash^1 \lambda_\bullet x. \lambda_\bullet y. x \bullet y :
+ [[a] \stackrel{\circ}{\rightarrow} a] \stackrel{\bullet}{\rightarrow} [a] \stackrel{\bullet}{\rightarrow} a
+\]
+Key insight: &eta;-reductions lead to typings that are either the same, or &ldquo;whiter and cheaper&rdquo;. 
+</p>
+</section>
+<section id="slide-7-2">
+<h3 id="7-2"><span class="section-number-3">7.2.</span> Correctness of the semantics</h3>
+<p>
+With the same techniques as for the regular relational semantics, we can prove
+</p>
+<div class="theorem" id="orgc29ff07">
+<p>
+For any term \(M\) of the checkers calculus:
+</p>
+<ul>
+<li>If \(M \Downarrow^k\) then there is a typing \(\Gamma \vdash^k M: \alpha\)</li>
+<li>If there is a typing \(\Gamma \vdash^k M: \alpha\) then \(M \Downarrow^{k'}\) for some \(k' \leq k\).</li>
+
+</ul>
+
+</div>
+
+<p>
+As a corollary,
+\[
+\text{if}~\sem{M} \subseteq \sem{N}~\text{then}~M \leimp N. 
+\]
+</p>
+
+<p class="fragment appear">
+However, semantic inclusion does not precisely capture \(\leimp\) because we know
+\[
+\lambda_\bullet x. \lambda_\bullet y. x \bullet y \leimp \lambda_\bullet x. x
+\]
+We need to capture the &ldquo;whiter and cheaper&rdquo; idea.
+</p>
+</section>
+<section id="slide-7-3">
+<h3 id="7-3"><span class="section-number-3">7.3.</span> Seeing improvements in typings</h3>
+<p>
+We write \(\alpha \leq_k^+ \alpha'\) if \(\alpha\) can be obtained from \(\alpha'\) by changing \(k\) <i>positively occurring</i> instances of \(\bullet\) to \(\circ\).
+</p>
+
+<p>
+We write \(\alpha \leq_k^- \alpha'\) if \(\alpha\) can be obtained from \(\alpha'\) by changing \(k\) <i>negatively occurring</i> instances of \(\bullet\) to \(\circ\).
+</p>
+
+<p>
+For example
+\[
+ [a] \stackrel{\circ}{\rightarrow} a \leq_1^+ [a] \stackrel{\bullet}{\rightarrow} a
+\]
+\[
+ [[a] \stackrel{\circ}{\rightarrow} a] \stackrel{\bullet}{\rightarrow} a \leq_1^- [[a] \stackrel{\bullet}{\rightarrow} a] \stackrel{\bullet}{\rightarrow} a
+ \]
+</p>
+
+<div class="definition" id="org1004b32">
+<p>
+For closed checkers terms \(M\), \(N\), we write \(M \lepwc N\) if and only if
+\[
+\text{if}~\vdash^k M: \alpha~\text{then there exists}~\vdash^{k'} N:\alpha'~\text{and}~d~\text{such that}~\alpha' \leq_d^+ \alpha, k'+d \leq k. 
+\]
+</p>
+
+</div>
+
+<p>
+The typing of \(N\) is \(d\)-whiter and at least \(d\)-cheaper.
+</p>
+</section>
+<section id="slide-7-4">
+<h3 id="7-4"><span class="section-number-3">7.4.</span> From the improvement order order to \(\lepwc\)</h3>
+<p>
+For ordinary &lambda;-terms, we know
+\[
+ M \leimp N \Rightarrow M \sqsubseteq_{\mathbf{B}\eta^{\text{red}}} N
+\]
+</p>
+
+<p>
+By direct analysis of typing derivations on B&ouml;hm-trees we can prove
+</p>
+<div class="theorem" id="orgc5dcbb4">
+<p>
+If \(M \sqsubseteq_{\mathbf{B}\eta^{\text{red}}} N\) then \(M \lepwc N\). 
+</p>
+
+</div>
+
+<p>
+It remains to prove that \(M \lepwc N\) implies \(M \leimp N\).
+</p>
+</section>
+<section id="slide-7-5">
+<h3 id="7-5"><span class="section-number-3">7.5.</span> Is \(\lepwc\) compositional?</h3>
+<p>
+Suppose the \(\lepwc\) ordering is preserved by term constructors.
+</p>
+
+<p>
+Then \(M \lepwc N\) implies \(C[M] \lepwc C[N]\) for any context \(C[-]\).
+</p>
+
+<p>
+If \(C[M] \Downarrow^k\) then \(C[M]\) has a typing \(\vdash^k C[M] : \alpha\).
+</p>
+
+<p>
+By \(\lepwc\) we obtain a typing \(\vdash^{k'} C[N]:\alpha'\) with \(k' \leq k\).
+</p>
+
+<p>
+Hence \(C[N]\Downarrow^{k''}\) for some \(k'' \leq k' \leq k\).
+</p>
+
+<p>
+So \(M \leimp N\).
+</p>
+
+<p>
+But is \(\lepwc\) compositional?
+</p>
+</section>
+<section id="slide-7-6">
+<h3 id="7-6"><span class="section-number-3">7.6.</span> The challenge of compositionality</h3>
+<p>
+Consider an application
+\[
+ \frac{\vdash^k M: [\alpha] \stackrel{\bullet}{\rightarrow} \beta \quad \vdash^{k'} N: \alpha}{\vdash^{k+k'} M \bullet N: \beta}
+\]
+</p>
+
+<p>
+If we replace \(N\) by an improved (whiter-cheaper) term
+\[
+ \vdash^{k''} N': \alpha'
+\]
+where \(\alpha' \leq_d^+ \alpha\), we can no longer apply the rule.
+</p>
+
+<p>
+We&rsquo;d like to find a new typing for \(M\) of the form
+\[
+\vdash^{l} M: [\alpha'] \stackrel{\bullet}{\rightarrow} \beta
+\]
+</p>
+</section>
+<section id="slide-7-7">
+<h3 id="7-7"><span class="section-number-3">7.7.</span> Repainting typings</h3>
+<div class="theorem" id="orgf84fcca">
+<p>
+Suppose \(\vdash^k M : \alpha\) and \(\alpha' \leq_1^- \alpha\). Then there exists a typing
+\[
+ \vdash^{k'} M: \alpha''
+\]
+such that one of the following holds:
+</p>
+<ul>
+<li>\(k = k'\) and \(\alpha'' \leq_1^+ \alpha'\)</li>
+<li>\(\alpha'' = \alpha'\) and \(|k' - k| = 1\)</li>
+
+</ul>
+
+</div>
+</section>
+<section id="slide-7-8">
+<h3 id="7-8"><span class="section-number-3">7.8.</span> Repainting: propagation via variables</h3>
+<p>
+Start with
+\[
+ \vdash^0 \lambda_\bullet x. x : [[a] \stackrel{\bullet}{\rightarrow} a] \stackrel{\bullet}{\rightarrow} [a] \stackrel{\bullet}{\rightarrow} a
+\]
+Change a negatively occurring \(\bullet\) to \(\circ\):
+\[
+ \not\vdash^0 \lambda_\bullet x. x : [[a] \stackrel{\circ}{\rightarrow} a] \stackrel{\bullet}{\rightarrow} [a] \stackrel{\bullet}{\rightarrow} a
+\]
+Repainting a positively occurring \(\bullet\) to \(\circ\) yields a valid typing:
+\[
+ \vdash^0 \lambda_\bullet x. x : [[a] \stackrel{\circ}{\rightarrow} a] \stackrel{\bullet}{\rightarrow} [a] \stackrel{\circ}{\rightarrow} a
+\]
+</p>
+</section>
+<section id="slide-7-9">
+<h3 id="7-9"><span class="section-number-3">7.9.</span> Repainting: propagation across applications</h3>
+<p>
+As we repaint a typing derivation, we may encounter
+\[
+ \frac{\vdash^k M: \mu \stackrel{\bullet}{\rightarrow} \alpha \quad \vdash^{k'} N: \mu}{\vdash^{k+k'} M\bullet N: \alpha}
+\]
+being repainted to
+\[
+ \frac{\vdash^k M: \mu \stackrel{\circ}{\rightarrow} \alpha \quad \vdash^{k'} N: \mu}{\not\vdash^{k+k'} M\bullet N: \alpha}
+\]
+The repainting here propagates to an additional interaction step:
+\[
+ \frac{\vdash^k M: \mu \stackrel{\circ}{\rightarrow} \alpha \quad \vdash^{k'} N: \mu}{\vdash^{k+k'+1} M\bullet N: \alpha}
+\]
+</p>
+</section>
+<section id="slide-7-10">
+<h3 id="7-10"><span class="section-number-3">7.10.</span> Repainting: propagation back and forth</h3>
+<p>
+We may need to repaint more steps in the derivation: given
+\[
+ \frac{\vdash^k M: \mu \stackrel{\bullet}{\rightarrow} \alpha \quad \vdash^{k'} N: \mu}{\vdash^{k+k'} M\bullet N: \alpha}
+\]
+Repaint \(N:\mu\) to \(\mu' \leq_1^+ \mu\):
+\[
+ \frac{\vdash^k M: \mu \stackrel{\bullet}{\rightarrow} \alpha \quad \vdash^{k'} N: \mu'}{\not\vdash^{k+k'} M\bullet N: \alpha}
+\]
+repainting propagates to \(M\):
+\[
+ \frac{\not\vdash^k M: \mu' \stackrel{\bullet}{\rightarrow} \alpha \quad \vdash^{k'} N: \mu'}{\not\vdash^{k+k'} M\bullet N: \alpha}
+\]
+which requires repainting \(\mu'\) to \(\mu'' \leq_1^- \mu'\):
+\[
+ \frac{\vdash^k M: \mu'' \stackrel{\bullet}{\rightarrow} \alpha \quad \vdash^{k'} N: \mu'}{\not\vdash^{k+k'} M\bullet N: \alpha}
+\]
+</p>
+</section>
+<section>
+<p>
+This is still not valid! But the process may terminate at the next step with e.g. 
+\[
+ \frac{\vdash^k M: \mu'' \stackrel{\bullet}{\rightarrow} \alpha \quad \vdash^{k''} N: \mu''}{\vdash^{k+k''} M\bullet N: \alpha}
+\]
+</p>
+</section>
+<section id="slide-7-11">
+<h3 id="7-11"><span class="section-number-3">7.11.</span> Termination of repainting</h3>
+<p>
+The termination argument is very easy:
+</p>
+
+<ul>
+<li>every non-final step changes one \(\bullet\) to \(\circ\) and does not change the type in any other way</li>
+<li>there are a finite number of annotations in a type</li>
+
+</ul>
+</section>
+<section id="slide-7-12">
+<h3 id="7-12"><span class="section-number-3">7.12.</span> \(\lepwc\) is compositional</h3>
+<div class="theorem" id="orgfe5c651">
+<p>
+If \(M \lepwc N\) then \(C[M] \lepwc C[N]\) for any context \(C[-]\) and hence \(M \leimp N\). 
+</p>
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-8">
+<h2 id="8"><span class="section-number-2">8.</span> Summary</h2>
+<p>
+We introduced an <i>interaction based improvement order</i> on checkers terms, and hence on &lambda;-terms.
+</p>
+
+<p>
+We developed an <i>annotated relational semantics</i> and associated denotational improvement ordering \(\lepwc\). 
+</p>
+
+<p>
+On &lambda;-terms, we showed that the order induced by the ordinary relational model coincides with the improvement order, yielding a <i>quantitative</i> analogue of the Hyland-Wadsworth theorem.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-bibliography">
+<h2 id="bibliography"><span class="section-number-2">9.</span> Bibliography</h2>
+<div class="csl-bib-body">
+  <div class="csl-entry"><a id="citeproc_bib_item_1"></a>Accattoli, B., Lancelot, A., Manzonetto, G. and Vanoni, G., 2025. Interaction Equivalence. <i>Proc. acm program. lang.</i> [Online], 9(POPL), pp.55:1627–55:1656. Available from: <a href="https://doi.org/10.1145/3704891">https://doi.org/10.1145/3704891</a> [Accessed 17 June 2025].</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_2"></a>Breuvart, F., Manzonetto, G. and Ruoppolo, D., 2018. Relational Graph Models at Work. <i>Logical methods in computer science</i> [Online], Volume 14, Issue 3. Available from: <a href="https://doi.org/10.23638/LMCS-14(3:2)2018">https://doi.org/10.23638/LMCS-14(3:2)2018</a> [Accessed 17 July 2025].</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_3"></a>Ghica, D.R., 2005. Slot games: A quantitative model of computation. <i>Proceedings of the 32nd acm sigplan-sigact symposium on principles of programming languages</i> [Online]. Popl ’05. Long Beach, California, USA: ACM, pp.85–97. Available from: <a href="https://doi.org/10.1145/1040305.1040313">https://doi.org/10.1145/1040305.1040313</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_4"></a>Girard, J.-Y., 1987. Linear Logic. <i>Theoretical computer science</i>, 50(1), pp.1–102.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_5"></a>Girard, J.-Y., 1988. Normal functors, power series and lambda-calculus. <i>Ann. pure appl. logic</i>, 37, pp.129–177.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_6"></a>Hyland, J.M.E., 1976. A syntactic characterization of the equality in some models of the lambda calculus. <i>J. london math. soc. (2)</i>, 12, pp.361–370.</div>
+</div>
+</section>
+</section>
+</div>
+</div>
+<script src="./reveal.js/dist/reveal.js"></script>
+<script src="./reveal.js/plugin/markdown/markdown.js"></script>
+<script src="./reveal.js/plugin/notes/notes.js"></script>
+<script src="./reveal.js/plugin/search/search.js"></script>
+<script src="./reveal.js/plugin/highlight/highlight.js"></script>
+<script src="./reveal.js/plugin/zoom/zoom.js"></script>
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: true,
+center: true,
+slideNumber: 'c',
+rollingLinks: false,
+keyboard: true,
+mouseWheel: false,
+fragmentInURL: false,
+hashOneBasedIndex: false,
+pdfSeparateFragments: false,
+overview: true,
+
+transition: 'fade',
+transitionSpeed: '10',
+
+// Plugins with reveal.js 4.x
+plugins: [ RevealMarkdown, RevealNotes, RevealSearch, RevealHighlight, RevealZoom ],
+
+// Optional libraries used to extend reveal.js
+dependencies: [
+]
+
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Weighted Relational Models</title>
+<meta name="author" content="Guy McCusker, University of Bath"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="./reveal.js/dist/reveal.css"/>
+
+<link rel="stylesheet" href="./reveal.js/dist/theme/serifdark.css" id="theme"/>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<link rel="stylesheet" type="text/css" href="mystyle.css" />
+<style type="text/css">body {color: white; background: black;}</style>
+<style type="text/css">div.content { counter-reset: def-counter 0 section-counter 0 lem-counter 0 thm-counter 0;  } </style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide">
+<h2>Weighted Relational Models</h2><center><p>Guy McCusker, University of Bath</p><p><a href="https://conferences.cirm-math.fr/2980.html">Di&lambda;LL</a>, Marseille, May 2024</p></center>
+</section>
+
+<section>
+<section id="slide-1">
+<h2 id="1"><span class="section-number-2">1.</span> Weighted relational models</h2>
+<p>
+This talk will be an overview of <i>weighted relational models</i> of (differential) linear logic and typed lambda calculus.
+</p>
+
+</section>
+<section id="slide-1-1">
+<h3 id="1-1"><span class="section-number-3">1.1.</span> Prehistory</h3>
+<ul>
+<li><p>
+Girard&rsquo;s <i>quantitative semantics</i> introduced the idea of interpreting lambda-terms as power series.
+</p>
+
+<p>
+Jean-Yves Girard, ‘Normal Functors, Power Series and λ-Calculus’, Annals of Pure and Applied Logic 37, no. 2 (1 February 1988): 129–77, <a href="https://doi.org/10.1016/0168-0072(88)90025-5">https://doi.org/10.1016/0168-0072(88)90025-5</a>.
+</p></li>
+
+<li>The relational model of linear logic underpins everything here.</li>
+
+<li><p>
+Lamarche introduced the Cartesian closed category of weighted relations via an algebraic construction
+</p>
+
+<p>
+François Lamarche, ‘Quantitative Domains and Infinitary Algebras’, Theoretical Computer Science 94, no. 1 (2 March 1992): 37–62, <a href="https://doi.org/10.1016/0304-3975(92)90323-8">https://doi.org/10.1016/0304-3975(92)90323-8</a>.
+</p></li>
+
+</ul>
+
+</section>
+<section>
+<ul>
+<li><p>
+Ehrhard&rsquo;s <i>Finiteness Spaces</i> refine these models so that infinite sums are not needed. 
+</p>
+
+<p>
+Thomas Ehrhard, ‘Finiteness Spaces’, Mathematical Structures in Computer Science 15, no. 4 (August 2005): 615–46, <a href="https://doi.org/10.1017/S0960129504004645">https://doi.org/10.1017/S0960129504004645</a>.
+</p></li>
+
+<li><p>
+Probabilistic coherence spaces were shown to be an adequate model of lambda-calculus by Ehrhard et al. 
+</p>
+
+<p>
+Thomas Ehrhard, Michele Pagani, and Christine Tasson, ‘The Computational Meaning of Probabilistic Coherence Spaces’, in LICS 2011 (IEEE 2011), 87–96, <a href="https://doi.org/10.1109/LICS.2011.29">https://doi.org/10.1109/LICS.2011.29</a>.
+</p></li>
+
+</ul>
+
+</section>
+<section>
+
+<p>
+We&rsquo;ll describe work that shows a general soundness result for weighted relational models of typed lambda-calculus with recursion.
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-2">
+<h2 id="2"><span class="section-number-2">2.</span> The simplest model of linear logic</h2>
+<p>
+\[
+ \def\sem#1{{[\![#1]\!]}}
+ \def\llwith{\mathbin{\&}}
+ \def\llto{{\multimap}}
+ \def\llexp{{!}}
+ \def\mf{\mathbf{M}_{\text{fin}}}
+\]
+</p>
+
+<p>
+The <i>relational model</i> is arguably the simplest categorical model of linear logic:
+</p>
+
+<ul>
+<li>A formula \(A\) is intepreted as a set \(\sem{A}\)</li>
+<li>A proof of \(A\vdash B\) is interpreted as a relation from \(\sem{A}\) to \(\sem{B}\)</li>
+<li>More generally, a proof of
+\[
+   A_1, \ldots, A_n \vdash B
+   \]
+is interpreted as a subset of
+\[
+    \sem{A_1} \times \cdots \times \sem{A_n} \times \sem{B}. 
+   \]</li>
+
+</ul>
+
+</section>
+<section>
+
+<p>
+The category <b>Rel</b> has:
+</p>
+<ul>
+<li>objects: sets</li>
+<li>morphisms \(X \rightarrow Y\): relations from \(X\) to \(Y\) i.e. subsets of \(X \times Y\)</li>
+<li>composition: relational composition</li>
+
+</ul>
+
+</section>
+<section>
+
+<ul>
+<li>\(\sem{A \otimes B} = \sem{A \llto B} = \sem{A} \times \sem{B}\) ; cartesian product of sets</li>
+<li>\(\sem{A \llwith B} = \sem{A}+\sem{B}\); disjoint union</li>
+
+</ul>
+
+<p>
+Note that
+\[
+ \mathbf{Rel}(X \times Y, Z) \cong \mathbf{Rel}(X,Y\times Z).
+\]
+</p>
+
+<p>
+We have a symmetric monoidal closed category, hence a model of the \(\otimes, \llto\) fragment of MLL.
+</p>
+
+<p>
+The disjoint union is a Cartesian product in this category, so we can model \(\llwith\).
+</p>
+
+</section>
+<section id="slide-2-1">
+<h3 id="2-1"><span class="section-number-3">2.1.</span> Exponential</h3>
+<p>
+The exponential \(\llexp A\) can be interpreted using <i>finite multisets</i>:
+\[
+\sem{!A} = \mf\sem{A}
+\]
+</p>
+
+<p>
+We&rsquo;ll give the comonad structure.
+</p>
+
+<p>
+Given a relation \(f:X \rightarrow Y\), \(\llexp f\) is the relation
+\[
+ \{ ([x_1, \ldots, x_n], [y_1, \ldots, y_n]) \mid (x_i,y_i)\in f \}. 
+\]
+</p>
+
+<p>
+Dereliction (counit) is the relation \(\llexp X \rightarrow X\) given by 
+\[
+ \{ ([x],x) \mid x \in X\}.
+\]
+</p>
+
+<p>
+Digging (comultiplication) is the relation \(\llexp X \rightarrow \llexp\llexp X\) given by
+\[
+ \{ (m, M) \mid m = \biguplus M \}.
+\]
+</p>
+
+<p>
+We also get the Seely isomorphisms: \(\mf(X+Y)\) is isomorphic to \(\mf X \times \mf Y\). 
+</p>
+
+<p>
+Could not be easier!
+</p>
+
+</section>
+<section id="slide-2-2">
+<h3 id="2-2"><span class="section-number-3">2.2.</span> A short abstract interlude</h3>
+<p>
+Finite multisets give the <i>free commutative monoid</i> on a set.
+</p>
+
+<p>
+Because the category <b>Rel</b> of sets and relations is the Kleisli category on <b>Set</b> for the powerset monad, and because this is commutative, \(\mf\) also gives free commutative monoids in <b>Rel</b>.
+</p>
+
+<p>
+(See e.g. Hyland et al. ‘A Category Theoretic Formulation for Engeler-Style Models of the Untyped λ-Calculus’. Proceedings of MFCSIT 2004, ENTCS 161 (31 August 2006): 43–57. <a href="https://doi.org/10.1016/j.entcs.2006.04.024">https://doi.org/10.1016/j.entcs.2006.04.024</a>.)
+</p>
+
+<p>
+<b>Rel</b> is self-dual, so these are also free commutative <i>comonoids</i>.
+</p>
+
+<p>
+Hence  \(\mf\) is the <i>Lafont exponential</i> in <b>Rel</b>.
+</p>
+
+</section>
+<section id="slide-2-3">
+<h3 id="2-3"><span class="section-number-3">2.3.</span> A model of typed lambda-calculus</h3>
+<p>
+The Kleisli category for \(\mf\) gives us a Cartesian closed category and hence a model of typed lambda calculus.
+</p>
+
+<p>
+A term of type \(A \rightarrow B\) is interpreted as a relation from \(\mf \sem{A}\) to \(\sem{B}\).
+</p>
+
+<p>
+Composition: \(f; g\) is given by
+   \[
+    \{ (\biguplus_i S_i,  n) \mid (S_i, n_i) \in f, ([n_1,\ldots, n_k],n)\in g \}
+   \]
+</p>
+
+</section>
+<section id="slide-kleisli">
+<h3 id="kleisli"><span class="section-number-3">2.4.</span> Kleisli composition pictured</h3>
+<div class="org-center">
+
+<div id="org22e4bc5" class="figure">
+<p><img src="./images/mrelcomp.png" alt="Diagram depicting the Kleisli composition in Rel" width="80%" />
+</p>
+</div>
+</div>
+
+</section>
+<section id="slide-2-5">
+<h3 id="2-5"><span class="section-number-3">2.5.</span> Examples</h3>
+<p>
+Assuming an obvious interpretation of the booleans and logical operations, \(x \wedge \neg y\) is the following relation:
+</p>
+
+<div class="displayeq">
+\begin{array}{cccc}
+x:\mathbf{Bool},& y:\mathbf{Bool} & \vdash & x \wedge \neg y:\mathbf{Bool}\\
+[\mathsf{true}] & [\mathsf{true}] & &\mathsf{false} \\
+[\mathsf{true}] & [\mathsf{false}] & &\mathsf{true} \\
+[\mathsf{false}] & [\mathsf{true}] & &\mathsf{false} \\
+[\mathsf{false}] & [\mathsf{false}] & & \mathsf{false} \\
+\end{array}
+
+</div>
+
+</section>
+<section>
+
+<p>
+If \(x\) and \(y\) are contracted to give \(x \wedge \neg x\) we have the following relation:
+</p>
+<div class="displayeq">
+\begin{array}{ccc}
+x:\mathbf{Bool} & \vdash & x \wedge \neg x:\mathbf{Bool}\\
+[\mathsf{true}, \mathsf{true}]  & &\mathsf{false} \\
+[\mathsf{true}, \mathsf{false}] &  &\mathsf{true} \\
+[\mathsf{false}, \mathsf{true}] &  &\mathsf{false} \\
+[\mathsf{false}, \mathsf{false}] & & \mathsf{false} \\
+\end{array}
+
+</div>
+
+</section>
+<section>
+<p>
+<b>Remarks</b>
+</p>
+
+<p>
+It is natural to read these relations right-to-left: &ldquo;to deliver this output, these inputs are needed&rdquo;. 
+</p>
+
+<p>
+The model is already somewhat <i>quantitative</i> (or at least <i>intensional</i>): it reveals the number of times a term interacts with its variables. 
+</p>
+
+<p>
+The model caters for nondeterminism: the two invocations of an argument can in principle be supplied <i>different</i> values.
+</p>
+
+</section>
+<section id="slide-2-6">
+<h3 id="2-6"><span class="section-number-3">2.6.</span> A model of nondeterminism</h3>
+<p>
+We can exploit this to interpret a nondeterministic extension of the language:
+\[
+\sem{M~\mathsf{or}~N}  = \sem{M} \cup \sem{N}. 
+\]
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-3">
+<h2 id="3"><span class="section-number-2">3.</span> From relations to matrices</h2>
+<p>
+A relation on \(f \subseteq X \times Y\) can be viewed as a matrix indexed by \(X \times Y\), populated with booleans:
+\[
+ f_{(x,y)} = \mathsf{true} \quad \mbox{iff} \quad (x,y) \in f. 
+\]
+</p>
+
+<p>
+In this view, composition of relations is matrix multiplication: given relations \(f:X \rightarrow Y\) and \(g: Y \rightarrow Z\)
+</p>
+
+<p>
+\[
+(g \circ f)_{(x,z)} = \bigvee_{y\in Y} f_{(x,y)} \wedge g_{(y,z)}. 
+\]
+</p>
+
+<p>
+Ingredients:
+</p>
+<ul>
+<li>finite multiplication (\(\wedge\))</li>
+<li>infinite sum (\(\bigvee\))</li>
+<li>distributivity</li>
+
+</ul>
+
+
+</section>
+<section id="slide-3-1">
+<h3 id="3-1"><span class="section-number-3">3.1.</span> Complete semirings</h3>
+<p>
+We can replace the booleans in this construction with any <i>complete semiring</i>.
+</p>
+
+<p>
+A complete (commutative) semiring \((R, \cdot, 1, \sum)\) comprises:
+</p>
+<ul>
+<li>a commutative monoid \((R, \cdot, 1)\)</li>
+<li>summation maps \(\sum_X: R^X \rightarrow R\) for every set \(X\) satisfying
+<ul>
+<li>appropriate commutativity and associativity laws</li>
+<li>distributivity</li>
+
+</ul></li>
+
+</ul>
+<p>
+ \[
+  a \cdot \sum_I b_i = \sum_I a \cdot b_i.
+ \]
+The empty sum provides a zero element. 
+</p>
+
+</section>
+<section id="slide-3-2">
+<h3 id="3-2"><span class="section-number-3">3.2.</span> Infinite sums</h3>
+<p>
+We need infinite sums because some of our indexing sets will be infinite: \(\mf X\) is infinite for any non-empty \(X\).
+</p>
+
+<p>
+Ehrhard&rsquo;s <i>finiteness spaces</i> give a way to manage without infinite sum: extra structure guarantees that in the composition
+\[
+(g \circ f)_{(x,z)} = \bigvee_{y\in Y} f_{(x,y)} \wedge g_{(y,z)}. 
+\]
+there are at most finitely many \(y\) for which \(f_{(x,y)}\) and \(g_{(y,z)}\) are non-zero.
+</p>
+
+<p>
+We take the easy way out and assume infinite sums exist. 
+</p>
+
+</section>
+<section id="slide-3-3">
+<h3 id="3-3"><span class="section-number-3">3.3.</span> Complete semirings have no negatives</h3>
+<p>
+By the way, a complete semiring cannot be a ring: they are <i>zerosumfree</i> (aka <i>positive</i>) because if \(a+b = 0\) then
+</p>
+
+<div class="displayeq">
+\begin{eqnarray*}
+ 0 & = & 0 + 0 + \ldots \\
+  & = & (a + b) + (a + b) + \ldots \\
+  & = & a + (b+a) + (b + a) + \ldots \\
+  & = & a + 0 + 0 + \ldots \\
+  & = & a. 
+\end{eqnarray*}
+
+</div>
+
+<p>
+(I discovered the day after giving this talk that this argument is called the <a href="https://en.wikipedia.org/wiki/Eilenberg%E2%80%93Mazur_swindle">Eilenberg–Mazur swindle</a>.)
+</p>
+
+</section>
+<section id="slide-3-4">
+<h3 id="3-4"><span class="section-number-3">3.4.</span> Examples</h3>
+<ul>
+<li>\((\mathbf{Bool}, \wedge, \mathsf{true}, \bigvee)\)
+<ul>
+<li>the booleans with finite conjunction and infinite disjunction</li>
+<li>this gives us the relational model</li>
+
+</ul></li>
+<li>\((\mathbf{N}^\infty, \times, 1, \sum)\)
+<ul>
+<li>the natural numbers with infinite, with finite multiplication and infinite summation</li>
+<li>\(\mathbf{N}\) can be replaced by \(\mathbf{R}_{\geq 0}\)</li>
+
+</ul></li>
+<li>\((\mathbf{N}^\infty, +, 0, \min)\)
+<ul>
+<li>the (discrete) tropical semiring</li>
+
+</ul></li>
+<li>\((\mathbf{R}_{\geq 0}^\infty, +, 0, \inf)\)
+<ul>
+<li>the (continuous) tropical semiring</li>
+
+</ul></li>
+
+</ul>
+
+</section>
+<section id="slide-3-5">
+<h3 id="3-5"><span class="section-number-3">3.5.</span> Categories of <i>weighted relations</i></h3>
+<p>
+Given any complete semiring \(R\) we can define a category, generalising from <b>Rel</b>:
+</p>
+<ul>
+<li>objects are sets</li>
+<li>morphisms \(X\) to \(Y\) are matrices which we can describe as functions
+\[
+    f: X \times Y \rightarrow R 
+   \]</li>
+<li>composition:</li>
+
+</ul>
+<p>
+\[
+(f ; g)_{(x,z)} = \sum_{y\in Y} f_{(x,y)} \cdot g_{(y,z)}. 
+\]
+</p>
+
+<p>
+The identity is given by the diagonal matrix,
+   \[
+   id_{(x,x')} = \delta_{x,x'}
+   \]
+using the Kronecker delta.
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-4">
+<h2 id="4"><span class="section-number-2">4.</span> Weighted relational models of linear logic</h2>
+<p>
+It&rsquo;s easy to lift the interpretation of the multiplicatives and \(\llwith\) from <b>Rel</b> to a weighted model: nothing changes! 
+</p>
+
+<ul>
+<li>\(\sem{A \otimes B} = \sem{A \llto B} = \sem{A} \times \sem{B}\)</li>
+<li>\(\sem{A \llwith B} = \sem{A}+\sem{B}\)</li>
+
+</ul>
+
+<p>
+As before, morphisms from \(X \times Y\) to \(Z\) are the same thing as morphisms from \(X\) to \(Y \times Z\).
+</p>
+
+<p>
+And morphisms from \(X\) to \(Y+Z\) are matrices
+\[
+ f:X \times (Y+Z) \rightarrow R
+\]
+which correspond to pairs of matrices
+\[
+f_1: X \times Y \rightarrow R \quad f_2:X \times Z \rightarrow R. 
+\]
+So we get a categorical product again.
+</p>
+
+</section>
+<section id="slide-4-1">
+<h3 id="4-1"><span class="section-number-3">4.1.</span> Algebraic viewpoints</h3>
+<p>
+We can view these matrices as describing <i>linear maps</i> between the modules of vectors \(R^X\) and \(R^Y\); or in the other direction via duality. 
+</p>
+
+<p>
+We could also see them as giving, for each \(y\in Y\), a vector \(R^X\), which we could write as an infinite formal sum
+\[
+ y \mapsto r_1x_1 + r_2x_2 + \ldots
+\]
+</p>
+
+</section>
+<section id="slide-4-2">
+<h3 id="4-2"><span class="section-number-3">4.2.</span> Exponentials, quantitatively</h3>
+<p>
+Exponentials interact more interestingly with the coefficients.
+</p>
+
+<p>
+We want to make \(\mf X\) into a (free) commutative comonoid on \(X\); in the right-to-left view, this will be a monoid.
+</p>
+
+<p>
+The underlying set \(\mf X\) is already a monoid, where multiplication is multiset union. We extend this to formal sums (vectors). 
+</p>
+
+</section>
+<section>
+<p>
+Suppose \(f:\mathbf{Bool} \rightarrow \mathbf{Bool}\) has
+\[
+ f_{(\mathsf{true},\mathsf{true})} = 1 \quad \quad f_{(\mathsf{false},\mathsf{true})} = 1 
+\]
+</p>
+
+<p>
+In the right-to-left viewpoint outlined above:
+\[
+\mathsf{true} \mapsto 1.\mathsf{true} + 1.\mathsf{false}. 
+\]
+</p>
+
+</section>
+<section>
+<p>
+Consider \(!f:\mf\mathbf{Bool} \rightarrow \mf\mathbf{Bool}\). Following algebraic intuition, we define it by multiplication:
+</p>
+<div class="displayeq">
+\begin{array}{rcl}
+[\mathsf{true},\mathsf{true}] & \mapsto & (1.\mathsf{true} + 1.\mathsf{false}) \times  (1.\mathsf{true} + 1.\mathsf{false}) \\
+ & = & 1.[\mathsf{true},\mathsf{true}]  \\
+ & + &  (1+1).[\mathsf{true},\mathsf{false}] \\
+ & + &  1.[\mathsf{false},\mathsf{false}]
+\end{array}
+
+</div>
+
+<p>
+Thus \(\llexp f: \mf\mathbf{Bool} \rightarrow \mf{\mathbf{Bool}}\) has <i>two</i> ways to relate
+\[
+ [\mathsf{true},\mathsf{false}] \quad\mbox{with}\quad  [\mathsf{true},\mathsf{true}].
+\]
+</p>
+
+</section>
+<section id="slide-4-3">
+<h3 id="4-3"><span class="section-number-3">4.3.</span> Kleisli composition is power series substitution</h3>
+<p>
+A morphism \(\llexp X \rightarrow Y\) assigns:
+</p>
+<ul>
+<li>to every \(y \in Y\) a vector of quantities indexed by \(\mf X\).</li>
+
+</ul>
+
+<p>
+If we regard the elements of \(x\) as formal indeterminates, this is:
+</p>
+<ul>
+<li>to every \(y \in Y\), a formal power series
+\[
+    \sum_{m \in \mf X} f_y(m).m
+   \]</li>
+
+</ul>
+
+<p>
+Each multiset is a basic monomial, something like
+\[
+ x_1^3x_2 x_3^2 = [x_1,x_1,x_1,x_2,x_3,x_3]
+\]
+and the quantities are the coefficients.
+</p>
+
+</section>
+<section>
+<p>
+Given \(f:\mf X \rightarrow Y\), we want the promotion \(f^!: \mf X \rightarrow \mf Y\) to be a <i>comonoid homomorphism</i>. With the above view, this means
+</p>
+
+<ul>
+<li>to every multiset (monomial) in \(\mf Y\), assign a formal power series</li>
+<li>in such a way that <i>power series multiplication</i> is preserved.</li>
+
+</ul>
+
+<p>
+The functorial action is similar:
+</p>
+
+<ul>
+<li>\(f: X \rightarrow Y\) assigns to each \(y\) a coefficient for each \(x\), i.e. a formal sum of \(x\)s</li>
+<li>we lift this to \(\llexp f: \mf X \rightarrow \mf Y\) by multiplication of power series</li>
+
+</ul>
+
+</section>
+<section>
+
+<p>
+Given \(f:\mf X \rightarrow Y\) and \(g:\mf Y \rightarrow Z\), the Kleisli composition \(f; g\) works as follows:
+</p>
+
+<ul>
+<li>\(g\) takes each \(z\) to a power series over \(Y\);</li>
+<li>substitute each \(y\in Y\) with the power series \(f(y)\) and multiply out.</li>
+
+</ul>
+
+</section>
+<section id="slide-4-4">
+<h3 id="4-4"><span class="section-number-3">4.4.</span> Example</h3>
+<p>
+Let \(f,g:\mf \mathbf{Bool}\rightarrow \mathbf{Bool}\) be given by:
+</p>
+<div class="displayeq">
+\begin{eqnarray*}
+g(\mathsf{true}) & = & 1.\mathsf{true}^2 + 2.\mathsf{false}\\
+g(\mathsf{false}) & = & 0 \\
+f(\mathsf{true}) & = & 1.\mathsf{true} + 1.\mathsf{false}\\
+f(\mathsf{false}) & = & 1.\mathsf{true}
+\end{eqnarray*}
+
+</div>
+
+<p>
+Then \(f;g\) maps \(\mathsf{true}\) to
+\[
+ (1.\mathsf{true} + 1.\mathsf{false})^2 + 2.\mathsf{true} =
+ 1.\mathsf{true}^2 + 2.\mathsf{true}\mathsf{false} + 1.\mathsf{false}^2 + 2.\mathsf{true}
+\]
+</p>
+
+<p class="backwardlink">
+Compare to <a href="#/slide-kleisli" class="backwardlink">the picture</a> of the relational Kleisli composition which shows the calculation of just one of the monomials. 
+</p>
+
+</section>
+<section id="slide-4-5">
+<h3 id="4-5"><span class="section-number-3">4.5.</span> Abstractly</h3>
+<p>
+What we&rsquo;ve constructed is the <i>symmetric algebra</i> (free commutative monoid) over the module of \(X\)-indexed vectors.
+</p>
+
+<p>
+But we&rsquo;re reading our arrows backwards, so this is the free commutative comonoid: the Lafont exponential. 
+</p>
+
+<p>
+This led Lamarche to make the observation that
+</p>
+<blockquote>
+<p>
+Linear logic is in fact co-linear
+</p>
+</blockquote>
+
+</section>
+</section>
+<section>
+<section id="slide-5">
+<h2 id="5"><span class="section-number-2">5.</span> Weighted relational models of typed lambda-calculi</h2>
+<p>
+These constructions give us a model of linear logic, and the Kleisli category is Cartesian closed.
+</p>
+
+<p>
+We can therefore model typed lambda calculi. Let&rsquo;s model something like a programming language:
+</p>
+<ul>
+<li>add some base types \(\mathbf{Bool}\), \(\mathbf{Int}\)</li>
+<li>add some constants with the obvious semantics e.g. \(\sem{\mathtt{true}}: \mf \emptyset \rightarrow \mathbf{Bool}\) has
+\[
+     \sem{\mathtt{true}}_{([],\mathsf{true})} = 1 \quad \sem{\mathtt{true}}_{([],\mathsf{false})} =0
+    \]</li>
+
+</ul>
+
+
+
+<p>
+We have additional operations available in the model:
+</p>
+<ul>
+<li>we can add weighted relations together</li>
+<li>we can multiply relations by quantities.</li>
+
+</ul>
+
+<p>
+What does this let us do?
+</p>
+
+</section>
+<section id="slide-5-1">
+<h3 id="5-1"><span class="section-number-3">5.1.</span> Nondeterminism</h3>
+<p>
+Addition of morphisms gives us an interpretation of nondeterministic choice:
+\[
+\sem{M~\mathsf{or}~N} = \sem{M} + \sem{N}. 
+\]
+</p>
+
+<p>
+If we work with the semiring \((\mathbf{N}^\infty, \times, 1, \sum)\), we see that for example
+\[
+\sem{\mathtt{true}~\mathsf{or}~\mathtt{true}}_{([],\mathsf{true})} = 2. 
+\]
+</p>
+
+<p>
+More generally we might expect that for a term \(\vdash M: \mathbf{Bool}\),
+\[
+ \sem{M}_{([],\mathsf{true})} 
+\]
+is the number of choice-paths that \(M\) can take to reach \(\mathtt{true}\).
+</p>
+
+</section>
+<section id="slide-5-2">
+<h3 id="5-2"><span class="section-number-3">5.2.</span> Probabilistic choice</h3>
+<p>
+Since we can <i>weight</i> our terms by multiplication with a quantity, we can interpret <i>probabilistic</i> choice: if we work with the reals rather than naturals we can define
+\[
+\sem{M +_p N} = p\sem{M} + (1-p)\sem{N}. 
+\]
+</p>
+
+<p>
+Then for example
+\[
+ \sem{\mathtt{true} +_{\frac{1}{2}} (\mathtt{true} +_{\frac{1}{2}} \mathtt{false})}_{([],\mathsf{true})} = \frac{3}{4}.
+\]
+</p>
+
+</section>
+<section id="slide-5-3">
+<h3 id="5-3"><span class="section-number-3">5.3.</span> Can we use \([0,1]\)?</h3>
+<p>
+For modelling probability, it&rsquo;s tempting to try using coefficients from \([0,1]\) rather than \(\mathbf{R}_{\geq 0}^\infty\).
+</p>
+
+<p>
+Sadly this won&rsquo;t work. For example, the term
+\[
+x:\mathbf{Bool},y:\mathbf{Bool} \vdash  x \wedge y:\mathbf{Bool}
+\]
+contains
+</p>
+
+<p>
+\[ ([\mathsf{true}],[\mathsf{false}],\mathsf{false})~\mbox{with coefficient 1}
+\]
+\[ ([\mathsf{false}],[\mathsf{true}],\mathsf{false})~\mbox{with coefficient 1}
+\]
+</p>
+
+</section>
+<section>
+<p>
+If we contract \(x\) and \(y\), the input patterns
+\[
+([\mathsf{true}],[\mathsf{false}]) \quad\quad ([\mathsf{false}],[\mathsf{true}]) 
+\]
+become the same multiset and the coefficients are <i>added</i>.
+</p>
+
+<p>
+Then
+\[
+x:\mathbf{Bool} \vdash  x \wedge x:\mathbf{Bool}
+\]
+contains
+\[ ([\mathsf{true},\mathsf{false}],\mathsf{false})~\mbox{with coefficient 2}
+\]
+</p>
+
+<p>
+The good news is that the model still seems to be counting choice-paths correctly!
+</p>
+
+</section>
+<section id="slide-5-4">
+<h3 id="5-4"><span class="section-number-3">5.4.</span> A generic soundness theorem</h3>
+<p>
+We shall give a weighted operational semantics to typed lambda-calculus in such a way that these relational models measure the operational reduction paths.
+</p>
+
+<p>
+Syntax (at least):
+\[
+ M ::= x \mid \lambda x^A.M \mid MM \mid M~\mathsf{or}~M \mid rM
+\]
+for \(r\in R\), the semiring of interest; plus base types and constants for booleans, numerals and basic operations as desired. 
+</p>
+
+<p>
+Operational semantics is via <i>weighted reductions</i> \(M \stackrel{r}{\rightarrow} N\): &ldquo;\(M\) reduces to \(N\) in one step with weight \(r\)&rdquo;.
+</p>
+
+</section>
+<section id="slide-5-5">
+<h3 id="5-5"><span class="section-number-3">5.5.</span> Basic reductions</h3>
+<p>
+\[
+(\lambda x^A.M)N \stackrel{1}{\rightarrow} M[N/x]
+\]
+\[
+M~\mathsf{or}~N \stackrel{1}{\rightarrow} M \quad M~\mathsf{or}~N \stackrel{1}{\rightarrow} N
+\]
+\[
+rM \stackrel{r}{\rightarrow} M
+\]
+</p>
+
+<p>
+Evaluate in a call-by-name strategy.
+</p>
+
+</section>
+<section>
+<p>
+Define the <i>weight</i> of a reduction path
+\[
+M \stackrel{r_1}{\rightarrow} M_1 \cdots \stackrel{r_n}{\rightarrow} M_n
+\]
+to be the product
+\[
+r_1 \cdot \cdots \cdot r_n
+\]
+</p>
+
+<p>
+For a term \(\vdash M: \mathbf{Int}\), define \(\mathrm{Red}(M,n)\) to be the sum of the weights of paths
+\[
+M \rightarrow^* n. 
+\]
+</p>
+
+</section>
+<section id="slide-5-6">
+<h3 id="5-6"><span class="section-number-3">5.6.</span> Example</h3>
+<div class="org-center">
+
+<div id="orgc3c7860" class="figure">
+<p><img src="./images/reductiontree.png" alt="Diagram depicting the Kleisli composition in Rel" width="60%" />
+</p>
+</div>
+</div>
+<p>
+\[
+\mathrm{Red}(M,2) = p^2 + q^2
+\]
+</p>
+
+</section>
+<section id="slide-5-7">
+<h3 id="5-7"><span class="section-number-3">5.7.</span> Soundness</h3>
+<p>
+By standard reasoning we can prove
+</p>
+<div class="theorem" id="org2747764">
+<p>
+For any term \(\vdash M:\mathbf{Int}\)
+\[
+\mathrm{Red}(M,0) = \sem{M}_{([],0)}. 
+\]
+</p>
+
+</div>
+
+</section>
+<section>
+<ul>
+<li>Using \((\mathbf{N}^\infty, \times, 1, \sum)\), the semantics counts reduction paths</li>
+<li>Using \((\mathbf{R}_{\geq 0}^\infty, \times, 1, \sum)\), translating probabilistic choice as
+\[
+    \frac{1}{2}M~\mathsf{or}~\frac{1}{2}N
+   \]
+the semantics computes probability of reduction to a value</li>
+<li>Using \((\mathbf{N}^\infty, +, 0, \min)\), the model computes the lowest weight of a reduction path;
+<ul>
+<li>if we instrument terms, e.g. replacing each \(\lambda x.M\) by \(\lambda x.1M\), the model counts &beta;-reductions.</li>
+
+</ul></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-6">
+<h2 id="6"><span class="section-number-2">6.</span> Fixed points and recursion</h2>
+<p>
+To interpret recursion, we&rsquo;d like to add a fixed point combinator to the language and give it a semantics.
+</p>
+
+<p>
+The easy way: insist that our semiring is <i>continuous</i>.
+</p>
+
+<p>
+That is:
+</p>
+<ul>
+<li>the semiring is a complete partial order</li>
+<li>addition and multiplication are continuous</li>
+<li>infinite sums are least upper bounds of chains of finite sums.</li>
+
+</ul>
+
+<p>
+Then the morphisms form complete partial orders and we can interpret fixed points in the normal way. Soundness is proved by standard techniques.
+</p>
+
+</section>
+<section id="slide-6-1">
+<h3 id="6-1"><span class="section-number-3">6.1.</span> Fixed points without continuity</h3>
+<p>
+In fact, as shown by Laird, continuity is not required.
+</p>
+
+<p>
+A fixed point combinator may be defined by taking a sum over all possible recursive call-patterns, expressed using <i>nested multisets</i>:
+\[
+\mathbb{M}_0 = \emptyset \quad \mathbb{M}_{n+1} = \mf \mathbb{M}_n \quad
+\mathbb{M} = \bigcup_n \mathbb{M}_n. 
+\]
+</p>
+
+<p>
+Given \(f:\mf X \rightarrow X\), we can define \(f^m:I \rightarrow \mf X\) for each \(m\in \mathbb{M}\) expressing the result of nested recursive calls to \(f\) following the pattern of \(m\).
+</p>
+
+<p>
+Then
+\[
+ \mathrm{fix}(f) = \sum_{m\in \mathbb{M}} f^m; f. 
+\]
+</p>
+
+<p>
+J. Laird, ‘Fixed Points In Quantitative Semantics’, in Proceedings,  LICS ’16, ACM 2016), 347–56, <a href="https://doi.org/10.1145/2933575.2934569">https://doi.org/10.1145/2933575.2934569</a>.
+</p>
+
+</section>
+<section id="slide-6-2">
+<h3 id="6-2"><span class="section-number-3">6.2.</span> Untyped lambda-calculus</h3>
+<p>
+A related construction gives a model of untyped &lambda;-calculus in these categories:
+\[
+D_0 = \emptyset \quad D_{n+1} = (\mf D_n)^\omega
+\quad D = \bigcup D_n. 
+\]
+</p>
+
+<p>
+Then \(D \cong \mf D \times D\) so we have a reflexive object
+\[
+ D \cong D \Rightarrow D.
+\]
+</p>
+
+<p>
+Antonio Bucciarelli, Thomas Ehrhard, and Giulio Manzonetto, ‘Not Enough Points Is Enough’, in CSL 2007, Springer 2007), 298–312, <a href="https://doi.org/10.1007/978-3-540-74915-8_24">https://doi.org/10.1007/978-3-540-74915-8_24</a>.
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-7">
+<h2 id="7"><span class="section-number-2">7.</span> Further</h2>
+<p>
+Our simple-minded quantitative model is <i>sound</i> but not <i>fully abstract</i> and has barely been explored. Others have done more. Some nice papers:
+</p>
+
+<ul>
+<li><p>
+Probabilistic coherence spaces are a refinement of one version of this model that delivers a quite remarkable full abstraction result. 
+</p>
+
+<p>
+Thomas Ehrhard, Christine Tasson, and Michele Pagani, ‘Probabilistic Coherence Spaces Are Fully Abstract for Probabilistic PCF’, in Proceedings, POPL ’14 (ACM 2014), 309–20, <a href="https://doi.org/10.1145/2535838.2535865">https://doi.org/10.1145/2535838.2535865</a>.
+</p></li>
+
+<li><p>
+Barbarossa and Pistone have recently studied the tropical version of the model. They have established connections with generalized metric spaces, and analysed the differential structure of the model in detail. 
+</p>
+
+<p>
+Davide Barbarossa and Paolo Pistone, ‘Tropical Mathematics and the Lambda-Calculus I: Metric and Differential Analysis of Effectful Programs’, in CSL 2024, Schloss Dagstuhl – Leibniz-Zentrum für Informatik, 2024, <a href="https://doi.org/10.4230/LIPIcs.CSL.2024.14">https://doi.org/10.4230/LIPIcs.CSL.2024.14</a>.
+</p></li>
+
+</ul>
+</section>
+</section>
+</div>
+</div>
+<script src="./reveal.js/dist/reveal.js"></script>
+<script src="./reveal.js/plugin/markdown/markdown.js"></script>
+<script src="./reveal.js/plugin/notes/notes.js"></script>
+<script src="./reveal.js/plugin/search/search.js"></script>
+<script src="./reveal.js/plugin/zoom/zoom.js"></script>
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: true,
+center: true,
+slideNumber: 'c',
+rollingLinks: false,
+keyboard: true,
+mouseWheel: false,
+fragmentInURL: false,
+hashOneBasedIndex: false,
+pdfSeparateFragments: false,
+overview: true,
+
+transition: 'fade',
+transitionSpeed: '10',
+
+// Plugins with reveal.js 4.x
+plugins: [ RevealMarkdown, RevealNotes, RevealSearch, RevealZoom ],
+
+// Optional libraries used to extend reveal.js
+dependencies: [
+]
+
+});
+</script>
+</body>
+</html>

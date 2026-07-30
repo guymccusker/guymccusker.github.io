@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Taylor expansion for Imperative Programs</title>
+<meta name="author" content="Guy McCusker (University of Bath) @@html:<br/>@@ @@html:<br/>@@ joint work with @@html:<br/>@@ Pierre Clairambault and Lionel Vaux-Auclair @@html:<br/>@@ (Aix-Marseille Universit\eacute{})"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="./reveal.js/dist/reveal.css"/>
+
+<link rel="stylesheet" href="./reveal.js/dist/theme/serifdark.css" id="theme"/>
+<link rel="stylesheet" href="./reveal.js/plugin/highlight/zenburn.css"/>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<style>pre.src {background-color: #303030; color: #e5e5e5;}</style>
+<div style="display: none"> \(
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Bool}{\mathbb{B}}
+\newcommand{\Unit}{\mathbb{U}}
+\newcommand{\Locations}{\mathbb{L}}
+\newcommand{\sem}[1]{{[\![#1]\!]}}
+\newcommand{\bag}[1]{[#1]}
+\newcommand{\emptyword}{\varepsilon}
+\newcommand{\inddef}{::=}
+\newcommand{\eqdef}{:=}
+\newcommand{\rM}{m}
+\newcommand{\rN}{n}
+\newcommand{\vX}{x}
+\newcommand{\cC}{c}
+\newcommand{\cD}{d}
+\newcommand{\bN}{\vec{\rN}}
+\newcommand{\iI}{\intConst{i}}
+\newcommand{\lL}{l}
+\newcommand{\rBool}{\mathbf{B}}
+\newcommand{\rNat}{\mathbf{N}}
+\newcommand{\rUnit}{\mathbf{U}}
+\newcommand{\rFun}{\rightarrow}
+\newcommand{\rSkip}{\mathsf{skip}}
+\newcommand{\rTrue}{\mathsf{tt}}
+\newcommand{\rFalse}{\mathsf{ff}}
+\newcommand{\rZero}{\mathbf{0}}
+\newcommand{\bZero}{\vec{\rZero}}
+\newcommand{\intConst}[1]{\underline{#1}}
+\newcommand{\intZero}{\intConst{0}}
+\newcommand{\rConst}[1]{#1}
+\newcommand{\rVar}[1]{#1}
+\newcommand{\rLoc}[1]{#1}
+\newcommand{\rTerm}[1]{#1}
+\newcommand{\rTrace}[1]{#1}
+\newcommand{\rAbs}[2]{\lambda \rVar{#1}.\rTerm{#2}}
+\newcommand{\rApp}[2]{\rTerm{#1 #2}}
+\newcommand{\rVec}[1]{\rTerm{\vec{#1}}}
+\newcommand{\rSeq}{\mathbin{;}}
+\newcommand{\rAssign}[2]{\rLoc{#1}\mathbin{:=}\rTerm{#2}}
+\newcommand{\rGet}[1]{\rTerm{\mathop{!}#1}}
+\newcommand{\rAssert}[2]{\rTerm{\mathsf{assert}_{~\rConst{#1}}{#2}}}
+\newcommand{\rPred}[1]{\rTerm{\mathsf{pred}~#1}}
+\newcommand{\rSucc}[1]{\rTerm{\mathsf{succ}~#1}}
+\newcommand{\rIter}[3]{\mathsf{do}_{#1}~{#2}~\mathsf{then}~{#3}}
+\newcommand{\opWrite}[1]{\mathsf{w}(#1)}
+\newcommand{\opRead}[1]{\mathsf{r}(#1)}
+\newcommand{\allValidTr}[1]{\mathrm{Val}(#1)}
+\newcommand{\validTr}[2]{\mathrm{Val}(#1,#2)}
+\newcommand{\tracePr}[2]{#1\mathbin\upharpoonright#2}
+\newcommand{\rSub}[3]{{#1}\vbrackets{#2/#3}}
+\newcommand{\oSub}[3]{{#1}\vbraces{#2/#3}}
+\newcommand{\oRI}{\opRead{i}}
+\newcommand{\oWI}{\opWrite{i}}
+\newcommand{\oOp}{op}
+
+
+% Types
+\newcommand{\sType}[1]{#1}
+\newcommand{\sBool}{\mathbf{B}}
+\newcommand{\sNat}{\mathbf{N}}
+\newcommand{\sUnit}{\mathbf{U}}
+\newcommand{\sFun}{\rightarrow} % probably want something else
+\newcommand{\sGround}{\mathbf{X}}
+% Judgements
+\newcommand{\sTypes}[4]{#1\vdash^{#2} \sTerm{#3}:\sType{#4}}
+
+% Variables and Locations
+\newcommand{\sVars}{\mathbf{V}}
+\newcommand{\sLocs}{\mathbf{L}}
+
+% Terms
+\newcommand{\sTerm}[1]{#1}
+\newcommand{\sConst}[1]{#1}
+\newcommand{\sVar}[1]{#1}
+\newcommand{\sLoc}[1]{#1}
+\newcommand{\sSkip}{\sTerm{\mathsf{skip}}}
+\newcommand{\sTrue}{\sTerm{\mathsf{tt}}}
+\newcommand{\sFalse}{\sTerm{\mathsf{ff}}}
+\newcommand{\sAbs}[2]{\lambda \sVar{#1}.\sTerm{#2}}
+\newcommand{\sApp}[2]{\sTerm{#1 #2}}
+\newcommand{\sAssign}[2]{\sLoc{#1}:=\sTerm{#2}}
+\newcommand{\sDeref}[1]{\mathop{!}\sTerm{#1}}
+\newcommand{\sIf}[3]{\sTerm{\mathop{\mathsf{if}}#1\mathbin{\mathsf{then}}#2\mathbin{\mathsf{else}}#3}}
+\newcommand{\sWhile}[2]{\sTerm{\mathop{\mathsf{while}}#1\mathbin{\mathsf{do}}#2}}
+\newcommand{\sIsZero}[1]{\sTerm{\mathop{\mathsf{isZero}}#1}}
+\newcommand{\sSucc}[1]{\sTerm{\mathop{\mathsf{succ}}#1}}
+\newcommand{\sPred}[1]{\sTerm{\mathop{\mathsf{pred}}#1}}
+\newcommand{\sSeq}[2]{\sTerm{#1 \mathbin{;} #2}}
+\newcommand{\sNew}[3]{\sTerm{\mathop{\mathsf{new}}}#1=#2\mathbin{\sTerm{\mathsf{in}}}\sTerm{#3}}
+
+\newcommand{\sReduces}{\longrightarrow}
+\newcommand{\sConfig}[2]{\sTerm{#1},#2}
+\newcommand{\sSubs}[3]{\sTerm{#1}[\sTerm{#3}/\sVar{#2}]}
+\newcommand{\sUpd}[3]{#1[#2\mapsto #3]}
+
+\newcommand{\statePr}[2]{#1\upharpoonright #2}
+
+\newcommand{\rFeed}[3]{#1\langle #3/#2\rangle}
+\newcommand{\trT}{t}
+
+\)</div>
+<link rel="stylesheet" type="text/css" href="mystyle.css" />
+<style type="text/css">body {color: white; background: black;}</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide">
+<h2>Taylor expansion for Imperative Programs</h2><h4>Guy McCusker (University of Bath) <br/> <br/> joint work with <br/> Pierre Clairambault and Lionel Vaux-Auclair <br/> (Aix-Marseille Universit&eacute;)</h4>
+</section>
+<section>
+<section id="slide-1">
+<h2 id="1"><span class="section-number-2">1.</span> Taylor Expansion of Lambda Terms</h2>
+<p>
+Ehrhard and Regnier (<a href="#/slide-bibliography">2003</a>) introduced the <i>Differential Lambda Calculus</i> and with it the <i>Taylor expansion of lambda-terms</i>.
+</p>
+
+<p>
+\[
+P x = \sum_{n=0}^\infty \frac{1}{n!} (\mathsf{D}^n P \cdot x^n) 0
+\]
+</p>
+
+<p>
+\(\mathsf{D}^n P \cdot x^n\) represents a version of \(P\) <i>linearly applied</i> to \(n\) occurrences of its argument. 
+</p>
+
+<p>
+The <i>fully developed</i> Taylor expansion &#x2014; in which subterms are recursively expanded &#x2014; can be seen as an infinite sum of <i>linear</i> terms drawn from a <i>resource calculus</i>.
+</p>
+</section>
+<section id="slide-1-1">
+<h3 id="1-1"><span class="section-number-3">1.1.</span> Differential lambda-calculus</h3>
+<p>
+This has led to a great deal of further developments, including:
+</p>
+<ul>
+<li>abstract categorical theory of <i>differential</i> and <i>tangent</i> categories e.g. (<a href="#/slide-bibliography">Blute, Cockett and Seely</a>, <a href="#/slide-bibliography">Ehrhard and Walch</a>)</li>
+<li>comparisons with G&ouml;del&rsquo;s <i>Dialectica</i> interpretation (<a href="#/slide-bibliography">Kerjean and Pédrot</a>)</li>
+<li>redevelopment of the classical theory of lambda-calculus using Taylor expansion (<a href="#/slide-bibliography">Barbarossa and Manzonetto</a>)</li>
+<li>the 2024 <a href="https://www.eatcs.org/index.php/component/content/article/1-news/2986-2024-alonzo-church-award-for-outstanding-contributions-to-logic-and-computation">Alonzo Church Award</a>.</li>
+
+</ul>
+</section>
+<section id="slide-1-2">
+<h3 id="1-2"><span class="section-number-3">1.2.</span> In this talk:</h3>
+<ul>
+<li>Some curiosity-driven exploration of what happens when we move to a noncommutative resource calculus</li>
+<li>A new (?) view on imperative programs</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-2">
+<h2 id="2"><span class="section-number-2">2.</span> Resource Calculus</h2>
+<p>
+The resource calculus replaces regular application of lambda-terms \(MN\) with a resource-sensitive application:
+</p>
+
+<div>
+\begin{eqnarray*}
+ m, n & ::= & x \mid \lambda x.m \mid m \bar{n} \\
+  \bar{n} & ::= & [n_1, \ldots, n_k] \quad\quad \mbox{a finite multiset of terms}
+\end{eqnarray*}
+
+</div>
+
+<p>
+Intuition: execution of \(MN\) is like execution of \(M[N,\ldots,N]\) for <i>some</i> number of copies of \(N\).
+</p>
+</section>
+<section id="slide-2-1">
+<h3 id="2-1"><span class="section-number-3">2.1.</span> Resource calculus reduction</h3>
+<p>
+\[
+(\lambda x.m)\bar{n} \rightarrow_\beta m[\bar{n}/x]
+\]
+</p>
+
+<p>
+Linear substitution generates a finite <i>sum</i> of terms:
+</p>
+
+<div>
+\begin{eqnarray*}
+  x[\bar{n}/x] & = & \left\{\begin{array}{rl}
+                           n & \text{if }\bar{n} = [n]\\
+                           \rZero& \text{otherwise}
+                     \end{array}\right. \\
+  y[\bar{n}/x] & = & \left\{\begin{array}{rl}
+                           y & \text{if }\bar{n} = []\\
+                           \rZero& \text{otherwise}
+                     \end{array}\right. \\
+  (\lambda y.m)[\bar{n}/x] & = & \lambda y.m[\bar{n}/x]\\
+  (m\bar{p})[\bar{n}/x] & = & \sum_{\bar n = \bar{n_1} \uplus \bar{n_2}} m[\bar{n_1}/x]\bar{p}[\bar{n_2}/x]\\
+  ([p_1,\ldots,p_k])[\bar{n}/x] & = & \sum_{\bar n = \bar{n_1} \uplus \ldots \uplus \bar{n_k}} [p_1[\bar{n_1}/x], \ldots, p_k[\bar{n_k}/x]]
+\end{eqnarray*}
+
+</div>
+
+</section>
+<section>
+
+<ul>
+<li>All syntactic operations can be extended to sums via <i>linearity</i>.</li>
+<li>In particular \(\rZero\) is preserved, so any zero that appears destroys the whole term.</li>
+<li>Reduction is <i>strongly normalizing</i> and (locally) <i>confluent</i>.</li>
+
+</ul>
+</section>
+<section id="slide-2-2">
+<h3 id="2-2"><span class="section-number-3">2.2.</span> Taylor Expansion</h3>
+<p>
+The Taylor expansion of a lambda-term is now readily defined:
+</p>
+
+<div>
+\begin{eqnarray*}
+\mathbf{T}(x) & = & x \\
+\mathbf{T}(\lambda x. M) & = & \lambda x. \mathbf{T}(M)\\
+\mathbf{T}(MN) & = & \sum_k \frac{1}{k!}\mathbf{T}(M)[\mathbf{T}(N)^k]
+\end{eqnarray*}
+
+</div>
+</section>
+<section id="slide-2-3">
+<h3 id="2-3"><span class="section-number-3">2.3.</span> Key result: B&ouml;hm commutation</h3>
+<p>
+Ehrhard and Regnier (<a href="#/slide-bibliography">2008</a>)  demonstrated that normalised Taylor expansions coincide with Taylor-expanded B&ouml;hm trees:
+\[
+ NF(\mathbf{T}(M)) = \mathbf{T}(\mathbf{BT}(M)). 
+\]
+</p>
+
+<p>
+So equivalence of Taylor expansions is the same as equivalence of B&ouml;hm trees.
+</p>
+
+<p>
+Barbarossa and Manzonetto (<a href="#/slide-bibliography">2019</a>) used this to redevelop several classical lambda-calculus results using Taylor expansions.
+</p>
+
+<p>
+Taylor expansion provides a powerful new approximation theory for the lambda-calculus. 
+</p>
+</section>
+<section id="slide-2-4">
+<h3 id="2-4"><span class="section-number-3">2.4.</span> A semantic view: Relational Semantics</h3>
+<p>
+These ideas grew from <i>quantitative semantics</i> of lambda-calculus and linear logic (<a href="#/slide-bibliography">Girard</a>).
+</p>
+
+<p>
+The simplest variant of quantitative semantics is the <i>relational model</i>:
+</p>
+<ul>
+<li>types = sets</li>
+<li>\(\sem{A\rightarrow B} = \mathbf{M}_f \sem{A} \times \sem{B}\)</li>
+<li>terms \(x:A \vdash M: B\) = relations between \(\mathbf{M}_f A\) and \(B\)</li>
+
+</ul>
+
+<p>
+(<a href="#/slide-bibliography">Reddy</a>) described a relational model of <i>imperative</i> programs based on lists rather than multisets. Let&rsquo;s see if we can adapt the Taylor expansion. 
+</p>
+</section>
+</section>
+<section>
+<section id="slide-3">
+<h2 id="3"><span class="section-number-2">3.</span> Noncommutative resource calculus: first attempt</h2>
+<p>
+The syntax looks the same as before, thanks to the magic of overloading. 
+</p>
+
+<div>
+\begin{eqnarray*}
+ m, n & ::= & x \mid \lambda x.m \mid m \vec{n} \\
+  \vec{n} & ::= & [n_1, \ldots, n_k] \quad\quad \mbox{a finite list of terms}
+\end{eqnarray*}
+
+</div>
+
+<p>
+\[
+(\lambda x.m)\vec{n} \rightarrow_\beta m[\vec{n}/x]
+\]
+</p>
+
+<p>
+What is the substitution?
+</p>
+</section>
+<section id="slide-3-1">
+<h3 id="3-1"><span class="section-number-3">3.1.</span> Noncommutative substitution</h3>
+<div>
+\begin{eqnarray*}
+  x[\vec{n}/x] & = & \left\{\begin{array}{rl}
+                           n & \text{if }\vec{n} = [n]\\
+                           \rZero& \text{otherwise}
+                     \end{array}\right. \\
+  y[\vec{n}/x] & = & \left\{\begin{array}{rl}
+                           y & \text{if }\vec{n} = []\\
+                           \rZero& \text{otherwise}
+                     \end{array}\right. \\
+  (\lambda y.m)[\vec{n}/x] & = & \lambda y.m[\vec{n}/x]\\
+  (m\vec{p})[\vec{n}/x] & = & \sum_{\vec n = \vec{n_1} \cdot \vec{n_2}} m[\vec{n_1}/x]\vec{p}[\vec{n_2}/x]\\
+  ([p_1,\ldots,p_k])[\vec{n}/x] & = & \sum_{\vec n = \vec{n_1} \cdot \ldots \cdot \vec{n_k}} [p_1[\vec{n_1}/x], \ldots, p_k[\vec{n_k}/x]]
+\end{eqnarray*}
+
+</div>
+
+<p>
+In contrast to the original resource calculus, the &ldquo;sums&rdquo; here are either \(\rZero\) or singletons. 
+</p>
+</section>
+<section id="slide-3-2">
+<h3 id="3-2"><span class="section-number-3">3.2.</span> Problem: confluence fails</h3>
+<p>
+Confluence is immediately problematic:
+</p>
+
+
+
+<div id="orged7c16f" class="figure">
+<p><img src="confluence.png" alt="confluence.png" />
+</p>
+</div>
+</section>
+<section id="slide-3-3">
+<h3 id="3-3"><span class="section-number-3">3.3.</span> A heavy-handed solution</h3>
+<p>
+We can avoid this situation by restricting our syntax.
+</p>
+
+<p>
+A <i>linear</i> application rule
+</p>
+
+<p>
+\[
+ \frac{\Gamma \vdash m \quad \Delta \vdash n_i \quad \quad (i = 1, \ldots, k)}{\Gamma, \Delta \vdash m[n_1, \ldots, n_k]}
+\]
+prevents variables from occurring in both function and argument.
+</p>
+
+<p>
+The resulting calculus is very boring: just a linear lambda-calculus. But it is confluent!
+</p>
+</section>
+<section id="slide-3-4">
+<h3 id="3-4"><span class="section-number-3">3.4.</span> Solution (more interesting)</h3>
+<p>
+We can restore some interesting computations to the calculus by adding a <i>sequencing</i> construct
+\[
+ m \rSeq n 
+\]
+with an <i>additive</i> style rule
+\[
+ \frac{\Gamma \vdash m \quad \Gamma \vdash n}{\Gamma \vdash m \rSeq n}
+\]
+</p>
+</section>
+<section id="slide-3-5">
+<h3 id="3-5"><span class="section-number-3">3.5.</span> A noncommutative resource calculus</h3>
+<p>
+We can add <i>constants</i> and <i>assertions</i> to obtain a noncommutative resource calculus. 
+</p>
+
+<p>
+\[
+  \rM, \rN \inddef \vX \mid \cC \mid \rAbs{\vX}{\rM} \mid
+  \rApp{\rM}{\bN} \mid \rM \rSeq \rN \mid \rAssert{\cC}{\rM}
+\]
+</p>
+
+<p>
+If-then-else can be expressed as 
+\[
+\rAssert{\rTrue}{B} \rSeq M + \rAssert{\rFalse}{B}\rSeq N
+\]
+</p>
+</section>
+<section id="slide-3-6">
+<h3 id="3-6"><span class="section-number-3">3.6.</span> Resource calculus reductions</h3>
+<p>
+\[
+(\lambda x.m)\vec{n} \rightarrow_\beta m[\vec{n}/x]  \quad\quad \rSkip \rSeq m \rightarrow m
+\]
+</p>
+
+<p>
+\[
+ \rAssert{\cC}{\cC} \rightarrow \rSkip \quad\quad \rAssert{\cC}{\cD} \rightarrow \rZero
+\]
+</p>
+
+<p>
+\[
+\rAssert{\cC}{(m \rSeq n)} \rightarrow m \rSeq \rAssert{\cC}{n}
+\]
+</p>
+
+
+<p>
+\[
+\frac{m \rightarrow m'}{m \rSeq n \rightarrow m' \rSeq n} \quad\quad
+\frac{n \rightarrow n'}{m \rSeq n \rightarrow m \rSeq n'} \quad\quad
+\]
+</p>
+</section>
+<section id="slide-3-7">
+<h3 id="3-7"><span class="section-number-3">3.7.</span> Goal</h3>
+<p>
+We aim to use this calculus as the target language for a <i>Taylor expansion of imperative programs</i>, inspired by the relational semantics.
+</p>
+</section>
+<section id="slide-3-8">
+<h3 id="3-8"><span class="section-number-3">3.8.</span> Relational semantics of imperative programs</h3>
+<p>
+(<a href="#/slide-bibliography">Reddy</a>) pioneered a relational semantics of <i>imperative</i> programs.
+</p>
+
+<p>
+His model replaces the multisets of the familiar relational model of linear logic with lists: a non-commutative relational semantics.
+</p>
+
+<p>
+It was later shown [M <a href="#/slide-bibliography">2002</a>] that this model is <i>fully abstract</i> for a programming language called <i>Basic SCI</i>.
+</p>
+
+<p>
+Reddy&rsquo;s work was an important precursor to the game semantics of local variables [Abramsky &amp; M, <a href="#/slide-bibliography">1996</a>]. 
+</p>
+</section>
+</section>
+<section>
+<section id="slide-4">
+<h2 id="4"><span class="section-number-2">4.</span> SCI: Syntactic Control of Interference</h2>
+<p>
+Reynolds (<a href="#/slide-bibliography">1978</a>) introduced <i>syntactic control of interference</i> (SCI) as an approach to control of <i>aliasing</i> in imperative programming.
+</p>
+
+<p>
+Key idea: functions and their arguments should not share identifiers.
+</p>
+
+<p>
+Reynolds used this property to ensure that distinct identifiers never <i>interfere</i>; this enables cleaner reasoning about programs.
+</p>
+
+<p>
+Nowadays we see this as a <i>linear (or affine) type system</i>.
+</p>
+
+</section>
+<section>
+
+<p>
+SCI is a restricted <i>Idealized Algol</i>. It has an important place in the development of programming language theory.
+</p>
+
+<ul>
+<li><a href="#/slide-bibliography">O’Hearn</a>&rsquo;s early work on SCI led him to notice the phenomenon <i>doubly-closed categories</i></li>
+<li>&#x2026; which led to Bunched Implications (<a href="#/slide-bibliography">O’Hearn and Pym</a>)</li>
+<li>&#x2026; and hence to Separation Logic (<a href="#/slide-bibliography">Reynolds</a>)</li>
+
+</ul>
+</section>
+<section id="slide-4-1">
+<h3 id="4-1"><span class="section-number-3">4.1.</span> Basic SCI</h3>
+<p>
+Basic SCI is a higher-order imperative programming language with local variables and an affine type system.
+</p>
+
+<p>
+Types:
+</p>
+<div>
+\begin{eqnarray*}
+  \sGround & \inddef & \sUnit \mid\sBool \mid \sNat  \quad\quad \text{unit, Booleans, natural numbers}\\ 
+  \sType{A} & \inddef &\sGround  \mid \sType{A} \sFun \sType{B}
+\end{eqnarray*}
+
+</div>
+
+</section>
+<section>
+<p>
+Constants:
+\[
+  \sConst{k} \inddef \sSkip \mid \sTrue \mid \sFalse \mid \sConst{i} 
+\]
+</p>
+
+<p>
+Syntax:
+</p>
+
+<div>
+\begin{eqnarray*}
+  M, N, P  & \inddef &  x \mid \sAbs{x^A}{M} \mid \sApp{M}{N} \\
+  &  \mid  &  \sAssign{l}{M} \mid  \sDeref{l} \mid \sSeq{M}{N} \mid \sWhile{M}{N}  \mid \sNew{l}{i}{M} \\
+  & \mid &  \sConst{k} \mid \sIsZero{M} \mid \sPred{M} \mid \sSucc{M} \mid \sIf{M}{N}{P} \\
+\end{eqnarray*}
+
+</div>
+
+<p>
+\(l\) ranges over an infinite set of <i>locations</i>.
+</p>
+
+</section>
+<section>
+
+<p>
+Note that there is no recursion: a function cannot call itself because
+\[
+ f(f(\ldots)) 
+\]
+violates the linearity constraint.
+</p>
+
+</section>
+<section>
+
+<p>
+Type judgements \( \sTypes{\Gamma}{L}{M}{A} \):
+</p>
+
+<p>
+\[
+\frac{\sTypes{\Gamma}{L}{M}{A \sFun B} \quad\quad  \sTypes{\Delta}{L'}{N}{A}} {\sTypes{\Gamma,\Delta}{L,L'}{\sApp{M}{N}}{B}}
+\]
+</p>
+
+<p>
+\[
+\frac{\sTypes{\Gamma}{L}{M}{\sUnit} \quad\quad \sTypes{\Gamma}{L}{N}{\sGround}}{\sTypes{\Gamma}{L}{\sSeq{M}{N}}{\sGround}}
+\]
+</p>
+
+<p>
+\[
+\frac{\sTypes{\Gamma}{L,l}{M}{\sGround}}
+{\sTypes{\Gamma}{L}{\sNew{l}{i}{M}}{\sGround}}
+\]
+</p>
+</section>
+<section id="slide-4-2">
+<h3 id="4-2"><span class="section-number-3">4.2.</span> Operational semantics</h3>
+<p>
+This language can be given a small-step operational semantics:
+\[
+ M, \sigma \rightarrow M', \sigma'
+\]
+where \(\sigma, \sigma'\) are <i>states</i>: functions from locations to integers.
+</p>
+
+<p>
+Key reductions:
+\[
+ (\lambda x.M)N, \sigma \rightarrow M[N/x], \sigma
+\]
+</p>
+
+<p>
+\[
+\sAssign{l}{i}, \sigma \rightarrow \sSkip,\sUpd{\sigma}{l}{i}
+\]
+</p>
+
+<p>
+\[
+\sDeref{l},\sigma \rightarrow \sigma(i), \sigma
+\]
+</p>
+
+<p>
+\[
+\frac{M, \sigma\oplus[l \mapsto i] \rightarrow M',\sigma'\oplus[l \mapsto i']}
+{\sNew{l}{i}{M}, \sigma \rightarrow \sNew{l}{i'}{M'}, \sigma' }
+\]
+</p>
+</section>
+</section>
+<section>
+<section id="slide-5">
+<h2 id="5"><span class="section-number-2">5.</span> Imperative resource terms</h2>
+<p>
+Resource calculus (reminder):
+\[
+  \rM, \rN \inddef \vX \mid \cC \mid \rAbs{\vX}{\rM} \mid
+  \rApp{\rM}{\bN} \mid \rM \rSeq \rN \mid \rAssert{\cC}{\rM}
+\]
+</p>
+
+<p>
+To this we add assignment and lookup operations:
+\[
+  \rM, \rN \inddef \ldots \mid \rGet{\lL} \mid \rAssign{\lL}{i} 
+\]
+</p>
+
+<p>
+Note that the more general \(\rAssign{\lL}{\rM}\) can be encoded via sums and asserts as
+\[
+ \sum_i \rAssert{i}{\rM}\rSeq \rAssign{\lL}{i}
+\]
+</p>
+</section>
+<section id="slide-5-1">
+<h3 id="5-1"><span class="section-number-3">5.1.</span> Imperative resource reductions</h3>
+<p>
+We add no more reductions to the calculus!
+</p>
+
+<p>
+The calculus is <i>strongly normalizing</i> and (locally) confluent.
+</p>
+
+<p>
+So how does it model state? Via the Taylor expansion of local variables.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-6">
+<h2 id="6"><span class="section-number-2">6.</span> Imperative Taylor Expansion</h2>
+<p>
+We can begin to give the Taylor expansion of SCI terms.
+</p>
+
+<p>
+A term \(M\) will be taken to a formal sum \(\mathbf{T}(M)\) of resource terms.
+</p>
+
+<p>
+For the lambda-calculus part, the definition appears identical to Ehrhard and Regnier&rsquo;s:
+</p>
+<div>
+\begin{eqnarray*}
+\mathbf{T}(x) & = & x \\
+\mathbf{T}(\lambda x. M) & = & \lambda x. \mathbf{T}(M)\\
+\mathbf{T}(MN) & = & \sum_k \mathbf{T}(M)[\mathbf{T}(N)^k]
+\end{eqnarray*}
+
+</div>
+
+</section>
+<section>
+
+<p>
+It is <i>not</i> the same &#x2014; it is much dumber!
+</p>
+<ul>
+<li>we work with lists rather than multisets</li>
+<li>in the application \(MN\) there are no identifiers in common between \(M\) and \(N\)</li>
+<li>the deterministic nature of our substitution means that no rational coefficients are required</li>
+
+</ul>
+
+</section>
+<section>
+
+<p>
+Arithmetic and conditionals are handled using sequencing, assert, and sums:
+</p>
+<div>
+\begin{eqnarray*}
+% \mathbf{T}(\sPred{M}) & = & \rAssert{0}{\mathbf{T}(M)}\rSeq 0 \\ & + & 
+% \sum_{i\in\N}\rAssert{i+1}{\mathbf{T}(M)}\rSeq i\\
+\mathbf{T}(\sSucc{M})& = & 
+  \sum_{i\in\N}\rAssert{i}{\mathbf{T}(M)}\rSeq i+1 \\
+\mathbf{T}(\sIf{M}{N}{P}) & = &
+  \rAssert{\rTrue}{\mathbf{T}(M)}\rSeq\mathbf{T}(N) \\ & + & 
+  \rAssert{\rFalse}{\mathbf{T}(M)}\rSeq\mathbf{T}(P)
+\end{eqnarray*}
+
+</div>
+
+</section>
+<section>
+
+<p>
+Basic imperative constructs:
+</p>
+<div>
+\begin{eqnarray*}
+\mathbf{T}(\sSeq{M}{N}) & = & \mathbf{T}(M)\rSeq\mathbf{T}(N)\\
+\mathbf{T}(\rGet{l}) & = & \rGet{l}\\
+\mathbf{T}(\sAssign{l}{M}) & = &
+  \sum_{i\in\N}\rAssert{i}{\mathbf{T}(M)}\rSeq\rAssign{l}{i}
+\end{eqnarray*}
+
+</div>
+
+</section>
+<section>
+
+<p>
+We just need to figure out variable allocation&#x2026;
+</p>
+</section>
+<section id="slide-6-1">
+<h3 id="6-1"><span class="section-number-3">6.1.</span> Motivating example</h3>
+<p>
+Consider the term
+\[
+ f: \sUnit \rightarrow \sUnit \vdash^l \sSeq{f(\sAssign{l}{\sDeref{l}+1})}{\sDeref{l}}:\sNat
+\]
+</p>
+
+<p>
+The first terms of its Taylor expansion are
+</p>
+<div>
+\begin{array}{cl}
+& &  f([])\rSeq \rGet{l} \\
+& + &  \sum_i f[\rAssert{i}{\rGet{l}}\rSeq \rAssign{l}{i+1}] \rSeq \rGet{l}\\
+& + &  \sum_{i,j} f[\rAssert{i}{\rGet{l}}\rSeq \rAssign{l}{i+1}, \rAssert{j}{\rGet{l}}\rSeq \rAssign{l}{j+1}] \rSeq \rGet{l}\\
+& + & \ldots 
+\end{array}
+
+</div>
+
+<p>
+(after simplifying some assertions.)
+</p>
+
+</section>
+<section>
+
+<p>
+Each term contains a single trace of reads and writes to location \(l\).
+</p>
+
+<p>
+The behaviour of such a term after \(l\) is allocated to a cell will be given by:
+</p>
+<ul>
+<li>replacing each \(\rGet{l}\) with an appropriate constant, reflecting the last value written</li>
+<li>replacing each \(\rAssign{l}{i}\) with \(\rSkip\)</li>
+
+</ul>
+
+<p>
+We can perform this replacement using a variant of linear substitution.
+</p>
+</section>
+<section id="slide-6-2">
+<h3 id="6-2"><span class="section-number-3">6.2.</span> Semantics of local variables</h3>
+<p>
+We define an operation of linear substitution of <i>state-traces</i> into resource terms.
+</p>
+
+<p>
+State events are sequences of operations:
+\[
+  \oOp \inddef \oWI \mid \oRI
+\]
+</p>
+
+<p>
+Given a <i>trace</i> \(\trT\) &#x2014; a sequence of these operations &#x2014; and a location \(l\), we define the substitution
+\[
+ \rFeed{m}{\lL}{\trT}
+\]
+on resource terms.
+</p>
+
+</section>
+<section>
+
+<p>
+This substitution represents the result of term \(m\), executed in an environment where location \(l\) insists on performing the trace \(\trT\).
+</p>
+
+<p>
+(Compare this to a linear application to a fixed list of inputs.)
+</p>
+
+</section>
+<section>
+
+<p>
+The key cases:
+\[
+  \rFeed{(\rGet{\lL'})}{\lL}{\trT}\eqdef\left\{\begin{array}{rl}
+    i&\text{if $\trT=\oRI$ and $\lL=\lL'$}    \\
+    \rGet{\lL'}&\text{if $\trT=\emptyword$ and $\lL\not=\lL'$}    \\
+    \rZero&\text{otherwise}
+  \end{array}\right.
+\]
+</p>
+
+<p>
+\[
+  \rFeed{(\rAssign{\lL'}{i})}{\lL}{\trT}\eqdef\left\{\begin{array}{rl}
+    \rSkip&\text{if $\trT=\oWI$ and $\lL=\lL'$}  \\
+    \rAssign{\lL'}{i}&\text{if $\trT=\emptyword$ and $\lL\not=\lL'$} \\
+    \rZero&\text{otherwise}
+  \end{array}\right.
+\]
+</p>
+
+</section>
+<section>
+
+<p>
+\[
+  \rFeed{\cC}{\lL}{\trT}\eqdef\left\{\begin{array}{rl}
+    \cC&\text{if $\trT=\emptyword$} \\
+    \rZero&\text{otherwise}
+\end{array}\right.
+\]
+\[
+  \rFeed{x}{\lL}{\trT}\eqdef\left\{\begin{array}{rl}
+    x&\text{if $\trT=\emptyword$}    \\
+    \rZero&\text{otherwise}
+  \end{array}\right.
+\]
+\[
+  \rFeed{(\rAbs{\vX}{\rM})}{\lL}{\trT}\eqdef \rAbs{\vX}{\rFeed{\rM}{\lL}{\trT}}
+\]
+\[  
+  \rFeed{(\rApp{\rM}{\bN})}{\lL}{\trT}\eqdef\left\{\begin{array}{rl}
+    \rApp{\rFeed{\rM}{\lL}{\trT}}{\bN}&\text{if $\lL$ is a location of $\rM$} \\
+    \rApp{\rM}{\rFeed{\bN}{\lL}{\trT}}&\text{if $\lL$ is a location of $\rN$}
+  \end{array}\right.
+\]
+\[
+  \rFeed{\bag{\rM_1,\ldots,\rM_k}}{\lL}{\trT}\eqdef
+  \sum_{\trT=t_1\cdots t_k}\bag{\rFeed{\rM_1}{\lL}{t_1},\dotsc,\rFeed{\rM_k}{\lL}{t_k}}
+\]
+\[
+  \rFeed{(\rM\rSeq \rN)}{\lL}{\trT}\eqdef
+  \sum_{\trT=t_1\cdot t_2}\rFeed{\rM}{\lL}{t_1}\rSeq \rFeed{\rN}{\lL}{t_2}
+\]
+\[
+  \rFeed{(\rAssert{\cC}{\rM})}{\lL}{\trT}\eqdef \rAssert{\cC}{\rFeed{\rM}{\lL}{\trT}}
+\]
+</p>
+</section>
+<section id="slide-6-3">
+<h3 id="6-3"><span class="section-number-3">6.3.</span> Taylor expansion of variable allocation</h3>
+<p>
+Variable allocation is expanded via substitution of all possible <i>valid traces</i>: those where the reads and writes match up as you would expect. 
+\[
+  \mathbf{T}(\sNew{\lL}{i}{M}) = \sum_{\trT\in\allValidTr{i}} \rFeed{\mathbf{T}(M)}{\lL}{\trT}. 
+\]
+</p>
+</section>
+<section id="slide-6-4">
+<h3 id="6-4"><span class="section-number-3">6.4.</span> Back to our example</h3>
+<p>
+Recall the term
+\[
+ f: \sUnit \rightarrow \sUnit \vdash^l \sSeq{f(\sAssign{l}{\sDeref{l}+1})}{\sDeref{l}}:\sNat
+\]
+</p>
+
+<p>
+with its Taylor expansion
+</p>
+<div>
+\begin{array}{cl}
+& &  f([])\rSeq \rGet{l} \\
+& + &  \sum_i f[\rAssert{i}{\rGet{l}}\rSeq \rAssign{l}{i+1}] \rSeq \rGet{l}\\
+& + &  \sum_{i,j} f[\rAssert{i}{\rGet{l}}\rSeq \rAssign{l}{i+1}, \rAssert{j}{\rGet{l}}\rSeq \rAssign{l}{j+1}] \rSeq \rGet{l}\\
+& + & \ldots 
+\end{array}
+
+</div>
+
+</section>
+<section>
+
+<p>
+To compute the expansion of
+\[
+ f: \sUnit \rightarrow \sUnit \vdash^{\emptyset} \sNew{l}{0}{\sSeq{f(\sAssign{l}{\sDeref{l}+1})}{\sDeref{l}}}:\sNat
+\]
+we perform all possible substitutions with valid state-traces, and discard any \(\rZero\)s that arise. 
+</p>
+
+</section>
+<section>
+<p>
+When \(f\) does not invoke its argument, the location is left unchanged:
+\[
+\sum_{\trT\in\allValidTr{0}} \rFeed{(f([])\rSeq \rGet{l})}{l}{\trT} = \sum_{t = \opRead{0}} \rFeed{(f([])\rSeq \rGet{l})}{l}{\trT} = 
+f[]; 0 
+\]
+</p>
+
+</section>
+<section>
+<p>
+When \(f\) invokes its argument once, the location is incremented once:
+\[
+\sum_{\trT\in\allValidTr{0}} \rFeed{(\sum_i f[\rAssert{i}{\rGet{l}}\rSeq \rAssign{l}{i+1}] \rSeq \rGet{l})}{l}{\trT} =
+\sum_i f[\rAssert{i}{0}\rSeq\rSkip]\rSeq i+1
+\]
+because the only traces yielding a non-zero substitution are of the form
+\[
+\opRead{0}\opWrite{i+1}\opRead{i+1}. 
+\]
+</p>
+
+</section>
+<section>
+<p>
+Discarding failed asserts, this is
+\[
+f[\rAssert{0}{0}\rSeq\rSkip]\rSeq 1
+\]
+which reduces to
+\[
+f[\rSkip]\rSeq 1
+\]
+</p>
+
+</section>
+<section>
+<p>
+When \(f\) invokes its argument twice, the location is incremented twice:
+</p>
+<div>
+\begin{eqnarray*}
+& & \sum_{\trT\in\allValidTr{0}} \rFeed{(\sum_{i,j} f[\rAssert{i}{\rGet{l}}\rSeq \rAssign{l}{i+1},
+\rAssert{j}{\rGet{l}}\rSeq \rAssign{l}{j+1}] \rSeq \rGet{l})}{l}{\trT} \\
+& = &
+\sum_{i,j} f[\rAssert{i}{0}\rSeq \rSkip, \rAssert{j}{i+1}\rSeq \rSkip] \rSeq j+1 \\
+\end{eqnarray*}
+
+</div>
+
+<p>
+This reduces to 
+\[
+f[\rAssert{0}{0}\rSeq \rSkip, \rAssert{1}{1} \rSeq\rSkip] \rSeq 2
+\]
+and then to 
+\[
+f[\rSkip,\rSkip]\rSeq 2
+\]
+</p>
+</section>
+</section>
+<section>
+<section id="slide-7">
+<h2 id="7"><span class="section-number-2">7.</span> Soundness</h2>
+<p>
+The Taylor expansion accurately reflects the operational semantics of SCI:
+</p>
+<div class="theorem" id="orgf041864">
+<p>
+If \(M, \sigma \rightarrow M', \sigma'\) then
+\[
+NF(\sum_{\trT\in\validTr{\sigma}{-}} \rFeed{\mathbf{T}(M)}{L}{\trT}) =
+NF(\sum_{\trT\in\validTr{\sigma'}{-}} \rFeed{\mathbf{T}(M')}{L}{\trT'})
+\]
+</p>
+
+</div>
+
+<p>
+This is proved by straightforward induction. 
+</p>
+</section>
+<section id="slide-7-1">
+<h3 id="7-1"><span class="section-number-3">7.1.</span> Adequacy</h3>
+<p>
+We can prove an adequacy result: if the Taylor expansion of a closed program is non-zero, the program terminates.
+</p>
+<div class="theorem" id="org5d31e89">
+<p>
+For a program \(\vdash^{\emptyset}M:\sUnit\), if \(NF(\mathbf{T}(M)) \not = \rZero\) then \(M, \sigma \rightarrow^* \sSkip, \sigma\), where \(\sigma\) is the unique state on no locations. 
+</p>
+
+</div>
+
+<p>
+The proof is a typical logical relations argument. 
+</p>
+
+</section>
+<section>
+
+<p>
+Combining soundness and adequacy with the compositionality of the Taylor expansion we obtain:
+</p>
+<div class="theorem" id="org7e499db">
+<p>
+For terms \(\Gamma \vdash^L M,N:A\) of SCI, if \(NF(\mathbf{T}(M)) = NF(\mathbf{T}(N))\) then \(M\) and \(N\) are observably equivalent. 
+</p>
+
+</div>
+
+</section>
+<section>
+
+<p>
+However, the Taylor expansion is <i>not</i> a fully abstract semantics. For example, in SCI
+\[
+\lambda x.\lambda y. \sSeq{x}{y} \cong \lambda x.\lambda y. \sSeq{y}{x}: \sUnit\rightarrow\sUnit\rightarrow\sUnit
+\]
+but their Taylor expansions are clearly different. 
+</p>
+</section>
+</section>
+<section>
+<section id="slide-8">
+<h2 id="8"><span class="section-number-2">8.</span> Summary</h2>
+<p>
+We introduced a noncommutative <i>resource calculus</i> which serves as a target of a Taylor expansion of imperative programs.
+</p>
+
+<p>
+The calculus is confluent, strongly normalizing, and has no reduction rules for handling imperative behaviour!
+</p>
+
+<p>
+Normal forms of the calculus can be seen as basic bricks of <i>approximants</i> to SCI programs.
+</p>
+<ul>
+<li>not discussed: eta-long normal forms denote single elements of Reddy&rsquo;s relational model</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-9">
+<h2 id="9"><span class="section-number-2">9.</span> Directions</h2>
+<ul>
+<li>Can we characterise Taylor equivalence? What does it mean for \(NF(\mathbf{T}(M)) = NF(\mathbf{T}(N))\)?</li>
+<li>Passive types: Reynolds&rsquo;s SCI allowed sharing of identifiers bound to phrases which do not write to the store. Can we develop a hybrid list/multiset resource calculus to incorporate these?</li>
+<li>Beyond SCI: can we handle full Idealized Algol similarly? Game semantics provides models of Algol, and the models are differential categories.</li>
+<li>Would like to understand the relationship between this account of state and others e.g. algebraic effects</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-bibliography">
+<h2 id="bibliography"><span class="section-number-2">10.</span> Bibliography</h2>
+<div class="csl-bib-body">
+  <div class="csl-entry"><a id="citeproc_bib_item_1"></a>Abramsky, S. and McCusker, G., 1996. Linearity, sharing and state: a fully abstract game semantics for Idealized Algol with active expressions (extended abstract). <i>Proceedings of 1996 workshop on linear logic</i>, 3. Electronic notes in theoretical computer science. Elsevier, pp.2–14.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_2"></a>Barbarossa, D. and Manzonetto, G., 2019. Taylor subsumes Scott, Berry, Kahn and Plotkin. <i>Proc. acm program. lang.</i> [Online], 4(POPL). Available from: <a href="https://doi.org/10.1145/3371069">https://doi.org/10.1145/3371069</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_3"></a>Blute, R.F., Cockett, J.R.B. and Seely, R.A.G., 2006. Differential categories. <i>Mathematical. structures in comp. sci.</i> [Online], 16(6), pp.1049–1083. Available from: <a href="https://doi.org/10.1017/S0960129506005676">https://doi.org/10.1017/S0960129506005676</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_4"></a>Ehrhard, T. and Regnier, L., 2003. The differential lambda-calculus. <i>Theoretical computer science</i> [Online], 309(1), pp.1–41. Available from: <a href="https://doi.org/https://doi.org/10.1016/S0304-3975(03)00392-X">https://doi.org/https://doi.org/10.1016/S0304-3975(03)00392-X</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_5"></a>Ehrhard, T. and Regnier, L., 2008. Uniformity and the Taylor expansion of ordinary lambda-terms. <i>Theoretical computer science</i> [Online], 403(2-3), pp.347–372. Available from: <a href="https://doi.org/10.1016/j.tcs.2008.06.001">https://doi.org/10.1016/j.tcs.2008.06.001</a> [Accessed 29 November 2023].</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_6"></a>Ehrhard, T. and Walch, A., 2023. Cartesian coherent differential categories. <i>2023 38Th annual acm/ieee symposium on logic in computer science (lics)</i> [Online]. pp.1–13. Available from: <a href="https://doi.org/10.1109/LICS56636.2023.10175717">https://doi.org/10.1109/LICS56636.2023.10175717</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_7"></a>Girard, J.-Y., 1988. Normal functors, power series and lambda-calculus. <i>Ann. pure appl. logic</i>, 37, pp.129–177.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_8"></a>Kerjean, M.M. and Pédrot, P.-M., 2024. Δ is for Dialectica. <i>Proceedings of the 39th Annual ACM/IEEE Symposium on Logic in Computer Science</i> [Online]. LICS ’24. New York, NY, USA: Association for Computing Machinery, pp.1–13. Available from: <a href="https://doi.org/10.1145/3661814.3662106">https://doi.org/10.1145/3661814.3662106</a> [Accessed 12 March 2025].</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_9"></a>McCusker, G., 2002. A fully abstract relational model of syntactic control of interference. <i>Proceedings, computer science logic (CSL) 2002</i>, 2471. Lecture notes in computer science. Springer-Verlag, pp.247–261.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_10"></a>O’Hearn, P.W., 1993. A model for syntactic control of interference. <i>Mathematical structures in computer science</i>, 3(4), pp.435–465.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_11"></a>O’Hearn, P.W. and Pym, D.J., 1999. The logic of bunched implications. <i>Bulletin of symbolic logic</i>, 5(2), pp.215–244.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_12"></a>Reddy, U.S., 1996. Global state considered unnecessary: Object-based semantics for interference-free imperative programs. <i>Lisp and symbolic computation</i>, 9(1), pp.7–76.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_13"></a>Reynolds, J.C., 1978. Syntactic control of interference. <i>Conf. record 5th acm symposium on principles of programming languages</i>. pp.39–46.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_14"></a>Reynolds, J.C., 2002. Separation logic: a logic for shared mutable data structures. <i>Seventeenth annual IEEE symposium on logic in computer science (lics 2002)</i>. IEEE Computer Society Press, pp.55–74.</div>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-11">
+<h2 id="11"><span class="section-number-2">11.</span> Coda: Reddy&rsquo;s model</h2>
+<p>
+The ideas of differential lambda calculus and Taylor expansion grew from <i>quantitative semantics</i> of lambda-calculus and linear logic [Girard 1988].
+</p>
+
+<p>
+The simplest variant of quantitative semantics is the <i>relational model</i>:
+</p>
+<ul>
+<li>types = sets</li>
+<li>\(\sem{A\rightarrow B} = \mathbf{M}_f \sem{A} \times \sem{B}\)</li>
+<li>terms \(x:A \vdash M: B\) = relations between \(\mathbf{M}_f A\) and \(B\)</li>
+
+</ul>
+
+<p>
+E.g.
+\[
+\sem{x:\mathbf{Z} \vdash x - x:\mathbf{Z}} = \{ ([n,m], n-m) \mid n,m \in \mathbf{Z}\}. 
+\]
+</p>
+
+</section>
+<section>
+
+<p>
+In function application, the argument can provide multiple inputs to the function.
+</p>
+
+<p>
+For closed terms:
+\[
+ \sem{MN} = \{ b \mid ([a_1, \ldots, a_k], b) \in \sem{M}, a_1, \ldots, a_k \in \sem{N} \}.
+\]
+Note that all inputs are drawn from \(\sem{N}\) and the order does not matter. 
+</p>
+
+<p>
+cf. \(\mathbf{T}(M)[\mathbf{T}(N)^k]. \)
+</p>
+
+</section>
+<section>
+<p>
+Resource terms provide finer control over the contents of the input bags. 
+</p>
+
+<p>
+Interpretation of resource calculus terms:
+</p>
+<ul>
+<li>closed term of type \(A\) = subset of \(A\)</li>
+<li>bag of closed terms of type \(A\) = subset of \(\mathbf{M}_f A\).</li>
+
+</ul>
+
+<p>
+\[
+ \sem{[M_1, \ldots, M_n]} = \{ [m_1, \ldots, m_n] \mid m_i \in \sem{M_i} \}
+\]
+</p>
+
+</section>
+<section>
+
+<p>
+Resource terms describe <i>building blocks</i> of the relational semantics.
+</p>
+
+<p>
+In some situations, a normal-form resource term denotes a <i>single element</i> of the relational model. 
+</p>
+</section>
+<section id="slide-11-1">
+<h3 id="11-1"><span class="section-number-3">11.1.</span> Reddy&rsquo;s model of imperative programming</h3>
+<p>
+We outline the basic definitions of Reddy&rsquo;s model of SCI, for comparison.
+</p>
+<ul>
+<li>Types = sets</li>
+<li>\(\sem{A \rightarrow B} = \sem{A}^* \times \sem{B}\)</li>
+<li>Terms \(x:A \vdash M:B\) = relations between \(A^*\) and \(B\)</li>
+
+</ul>
+
+</section>
+<section>
+
+<p>
+The <i>unit type</i> \(\sUnit\) is modelled as a singleton set \(\{*\}\).
+</p>
+
+<p>
+Locations are treated as variables of a special type \(\sVars\), modelled as the set of possible <i>read</i> and <i>write</i> actions. 
+\[
+ \{ \oRI \mid i \in \sNat \} \cup   \{ \oWI \mid i \in \sNat \}
+\]
+</p>
+
+</section>
+<section>
+
+<p>
+The term
+</p>
+
+<p>
+\[f:\sUnit \rightarrow \sUnit \vdash^{l} \sSeq{f(\sAssign{l}{\sDeref{l}+1})}{\sDeref{l}}: \sNat
+\]
+is interpreted as a relation with entries such as
+</p>
+
+<div>
+\begin{array}{ccccc}
+ \sUnit & \rightarrow & \sUnit, & \sVars & \vdash & \sNat \\
+ f: [([*,*], & & *)],  & l: [\opRead{i},\opWrite{i+1},\opRead{j},\opWrite{j+1},\opRead{k}], & & k 
+\end{array}
+
+</div>
+</section>
+<section id="slide-11-2">
+<h3 id="11-2"><span class="section-number-3">11.2.</span> Semantics of application</h3>
+<p>
+As in the relational model of lambda-calculus, the semantics of application of closed terms is easy to describe:
+\[
+ \sem{MN} = \{ b \mid ([a_1, \ldots, a_k], b) \in \sem{M}, a_1, \ldots, a_k \in \sem{N} \}.
+\]
+</p>
+</section>
+<section id="slide-11-3">
+<h3 id="11-3"><span class="section-number-3">11.3.</span> Semantics of local variables</h3>
+<p>
+Semantics of local variable application is similar!
+</p>
+
+<p>
+Given
+\[
+\Gamma \vdash^{l} M:\sGround
+\]
+we have
+\[
+\sem{\Gamma \vdash^{\emptyset}\sNew{l}{i}{M}} = \{ (s,b) \mid (s,t,b) \in \sem{M}, t\text{ is a valid state trace from $i$}\}
+\]
+</p>
+
+</section>
+<section>
+
+<p>
+Recalling our example:
+</p>
+<div>
+\begin{array}{ccccc}
+ \sUnit & \rightarrow & \sUnit, & \sVars & \vdash & \sNat \\
+ f: [([**], & & *)],  & l: [\opRead{i},\opWrite{i+1},\opRead{j},\opWrite{j+1},\opRead{k}], & & k 
+\end{array}
+
+</div>
+
+<p>
+After allocation of \(l\) as a local variable, the only elements in play are those with valid state traces
+</p>
+<div>
+\begin{array}{ccccc}
+ \sUnit & \rightarrow & \sUnit, & \sVars & \vdash & \sNat \\
+ f: [([**], & & *)],  & l: [\opRead{0},\opWrite{1},\opRead{1},\opWrite{2},\opRead{2}], & & 2 
+\end{array}
+
+</div>
+<p>
+and the final semantics is
+</p>
+<div>
+\begin{array}{ccccc}
+ \sUnit & \rightarrow & \sUnit & \vdash & \sNat \\
+ f: [([**], & & *)] & & 2 
+\end{array}
+
+</div>
+</section>
+</section>
+</div>
+</div>
+<script src="./reveal.js/dist/reveal.js"></script>
+<script src="./reveal.js/plugin/markdown/markdown.js"></script>
+<script src="./reveal.js/plugin/notes/notes.js"></script>
+<script src="./reveal.js/plugin/search/search.js"></script>
+<script src="./reveal.js/plugin/highlight/highlight.js"></script>
+<script src="./reveal.js/plugin/zoom/zoom.js"></script>
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: true,
+center: true,
+slideNumber: 'c',
+rollingLinks: false,
+keyboard: true,
+mouseWheel: false,
+fragmentInURL: false,
+hashOneBasedIndex: false,
+pdfSeparateFragments: false,
+overview: true,
+
+transition: 'fade',
+transitionSpeed: '10',
+
+// Plugins with reveal.js 4.x
+plugins: [ RevealMarkdown, RevealNotes, RevealSearch, RevealHighlight, RevealZoom ],
+
+// Optional libraries used to extend reveal.js
+dependencies: [
+]
+
+});
+</script>
+</body>
+</html>

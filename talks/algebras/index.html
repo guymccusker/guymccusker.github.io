@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Algebras in relational semantics <br> (work in progress)</title>
+<meta name="author" content="Guy McCusker, University of Bath"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="./reveal.js/dist/reveal.css"/>
+
+<link rel="stylesheet" href="./reveal.js/dist/theme/serifdark.css" id="theme"/>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<link rel="stylesheet" type="text/css" href="mystyle.css" />
+<style type="text/css">body {color: white; background: black;}</style>
+<style type="text/css">div.content { counter-reset: def-counter 0 section-counter 0 lem-counter 0 thm-counter 0;  } </style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide">
+<h2>Algebras in relational semantics <br> (work in progress)</h2><center><p>Guy McCusker, University of Bath</p></center>
+</section>
+
+
+<section>
+<section id="slide-1">
+<h2 id="1"><span class="section-number-2">1.</span> Acknowledgements</h2>
+<p>
+\[
+\def\coh{\overset{\textstyle\frown}{\smile}}
+\]
+My visit to Marseille this month (November 2023) was funded by grants held by Pierre Clairambault and Lionel Vaux Auclair. And we talked about this material a little bit. 
+</p>
+
+<p class="fragment (fade-up)">
+Thanks Pierre and Lionel &#x2013; I&rsquo;ve had a great time.
+</p>
+
+<p class="fragment (fade-up)">
+I&rsquo;ve also chatted with Jim Laird (Bath) about some of this material. 
+</p>
+
+</section>
+<section id="slide-1-1">
+<h3 id="1-1"><span class="section-number-3">1.1.</span> Alternative title</h3>
+<p>
+With thanks to John Power&#x2026;
+</p>
+
+<blockquote class="fragment (fade-up)">
+<p>
+&ldquo;I understood that too&rdquo;
+</p>
+</blockquote>
+
+
+
+</section>
+</section>
+<section>
+<section id="slide-2">
+<h2 id="2"><span class="section-number-2">2.</span> Scott&rsquo;s P-omega model</h2>
+<p>
+Dana Scott, <i>Data Types as Lattices</i> (<a href="#/slide-bibliography">1976</a>): 
+</p>
+
+<p>
+A continuous function \(f: \mathbf{P}\omega \rightarrow \mathbf{P}\omega\) is determined by the relation
+\[
+ \{ (S,n)  \mid S \subset_f \omega, n \in f(S) \}
+\]
+</p>
+
+<p>
+Since \(\mathbf{P}_f \omega \times \omega\) is <i>countable</i>, such relations can be encoded as sets of naturals.
+</p>
+
+</section>
+<section>
+<p>
+This gives an embedding
+\[
+ (\mathbf{P}\omega \rightarrow \mathbf{P}\omega) \lhd \mathbf{P}\omega
+\]
+and hence a model of the \(\lambda\)-calculus.
+</p>
+
+<p>
+But how should we understand the construction?
+</p>
+
+
+
+</section>
+<section id="slide-2-1">
+<h3 id="2-1"><span class="section-number-3">2.1.</span> A categorical view (failed)</h3>
+<p>
+(Try to) define a category as follows:
+</p>
+<ul>
+<li>Objects: Sets</li>
+<li>Morphisms \(A \rightarrow B\): relations on \(\mathbf{P}_f A \times B\).</li>
+<li>Composition: \(f; g\) given by
+\[
+    \{ (\bigcup_i S_i,  n) \mid (S_i, n_i) \in f, (\{n_1,\ldots, n_k\},n)\in g \}
+   \]</li>
+
+</ul>
+
+</section>
+<section>
+<div class="org-center">
+
+<div id="org7b37bdf" class="figure">
+<p><img src="./images/scottcomp.png" alt="Diagram depicting the proposed definition of composition in this non-category" width="80%" />
+</p>
+</div>
+</div>
+
+
+</section>
+<section id="slide-2-2">
+<h3 id="2-2"><span class="section-number-3">2.2.</span> This doesn&rsquo;t work!</h3>
+<p>
+The enumeration \(\{n_1,\ldots,n_k\}\) is not unique because set union is idempotent.
+</p>
+
+<p>
+This means that there is no identity in the definition as given above. 
+</p>
+
+</section>
+<section id="slide-2-3">
+<h3 id="2-3"><span class="section-number-3">2.3.</span> Fixing this</h3>
+<p>
+There are lots of ways to fix this problem:
+</p>
+<ul>
+<li>up-close all the sets;</li>
+<li>more sophisticated closure based on preorders cf. Ehrhard (<a href="#/slide-bibliography">2012b</a>);</li>
+<li>banish idempotence (coming next);</li>
+<li>something else (coming later).</li>
+
+</ul>
+
+</section>
+<section id="slide-2-4">
+<h3 id="2-4"><span class="section-number-3">2.4.</span> Idea of this talk</h3>
+<p>
+We&rsquo;ll explore a range of models of computation which have much in common with this construction.
+</p>
+
+<p>
+We try to advocate a view of these categories as the <i>opposite</i> of categories of <i>algebras</i>.
+</p>
+
+<p>
+(cf. Stone duality)
+</p>
+
+<p>
+Most of this was presaged by Lamarche (<a href="#/slide-bibliography">1992</a>)
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-3">
+<h2 id="3"><span class="section-number-2">3.</span> The relational model of linear logic</h2>
+<p class="backwardlink">
+<a href="#/slide-1" class="backwardlink">1</a>
+</p>
+
+
+<p>
+Take Scott&rsquo;s idea and replace sets with multisets:
+</p>
+
+<ul>
+<li>Objects: Sets</li>
+<li>Morphisms \(A \rightarrow B\): relations on \(\mathbf{M}_f A \times B\).</li>
+<li>Composition: \(f; g\) given by
+\[
+    \{ (\biguplus_i S_i,  n) \mid (S_i, n_i) \in f, ([n_1,\ldots, n_k],n)\in g \}
+   \]</li>
+
+</ul>
+
+<p>
+This works just fine!
+</p>
+
+</section>
+<section id="slide-3-1">
+<h3 id="3-1"><span class="section-number-3">3.1.</span> Linear logic roots</h3>
+<ul>
+<li>\(\mathbf{Rel}\) is a *-autonomous category = model of MLL.</li>
+<li>finite multiset models the exponential !</li>
+<li>the category described above is the associated Cartesian closed category.</li>
+
+</ul>
+
+</section>
+<section id="slide-3-2">
+<h3 id="3-2"><span class="section-number-3">3.2.</span> References</h3>
+<p>
+<b>Before</b>
+</p>
+<ul>
+<li>Ehrhard (<a href="#/slide-bibliography">2012a</a>) writes that this was &ldquo;introduced implicitly&rdquo; by Girard (<a href="#/slide-bibliography">1988</a>)</li>
+<li>&#x2026; and that it was folklore in the LL community in the early 1990s.</li>
+<li>It is <i>explicit</i> in Lamarche (<a href="#/slide-bibliography">1992</a>) <i>Quantitative domains and infinitary algebras</i> [written in 1990]</li>
+
+</ul>
+
+</section>
+<section>
+
+<p>
+<b>After</b>
+</p>
+<ul>
+<li>Models of Differential lambda calculus / LL Ehrhard and Regnier (<a href="#/slide-bibliography">2003</a>)</li>
+<li>Generalised Species of Structures (<a href="#/slide-bibliography">Fiore et al., 2008</a>)</li>
+<li>Non-idempotent intersection types (<a href="#/slide-bibliography">De Carvalho, 2009</a> explains the connection)</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-4">
+<h2 id="4"><span class="section-number-2">4.</span> Categorical analysis of the construction</h2>
+<p>
+Recall that \(\mathbf{Rel}\) is the Kleisli category for the powerset monad on \(\mathbf{Set}\): relations are maps \(A \rightarrow \mathbf{P}B\). 
+</p>
+
+<p>
+The opposite  category described above can be seen as consisting of functions
+\[
+ B \rightarrow \mathbf{P}\mathbf{M}_f A 
+\]
+</p>
+
+</section>
+<section>
+<p>
+The functor \(\mathbf{P}\mathbf{M}_f\) is a <i>monad</i> thanks to a <i>distributive law of monads</i>
+\[
+  \mathbf{M}_f \mathbf{P} \rightarrow \mathbf{P}\mathbf{M}_f
+\]
+mapping
+\[
+ [S_1,\ldots,S_k]  \mapsto \{ [a_1,\ldots,a_k] \mid a_i \in S_i \}
+\]
+</p>
+
+</section>
+<section id="slide-4-1">
+<h3 id="4-1"><span class="section-number-3">4.1.</span> Aside: Scott&rsquo;s model is not like this</h3>
+<p>
+The Scott model &#x2014; using \(\mathbf{P}_f\) rather than \(\mathbf{M}_f\) &#x2014; cannot be constructed in this way.
+</p>
+
+<p>
+There is no distributive law for \(\mathbf{P}_f\) over \(\mathbf{P}\) and in fact no monad structure on \(\mathbf{P}\mathbf{P}_f\) <i>at all</i> (<a href="#/slide-bibliography">Klin and Salamanca, 2018</a>)
+</p>
+
+<p>
+Related: Zwart and Marsden (<a href="#/slide-bibliography">2022</a>) characterise the availability and non-availability of such distributive laws for a range of monads.
+</p>
+
+</section>
+<section id="slide-4-2">
+<h3 id="4-2"><span class="section-number-3">4.2.</span> Multiple points of view</h3>
+<p>
+This category is:
+</p>
+<ul>
+<li>the opposite of the Kleisli category for \(\mathbf{P}\mathbf{M}_f\) &#x2014; 
+cf. <a href="#/slide-bibliography">Hyland et al., 2006</a></li>
+<li>the Kleisli category for the cofree cocommutative comonoid on \(\mathbf{Rel}\) &#x2014;
+the linear logic view (hat tip: Yves Lafont)</li>
+<li>the opposite of the Kleisli category for \(\mathbf{P}\) on the category of free commutative monoids: morphisms in the underlying category are <i>monoid homomorphisms</i>
+\[
+   \mathbf{M}_f B \rightarrow \mathbf{M}_f A
+   \]</li>
+<li>the opposite of the category of free commutative monoids on \(\mathbf{Rel}\).</li>
+
+</ul>
+
+<p>
+We&rsquo;ll expand on this last point of view. 
+</p>
+
+</section>
+<section id="slide-4-3">
+<h3 id="4-3"><span class="section-number-3">4.3.</span> Monoids and relations</h3>
+<p>
+Aside: the idea of using relations between monoids underpins Uday Reddy&rsquo;s relational semantics of <i>imperative</i> computation (<a href="#/slide-bibliography">1996</a>). We&rsquo;ll see this later if there&rsquo;s time.
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-5">
+<h2 id="5"><span class="section-number-2">5.</span> Weighted relations, quantitative models</h2>
+<p>
+Idea: replace \(\mathbf{P}X = 2^X\) with the monad \(R^X\) where \(R\) is an appropriate structure of <i>coefficients</i>:
+</p>
+<ul>
+<li>a ring</li>
+<li>a semiring</li>
+<li>a <i>complete</i> semiring (allowing infinite sums)</li>
+<li>a &Sigma;-semiring (allowing partially-defined infinite sums)</li>
+
+</ul>
+
+</section>
+<section>
+
+<p>
+Easy reading: each entry \((M, b)\) in a relation now comes with a coefficient. Coefficients could track:
+</p>
+<ul>
+<li>number of paths leading to this computation</li>
+<li>cost of computation</li>
+<li>probability of this computation</li>
+<li>etc&#x2026;</li>
+
+</ul>
+
+</section>
+<section>
+<p>
+When composing, the coefficient of an entry \((M,c)\) is computed by:
+</p>
+<ul>
+<li>taking the sum over all ways to produce \((M,c)\)&#x2026;</li>
+<li>&#x2026; of product of the coefficients of the \((M_1,b_1),\ldots, (M_n,b_n)\) and \(([b_1,\ldots,b_n],c)\)</li>
+
+</ul>
+
+<p>
+(<a href="#/slide-bibliography">Laird et al., 2013</a>;  cf. Ehrhard &amp; Regnier; cf. also Lamarche, obviously).
+</p>
+
+<p>
+This is a simplification of Girard&rsquo;s quantitative semantics, where the coefficients were taken to be sets, and of profunctor models, etc. 
+</p>
+
+</section>
+<section id="slide-5-1">
+<h3 id="5-1"><span class="section-number-3">5.1.</span> Complete semirings</h3>
+<ul>
+<li>\(\mathbf{B}, \vee, \wedge\): just relations</li>
+<li>\(\mathbf{N}^\infty, +, \times\): count paths</li>
+<li>\(\mathbf{N}^\infty, \min, +\): count shortest path length</li>
+<li>\(\mathbf{R}^\infty, +, \times\): probability</li>
+
+</ul>
+
+</section>
+<section id="slide-5-2">
+<h3 id="5-2"><span class="section-number-3">5.2.</span> Model construction, categorically</h3>
+<p>
+The monad \(\mathbf{M}_f\) distributes over \(R^X\) so we obtain a composite monad \(R^{\mathbf{M}_f X}\).
+</p>
+
+<p>
+Yet another viewpoint is that the free commutative monoid construction extends to the Kleisli category for \(R^X\).
+</p>
+
+<p>
+This all holds for general, abstract reasons: see e.g. <a href="#/slide-bibliography">Porst, 2008</a>. 
+</p>
+
+</section>
+<section id="slide-5-3">
+<h3 id="5-3"><span class="section-number-3">5.3.</span> So what are we looking at?</h3>
+<p>
+With our preferred view, the model looks like this:
+</p>
+<ul>
+<li>start with the Kleisli category for \(R^X\); this is the category of <i>free \(R\)-modules</i></li>
+<li>move to the Kleisli category for \(\mathbf{M}_f\) over this: free commutative monoids over free \(R\)-modules.</li>
+
+</ul>
+
+<p>
+Monoids in a category of modules are <i>algebras</i>.    
+</p>
+
+</section>
+<section>
+
+<p>
+The fact that relational semantics is based around algebras is not a new observation: it underpins Ehrhard&rsquo;s development of finiteness spaces, and his work with Regnier on differential lambda-calculus, Taylor expansion etc.
+</p>
+
+<p>
+And Lamarche&rsquo;s paper was entirely based on algebras like the ones we&rsquo;ll discuss.
+</p>
+
+<p class="fragment (fade-up)">
+But <b><b>I understood that too</b></b>. Finally. Although there is lots for me still to understand. 
+</p>
+
+</section>
+<section>
+<p>
+Ehrhard&rsquo;s line of work profitably uses the viewpoints of linear logic.
+</p>
+
+<p>
+We&rsquo;ll advocate that, sometimes, heading straight for the (opposite of the) Cartesian closed category &#x2013; as Lamarche did &#x2013; is helpful, because we can work directly with the algebras. 
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-6">
+<h2 id="6"><span class="section-number-2">6.</span> Algebraic perspective: polynomials</h2>
+<p>
+As we will see, the quantitative relational model may be described as follows:
+</p>
+<ul>
+<li>Objects: sets</li>
+<li>Maps \(A \rightarrow B\): algebra homomorphisms from the polynomial (or power-series) semiring \(R[B]\) to \(R[A]\).</li>
+
+</ul>
+
+<p>
+This gives an alternative view, using arguably more standard mathematics. 
+</p>
+
+</section>
+<section id="slide-6-1">
+<h3 id="6-1"><span class="section-number-3">6.1.</span> Polynomial (semi-)ring</h3>
+<p>
+A <i>monomial</i> over \(A\) is a formal product \(a_1\cdots a_n\) of elements of \(A\), identified up to commutativity.
+</p>
+
+<p>
+That is, it is a finite multiset of elements of \(A\).
+</p>
+
+<p>
+A <i>polynomial</i> is a linear combination 
+\[
+ p = \sum_{m \in \mathbf{M}_f A}  p_m \cdot  m
+\]
+with each \(p_m \in R\).
+</p>
+
+</section>
+<section>
+<p>
+(We will typically work with semiring structures that admit <i>infinite</i> sums, so we don&rsquo;t draw a distinction between polynomials and power series. Maybe we should.)
+</p>
+
+</section>
+<section>
+<p>
+Polynomials form an <i>algebra</i>:
+</p>
+<ul>
+<li>scalar multiplication and addition</li>
+<li>multiplication</li>
+
+</ul>
+<p>
+\[
+ (pq)_m = \sum_{m = m_1\cdot m_2} p_{m_1}q_{m_2}
+\]
+</p>
+
+</section>
+<section id="slide-6-2">
+<h3 id="6-2"><span class="section-number-3">6.2.</span> Symmetric algebra</h3>
+<p>
+The polynomial ring \(R[A]\) is the <i>symmetric algebra</i> over the <i>free module</i> with basis \(A\).
+</p>
+
+<p>
+Perhaps more familiar: \(R[A]\) is the <i>free commutative monoid</i> over \(R^A\).
+</p>
+
+<p>
+Algebra homomorphisms are module homomorphisms (linear maps) which also preserve multiplication. 
+</p>
+
+</section>
+<section>
+<p>
+So we get natural isomorphisms
+</p>
+<div>
+\begin{eqnarray*}
+\mathbf{Alg}(R[B],R[A]) & \cong & \mathbf{Mod}(R^B,R[A]) \\
+ & \cong & \mathbf{Set}(B,R^{\mathbf{M}_f A})\\
+ & \cong & \mathbf{Set}(\mathbf{M}_f A \times B, R)
+\end{eqnarray*}
+
+</div>
+
+<p>
+This was the perspective introduced by Lamarche (1992). (Note that when \(R = 2 = \{0,1\}\), \(R^A\) is \(\mathbf{P}A\) and we are in the traditional relational setting.)
+</p>
+
+</section>
+<section id="slide-6-3">
+<h3 id="6-3"><span class="section-number-3">6.3.</span> Beyond free constructions?</h3>
+<p>
+Everything above is a <i>free</i> construction. 
+</p>
+
+<p>
+Thought: can we get something interesting by looking at other algebras i.e. by applying some quotients?
+</p>
+
+</section>
+<section id="slide-6-4">
+<h3 id="6-4"><span class="section-number-3">6.4.</span> Algebras are semirings</h3>
+<p>
+There are two equivalent ways to define algebras:
+</p>
+<ul>
+<li>an \(R\)-algebra \(A\) is a monoid in the category of \(R\)-modules</li>
+<li>an \(R\)-algebra \(A\) is a semiring together with a semiring homomorphism
+\[
+    R \longrightarrow A
+   \]</li>
+
+</ul>
+
+</section>
+<section id="slide-6-5">
+<h3 id="6-5"><span class="section-number-3">6.5.</span> Constructing algebras</h3>
+<p>
+The second view gives us easy access to a way of quotienting our structures: a semiring \(A\) can be quotiented by an <i>ideal</i> \(I\) via the <i>Bourne equivalence</i> (<a href="#/slide-bibliography">Bourne, 1951</a>)
+\[
+ x \equiv y \Leftrightarrow \exists i,j\in I. x + i = y+j . 
+\]
+</p>
+
+<p>
+We obtain a new algebra
+\[
+ R \longrightarrow A \longrightarrow A/I
+\]
+</p>
+
+</section>
+<section id="slide-6-6">
+<h3 id="6-6"><span class="section-number-3">6.6.</span> Monoid rings</h3>
+<p>
+Another standard algebra construction will come in handy: we can use <i>any</i> monoid as the collection of monomials.
+</p>
+
+<p>
+The polynomials (power series)
+\[
+ \sum_{m\in M} p_m \cdot m 
+\]
+form an \(R\)-algebra.
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-7">
+<h2 id="7"><span class="section-number-2">7.</span> Scott&rsquo;s model using algebra?</h2>
+<p>
+Working over the Boolean semiring, Scott&rsquo;s construction starts to look like the algebra (actually, free module) over the powerset monoid: the free commutative idempotent monoid on a set.
+</p>
+
+<p>
+Step back and consider algebras formed from idempotent commutative monoids.
+</p>
+
+</section>
+<section id="slide-7-1">
+<h3 id="7-1"><span class="section-number-3">7.1.</span> The trouble with idempotence</h3>
+<p>
+Let \(f:A \rightarrow B\) be an algebra homomorphism and \(a\) any monomial in \(A\).
+</p>
+
+<p>
+Because of idempotence in the underlying monoid
+\[
+ f(a) = f(a^2) = f(a)^2 
+\]
+</p>
+
+</section>
+<section>
+<p>
+Suppose \(f(a) = \sum_i b_i\).
+</p>
+
+<p>
+Then we require
+</p>
+<div>
+\begin{eqnarray*}
+ f(a) = f(a)^2  & = & (\sum_i b_i)\cdot(\sum_j b_j) \\
+ & = & \sum_i b_i^2 + \sum_{i\not=j} b_i b_j\\
+ & = & f(a) + \sum_{i\not=j} b_i b_j
+\end{eqnarray*}
+
+</div>
+
+
+</section>
+<section id="slide-7-2">
+<h3 id="7-2"><span class="section-number-3">7.2.</span> Characterising algebra homomorphisms</h3>
+<p>
+The secret to obtaining the <i>closed</i> structure in the relational model was freeness: <i>any</i> map from singleton-monomials to an algebra generates a well-defined algebra homomorphism.
+</p>
+
+<p>
+That is no longer the case; how can we restore it?
+</p>
+
+</section>
+<section>
+
+<p>
+Option 1: consider only those elements of our algebras which are <i>up-closed</i>: if monomial \(a\) has coefficient 1 then so does \(ab\) for every \(b\).
+</p>
+
+<p class="fragment (fade-up)">
+This leads to a category, but it is still tricky to obtain a closed structure. 
+</p>
+
+<p class="fragment (fade-up)">
+Option 2: quotient our algebras so that each \(b_ib_j = 0\).
+</p>
+
+</section>
+<section id="slide-7-3">
+<h3 id="7-3"><span class="section-number-3">7.3.</span> Zeros</h3>
+<p>
+Consider instead idempotent commutative monoids <i>with a zero</i>, which we write as \(\bot\) to avoid clash with the semiring zero.
+</p>
+
+<p>
+Form algebras which are sums \(\sum_i a_i\) such that
+\[
+ i \not= j \Rightarrow a_i a_j = \bot 
+\]
+(NB sums are now <i>partial</i>).
+</p>
+
+<p>
+These algebras will be idempotent &#x2014; \((\sum_i a_i)^2 = \sum_i a_i\) &#x2014; if we can ignore \(\bot\). 
+</p>
+
+</section>
+<section id="slide-7-4">
+<h3 id="7-4"><span class="section-number-3">7.4.</span> Quotient out the zeros</h3>
+<p>
+We don&rsquo;t want to care about coefficients of zero in our algebra: we want \(a = a + \bot\).
+</p>
+
+<p>
+Easy! Quotient out by the ideal generated by \(\bot\).
+</p>
+
+<p>
+We can see this algebra as containing sums of non-\(\bot\) elements. Multiplication discards any \(\bot\)s that are generated.
+</p>
+
+</section>
+<section id="slide-7-5">
+<h3 id="7-5"><span class="section-number-3">7.5.</span> Back to powersets</h3>
+<p>
+Let&rsquo;s apply this idea to the Scott-like model and see what we get.
+</p>
+
+<p>
+We have to decide which multiplications (unions) in \(\mathbf{P}_f A\) will yield \(\bot\).
+</p>
+
+<p>
+To make life easy, just declare that certain pairs of elements \(a\), \(a'\) yield \(\bot\).
+</p>
+
+</section>
+<section>
+
+<p>
+As above we generate an algebra whose monomials are the elements of \(\mathbf{P}_f A\) generated by this monoid operation.
+</p>
+
+<p>
+What do algebra homomorphisms look like?
+</p>
+
+</section>
+<section>
+
+<p>
+We&rsquo;ll focus on the action of an algebra homomorphism on singletons
+\[
+ f(a) = \sum_i S_i
+\]
+where each \(S_i \subseteq_f B\).
+</p>
+
+<p>
+Write \(a\mathbin f S_i\) when \(S_i\) is in the support of \(f(a)\).
+</p>
+
+<p>
+Let&rsquo;s see what properties this relation has. 
+</p>
+</section>
+<section>
+
+<p>
+Because of the definition of our algebras we have:
+</p>
+<ul>
+<li>\(a\mathbin f S\) and \(a \mathbin f T\) implies \(S\cdot T = \bot\) or \(S=T\).</li>
+
+</ul>
+
+</section>
+<section>
+
+<p>
+If \(a \cdot a'= \bot\) then \(f(a\cdot a') = 0\). So if \(f(a) = \sum_i S_i\) and \(f(a') = \sum_j T_j\) we get
+\[
+ \sum_{i,j} S_i \cdot T_j = 0
+\]
+which means each \(S_i \cdot T_j = \bot\).
+</p>
+
+<p>
+So we have:
+</p>
+<ul>
+<li>\(a \cdot a' = \bot\), \(a \mathbin f S\), \(a' \mathbin f T\) implies \(S\cdot T = \bot\).</li>
+
+</ul>
+
+</section>
+<section id="slide-7-6">
+<h3 id="7-6"><span class="section-number-3">7.6.</span> D&eacute;nouement</h3>
+<p>
+Write \(a\coh a'\) to mean \(a\cdot a'\not = \bot\).
+</p>
+
+<p>
+Note that any set \(S\) appearing as a monomial in our algebra satisfies
+\[
+ x, y\in S \Rightarrow x \coh y
+\]
+</p>
+
+<p>
+So the monomials are precisely <i>cliques</i>.
+</p>
+
+</section>
+<section>
+<p>
+Reversing the arrows, to look at the opposite category, the conditions above become:
+</p>
+
+<ul>
+<li>\(S \mathbin f a\) and \(T \mathbin f a\) with \(S \coh T\) implies \(S = T\)</li>
+<li>\(S \mathbin f a\) and \(T \mathbin f a'\) with \(S \coh T\) implies \(a \coh a'\)</li>
+
+</ul>
+
+<p class="fragment (fade-up)">
+These are exactly the maps of coherence spaces!
+</p>
+
+<p class="fragment (fade-up)">
+I guess this is not Scott&rsquo;s model any more. 
+</p>
+
+
+</section>
+<section id="slide-7-7">
+<h3 id="7-7"><span class="section-number-3">7.7.</span> Punchline</h3>
+<p>
+<b>Theorem</b> The category of coherence spaces and stable maps is a full subcategory of the opposite of this category of partial algebras and algebra homomorphisms.
+</p>
+
+</section>
+<section id="slide-7-8">
+<h3 id="7-8"><span class="section-number-3">7.8.</span> Related</h3>
+<p>
+(Other than Lamarche, Ehrhard, Regnier&#x2026;)
+</p>
+
+<p>
+Tsukada and Asada (<a href="#/slide-bibliography">2022</a>) have also shown how to reconstruct coherence spaces in categories of modules; they construct the linear maps, and find a free commutative comonoid. Their construction appears to be quite different to this one. 
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-8">
+<h2 id="8"><span class="section-number-2">8.</span> Imperative computation</h2>
+<p>
+Reddy (<i>Global state considered unnecessary</i>, <a href="#/slide-bibliography">1996</a>) introduced another revolutionary idea.
+</p>
+
+<p>
+Stateful computation can be modelled using traces of behaviour, rather than an explicit representation of state.
+</p>
+
+<p>
+(This presaged the game semantics of imperative computation.)
+</p>
+
+</section>
+<section>
+
+<p>
+In this interpretation, a term such as 
+\[
+ x:\mathsf{Var}, y:\mathsf{Var} \vdash x:=0; x := !x + 1 ; y := !x :\mathsf{Comm}
+\]
+is modelled as a set of (tuples of) traces:
+\[
+ \mathsf{write}~0\cdot\mathsf{read}~n \cdot \mathsf{write}~(n+1) \cdot \mathsf{read}~m, \quad\mathsf{write}~m , \quad \checkmark
+\]
+</p>
+
+</section>
+<section>
+
+<p>
+We model the allocation of (local) store to \(x\) by:
+</p>
+<ul>
+<li>considering only the &ldquo;good variable&rdquo; traces in \(x\)</li>
+<li>hiding the action in \(x\)</li>
+
+</ul>
+
+<p>
+So the semantics of
+\[
+ y:\mathsf{Var} \vdash \mathsf{new}~x~\mathsf{in}~x:=0; x := !x + 1 ; y := !x :\mathsf{Comm}
+\]
+contains just
+\[
+ \mathsf{write}~1, \quad \checkmark. 
+\]
+</p>
+
+</section>
+<section>
+
+<p>
+Reddy defined a <i>multicategory</i>. In its simplest form:
+</p>
+<ul>
+<li>Objects: sets</li>
+<li>Morphisms \(A_1, \ldots, A_n \rightarrow B\): relations on \(A_1^* \times \cdots \times A_n^* \times B\).</li>
+
+</ul>
+
+</section>
+<section>
+
+<div class="theorem" id="orge513aff">
+<p>
+(<a href="#/slide-bibliography">Reddy, 1996</a>) The relational semantics is sound for inteference-controlled Idealised Algol (SCI).
+</p>
+
+</div>
+
+<div class="theorem" id="orgeef5cb2">
+<p>
+(<a href="#/slide-bibliography">2002</a>) The relational semantics is fully abstract for SCI with active expressions.
+</p>
+
+</div>
+
+</section>
+<section id="slide-8-1">
+<h3 id="8-1"><span class="section-number-3">8.1.</span> Algebraic viewpoint</h3>
+<p>
+The non-multicategory variant of this construction can be achieved through our algebraic viewpoint:
+</p>
+<ul>
+<li>Objects: sets</li>
+<li>Morphisms \(A \rightarrow B\): homomorphisms between the <i>free algebras</i> \(2\langle B\rangle\) and \(2\langle A\rangle\).</li>
+
+</ul>
+
+<p>
+The free algebra is the noncommutative analogue of the symmetric algebra (polynomial ring): monomials are now finite <i>sequences</i> rather than finite multisets. 
+</p>
+
+
+</section>
+<section id="slide-8-2">
+<h3 id="8-2"><span class="section-number-3">8.2.</span> Active expressions</h3>
+<p>
+Active expressions are terms that return values but may affect the store, e.g. the preincrement operator
+\[
+ x := !x + 1; \mathsf{return}~!x 
+\]
+(also known as <code>++x</code>).
+</p>
+
+<p>
+Reddy refined the model with a notion of <i>passive type</i> where such side-effects cannot happen.
+</p>
+
+</section>
+<section id="slide-8-3">
+<h3 id="8-3"><span class="section-number-3">8.3.</span> Passive types</h3>
+<p>
+In the syntax, passivity is easy to achieve: simply do not provide access any state-changing operations at passive types.
+</p>
+
+<p>
+A consequence is that, in a term such as
+\[
+ \Gamma, c : \mathsf{Comm} \vdash M: P
+\]
+where \(P\) is passive, we know (intuitively, or via an inductive proof) that the command \(c\) cannot be used.
+</p>
+
+<p>
+In the semantics this property will appear as a notion of <i>passivity reflection</i>.
+</p>
+
+</section>
+<section id="slide-8-4">
+<h3 id="8-4"><span class="section-number-3">8.4.</span> A/P monoids</h3>
+<p>
+Idea: events in the traces are either <i>active</i> (state-changing) or <i>passive</i> (not state-changing).
+</p>
+
+<p>
+Passive events <i>commute</i> with one another and are <i>idempotent</i>.
+</p>
+
+</section>
+<section>
+<p>
+An A/P-monoid \(A\) is given by two sets, \(A_a\) and \(A_p\), and is the quotient of the free monoid over \(A_a + A_p\) by the relations
+</p>
+<div>
+\begin{eqnarray*}
+ p \cdot p' & = & p' \cdot p \\
+ p \cdot p & = & p 
+p\end{eqnarray*}
+
+</div>
+<p>
+for \(p,p' \in A_p\).
+</p>
+
+
+</section>
+<section>
+
+<p>
+Concretely this can be described as the monoid of sequences
+\[
+s_0 \cdot \alpha_0 \cdot s_1 \cdots s_n \cdot \alpha_n
+\]
+where:
+</p>
+<ul>
+<li>\(s_i \in A_a^*\) with \(s_i \not = \epsilon\) for \(i\gt0\)</li>
+<li>\(\alpha_i\) &isin; \(\mathbf{P}A_p\) with \(\alpha_i \not = \emptyset\) for \(i \lt n\).</li>
+
+</ul>
+
+</section>
+<section id="slide-8-5">
+<h3 id="8-5"><span class="section-number-3">8.5.</span> A/P algebras</h3>
+<p>
+As above, we can construct an algebra over this monoid, using linear combinations
+\[
+ \sum_{a\in A} k_a \cdot a
+\]
+with coefficients \(k_a\) drawn from some semiring. 
+</p>
+
+</section>
+<section id="slide-8-6">
+<h3 id="8-6"><span class="section-number-3">8.6.</span> Reddy&rsquo;s refinements</h3>
+<p>
+Reddy&rsquo;s description of the model is based on coherence spaces:
+</p>
+<ul>
+<li>each set \(A_p\), \(A_a\) comes with a coherence structure</li>
+<li>this is extended to traces: \(a_1\cdots a_n \coh b_1 \cdots b_m\) when the first non-equal elements in the sequences are coherent</li>
+<li>the sets \(\alpha_i\) are required to be pairwise coherent</li>
+<li>morphisms are those of coherence spaces</li>
+<li>morphisms are required to reflect passivity: if \((a,b) \in f\) and \(b \in B_p\) then \(a \subset A_p\)</li>
+
+</ul>
+
+</section>
+<section>
+
+<p>
+<b>Observations</b>
+</p>
+<ul>
+<li>The algebraic character is lost (and wasn&rsquo;t really noticed at the time)</li>
+<li>the &ldquo;monoids&rdquo; are now partial: incoherent passive elements cannot be multiplied</li>
+<li>an aspect that ought to emerge naturally &#x2014; passivity reflection &#x2014; is added by fiat.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-9">
+<h2 id="9"><span class="section-number-2">9.</span> Algebraic version of Reddy&rsquo;s model</h2>
+<ul>
+<li>Objects: \((A_a,A_p, \coh)\) as in Reddy&rsquo;s setup
+<ul>
+<li>Each object generates a monoid of sequences as above, plus a single undefined element \(\bot\)</li>
+<li>From this we generate an algebra as above</li>
+
+</ul></li>
+<li>Morphisms: algebra homomorphisms.</li>
+
+</ul>
+
+</section>
+<section>
+<p>
+WARNING!
+</p>
+<blockquote>
+<p>
+There is now a distinction between <i>incoherence</i> and <i>multiplying to zero</i>. 
+</p>
+</blockquote>
+<p>
+The coherence relation describes when events can appear in parallel while the monoid multiplication puts things together in sequence.
+</p>
+
+<p>
+For the passive events, the two coincide.
+</p>
+
+<p>
+This needs some study!
+</p>
+
+</section>
+<section id="slide-9-1">
+<h3 id="9-1"><span class="section-number-3">9.1.</span> Passivity reflection</h3>
+<p>
+In our reverse direction, passivity reflection would mean: given \(b \in B_p\), the support of \(f(b)\) contains only elements made from \(A_p\).
+</p>
+
+<div class="theorem" id="orge995ae4">
+<p>
+Algebra homomorphisms are passivity reflecting. 
+</p>
+
+</div>
+
+</section>
+<section>
+<div class="proof" id="org5501d04">
+<p>
+For \(b\in B_p\) we have \(b\cdot b = b\). Hence \(f(b) = f(b\cdot b) = f(b)\cdot f(b)\).
+</p>
+
+<p>
+Let \(s\) be a minimal sequence in the support of \(f(b)\) that contains an element of \(A_a\). The equation above means that \(s = s' \cdot s'\) for some \(s' \in f(b)\), which is impossible by minimality. 
+</p>
+
+</div>
+
+</section>
+<section>
+<p>
+Nice! A desirable semantic property emerges from the homomorphism property in our algebraic view.
+</p>
+
+</section>
+<section id="slide-9-2">
+<h3 id="9-2"><span class="section-number-3">9.2.</span> Passive subcategory</h3>
+<p>
+We can single out those objects \((\emptyset, A_p)\) where the set of active elements is empty, and immediately notice:
+</p>
+
+<div class="theorem" id="orga6edee3">
+<p>
+The full subcategory of objects with no active elements is the category of coherence spaces.
+</p>
+
+</div>
+
+<p>
+Then passivity-reflection may be expressed as:
+</p>
+
+<div class="theorem" id="org230f14a">
+<p>
+The inclusion functor from coherence spaces to the opposite of our category of algebras has a left adjoint which maps an object \((A_a,A_p)\) to \((\emptyset, A_p)\).
+</p>
+
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-10">
+<h2 id="10"><span class="section-number-2">10.</span> Conclusions</h2>
+<ul>
+<li>Lots of nice relational semantics can be expressed using categories of algebras and algebra homomorphisms</li>
+<li>François Lamarche knew this in the late 1980s</li>
+<li>But there is plenty of scope for working with algebras other than the free ones</li>
+<li>If you pretend hard enough you can convince yourself that coherence spaces are the algebraic fix of Scott&rsquo;s model</li>
+<li>Much of Reddy&rsquo;s work can be reproduced in this way, and homomorphisms yield attractive semantic properties; with more to be figured out.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-bibliography">
+<h2 id="bibliography"><span class="section-number-2">11.</span> Bibliography</h2>
+<div class="csl-bib-body">
+  <div class="csl-entry"><a id="citeproc_bib_item_1"></a>Bourne, S., 1951. The Jacobson Radical of a Semiring. <i>Proceedings of the national academy of sciences</i> [Online], 37(3), pp.163–170. Available from: <a href="https://doi.org/10.1073/pnas.37.3.163">https://doi.org/10.1073/pnas.37.3.163</a> [Accessed 5 December 2023].</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_2"></a>de Carvalho, D., 2009. <i>Execution Time of lambda-Terms via Denotational Semantics and Intersection Types</i> [Online]. arXiv. Comment: 36 pages. Available from: <a href="https://doi.org/10.48550/arXiv.0905.4251">https://doi.org/10.48550/arXiv.0905.4251</a> [Accessed 5 December 2023].</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_3"></a>Ehrhard, T., 2012a. Collapsing non-idempotent intersection types. <i>DROPS-IDN/v2/document/10.4230/LIPIcs.CSL.2012.259</i> [Online]. Schloss-Dagstuhl - Leibniz Zentrum für Informatik. Available from: <a href="https://doi.org/10.4230/LIPIcs.CSL.2012.259">https://doi.org/10.4230/LIPIcs.CSL.2012.259</a> [Accessed 5 December 2023].</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_4"></a>Ehrhard, T., 2012b. The Scott model of linear logic is the extensional collapse of its relational model. <i>Theoretical computer science</i> [Online], 424, pp.20–45. Available from: <a href="https://doi.org/10.1016/j.tcs.2011.11.027">https://doi.org/10.1016/j.tcs.2011.11.027</a> [Accessed 27 November 2023].</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_5"></a>Ehrhard, T. and Regnier, L., 2003. The differential lambda-calculus. <i>Theoretical computer science</i> [Online], 309(1), pp.1–41. Available from: <a href="https://doi.org/https://doi.org/10.1016/S0304-3975(03)00392-X">https://doi.org/https://doi.org/10.1016/S0304-3975(03)00392-X</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_6"></a>Fiore, M., Gambino, N., Hyland, M. and Winskel, G., 2008. The cartesian closed bicategory of generalised species of structures. <i>Journal of the London Mathematical Society</i> [Online], 77(1), pp.203–220. Available from: <a href="https://doi.org/10.1112/jlms/jdm096">https://doi.org/10.1112/jlms/jdm096</a> [Accessed 5 December 2023].</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_7"></a>Girard, J.-Y., 1988. Normal functors, power series and lambda-calculus. <i>Ann. pure appl. logic</i>, 37, pp.129–177.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_8"></a>Hyland, M., Nagayama, M., Power, J. and Rosolini, G., 2006. A category-theoretic formulation of Engeler-style models of the untyped lambda-calculus. <i>Proc. MCFSIT 2004, electronic notes in theoretical computer science volume 161</i>. pp.43–57.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_9"></a>Klin, B. and Salamanca, J., 2018. Iterated Covariant Powerset is not a Monad. <i>Electronic notes in theoretical computer science</i> [Online], 341, pp.261–276. Available from: <a href="https://doi.org/10.1016/j.entcs.2018.11.013">https://doi.org/10.1016/j.entcs.2018.11.013</a> [Accessed 5 December 2023].</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_10"></a>Laird, J., Manzonetto, G., McCusker, G. and Pagani, M., 2013. Weighted relational models of typed lambda-calculi. <i>Proceedings of the 2013 28th annual acm/ieee symposium on logic in computer science</i> [Online]. LICS ’13. Washington, DC, USA: IEEE Computer Society, pp.301–310. Available from: <a href="https://doi.org/10.1109/LICS.2013.36">https://doi.org/10.1109/LICS.2013.36</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_11"></a>Lamarche, F., 1992. Quantitative domains and infinitary algebras. <i>Theoretical computer science</i> [Online], 94(1), pp.37–62. Available from: <a href="https://doi.org/10.1016/0304-3975(92)90323-8">https://doi.org/10.1016/0304-3975(92)90323-8</a> [Accessed 29 November 2023].</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_12"></a>McCusker, G., 2002. A fully abstract relational model of syntactic control of interference. <i>Proceedings, computer science logic (CSL) 2002</i>, 2471. Lecture notes in computer science. Springer-Verlag, pp.247–261.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_13"></a>Porst, H.-E., 2008. On Categories of Monoids, Comonoids, and Bimonoids. <i>Quaestiones mathematicae</i>, 31(2), pp.127–139.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_14"></a>Reddy, U.S., 1996. Global state considered unnecessary: Object-based semantics for interference-free imperative programs. <i>Lisp and symbolic computation</i>, 9(1), pp.7–76.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_15"></a>Scott, D., 1976. Data types as lattices. <i>Siam j. computing</i>, 5, pp.522–587.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_16"></a>Tsukada, T. and Asada, K., 2022. Linear-Algebraic Models of Linear Logic as Categories of Modules over σ-Semirings. <i>Proceedings of the 37th Annual ACM/IEEE Symposium on Logic in Computer Science</i> [Online]. Haifa Israel: ACM, pp.1–13. Available from: <a href="https://doi.org/10.1145/3531130.3533373">https://doi.org/10.1145/3531130.3533373</a> [Accessed 26 November 2023].</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_17"></a>Zwart, M. and Marsden, D., 2022. No-Go Theorems for Distributive Laws. <i>Logical methods in computer science</i> [Online], Volume 18, Issue 1. Available from: <a href="https://doi.org/10.46298/lmcs-18(1:13)2022">https://doi.org/10.46298/lmcs-18(1:13)2022</a> [Accessed 5 December 2023].</div>
+</div>
+</section>
+</section>
+</div>
+</div>
+<script src="./reveal.js/dist/reveal.js"></script>
+<script src="./reveal.js/plugin/markdown/markdown.js"></script>
+<script src="./reveal.js/plugin/notes/notes.js"></script>
+<script src="./reveal.js/plugin/search/search.js"></script>
+<script src="./reveal.js/plugin/zoom/zoom.js"></script>
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: true,
+center: true,
+slideNumber: 'c',
+rollingLinks: false,
+keyboard: true,
+mouseWheel: false,
+fragmentInURL: false,
+hashOneBasedIndex: false,
+pdfSeparateFragments: false,
+overview: true,
+
+transition: 'fade',
+transitionSpeed: '10',
+
+// Plugins with reveal.js 4.x
+plugins: [ RevealMarkdown, RevealNotes, RevealSearch, RevealZoom ],
+
+// Optional libraries used to extend reveal.js
+dependencies: [
+]
+
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+#+Reveal_VERSION: 4
+#+OPTIONS: toc:nil  date:nil frag:t  reveal_pdfseparatefragments:nil reveal_single_file:nil
+#+OPTIONS: reveal_history:t
+#+OPTIONS: ':t
+#+OPTIONS: num:t
+#+REVEAL_THEME: serif
+#+REVEAL_TRANS: fade
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="mystyle.css" />
+#+HTML_HEAD_EXTRA: <style type="text/css">body {color: black; background: white;}</style>
+#+HTML_HEAD_EXTRA: <style type="text/css">pre {background: #ccdddd;}</style>
+
+#+REVEAL_SPEED: 10
+#+REVEAL_TITLE_SLIDE:<h2>%t</h2><h4>%a</h4><h5>%d</h5>
+
+#+LATEX_CLASS_OPTIONS: [a4paper,11pt]
+#+Latex_HEADER: \newtheorem{theorem}{Theorem}[section]
+#+Latex_HEADER: \newtheorem{definition}{Definition}[section]
+#+Latex_HEADER: \newtheorem{lemma}{Lemma}[section]
+#+Latex_HEADER: \newcommand{\sem}[1]{[\![#1]\!]}
+#+Latex_HEADER: \newcommand{\concat}{+\!\!+}
+#+Latex_HEADER: \newenvironment{proof}{\paragraph{Proof}}{\hspace{1em}\hfill$\square$}
+#+Latex_HEADER: \newenvironment{notes}{}{}
+#+Latex_HEADER: \usepackage{tikz,amsmath,amssymb,tikz-cd}
+#+Latex_HEADER: \usepackage{prooftree}
+#+Latex_HEADER: \usetikzlibrary{decorations.pathmorphing,shapes,backgrounds,patterns}
+#+Latex_HEADER: \tikzcdset{labels={font=\everymath\expandafter{\the\everymath\textstyle}}}
+
+#+REVEAL_PLUGINS: (markdown notes search highlight zoom)
+
+#+macro: graphic (eval (concat "\n#+NAME: " $1  (if (org-export-derived-backend-p org-export-current-backend 'latex) "\n#+header: :file 'nil \n#+header: :results \"latex\"" (concat "\n#+header: :file \"" $1 ".png\" \n#+header: :results \"file raw\""  )) "\n#+header: :imagemagick yes :fit yes :iminoptions -density 600 :imoutoptions -geometry 900 -channel RGB  \n #+HEADER: :headers \\usepackage{tikz, amsmath,amssymb,tikz-cd} \\usetikzlibrary{decorations.pathmorphing,patterns,shapes,backgrounds} "))
+
+* COMMENT This is for light backgrounds -- no  -negate option in the macro

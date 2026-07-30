@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Introduction to (Quantitative?) (Relational?) Semantics</title>
+<meta name="author" content="Guy McCusker, University of Bath"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="./reveal.js/dist/reveal.css"/>
+
+<link rel="stylesheet" href="./reveal.js/dist/theme/serifdark.css" id="theme"/>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<link rel="stylesheet" type="text/css" href="mystyle.css" />
+<style type="text/css">body {color: white; background: black;}</style>
+<style type="text/css">div.content { counter-reset: def-counter 0 section-counter 0 lem-counter 0 thm-counter 0;  } </style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide">
+<h2>Introduction to (Quantitative?) (Relational?) Semantics</h2><center><p>Guy McCusker, University of Bath</p></center>
+</section>
+
+<section>
+<section id="slide-org1fd81a6">
+<h2 id="org1fd81a6">Denotational semantics</h2>
+<p>
+\[
+ \def\sem#1{{[\![#1]\!]}}
+\]
+</p>
+
+
+<p>
+<i>Denotational semantics</i> is the study of programming languages or proof systems via their <i>models</i>.
+</p>
+
+<p>
+The idea is to define an <i>interpretation function</i> that takes a program or proof to an element of the model:
+\[
+\sem{-}: \mathcal{L} \rightarrow \mathcal{M}
+\]
+</p>
+
+<p>
+Why do this?
+</p>
+
+</section>
+<section id="slide-orgb57574c">
+<h3 id="orgb57574c">Understanding programs via models</h3>
+<p>
+Programs are typically defined via an inductive <i>grammar</i> and perhaps a <i>type system</i>.
+</p>
+
+<p>
+This tells you <i>which things are programs</i>.
+</p>
+
+<p>
+But it doesn&rsquo;t tell you what <i>properties</i> they have: we don&rsquo;t just want to know what they <i>are</i> but what they are <i>like</i>.
+</p>
+
+<p>
+For example: do lambda-terms behave like functions? Can we explain the way in which they are functions? A model can.
+</p>
+
+</section>
+<section id="slide-orge0ba6a1">
+<h3 id="orge0ba6a1">Plan</h3>
+<ul>
+<li>Denotational semantics of typed &lambda;-calculus using sets and functions</li>
+<li>Relational semantics, as introduced by Scott</li>
+<li>Multiset-relational semantics</li>
+<li>Quantitative (weighted) relational semantics</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgaf5c121">
+<h2 id="orgaf5c121">Typed lambda-terms as functions</h2>
+<p>
+Consider a typed lambda-calculus. Types are given by
+\[
+ A, B ::= \gamma \mid A \rightarrow B
+\]
+</p>
+
+<p>
+Terms are given by the grammar
+\[
+ M ::= x \mid \lambda x^A. M | MM
+\]
+</p>
+
+</section>
+<section>
+<p>
+We can define typing rules:
+</p>
+<div class="org-center">
+
+<div id="org6d72d3c" class="figure">
+<p><img src="variableruleq.png" alt="Gamma proves that x:T if x:T is part of Gamma" width="50%" />
+</p>
+</div>
+</div>
+<div class="org-center">
+
+<div id="org92d4dee" class="figure">
+<p><img src="abstractionruleq.png" alt="if Gamma, x:T1 proves M:T'2 then Gamma proves lambda x.M:T1=&gt;T2" width="50%" />
+</p>
+</div>
+</div>
+
+
+<div class="org-center">
+
+<div id="org2b4e425" class="figure">
+<p><img src="applicationruleq.png" alt="if Gamma proves M:T1=&gt;T2 and N:T1, then Gamma proves MN:T2" width="50%" />
+</p>
+</div>
+</div>
+
+<p>
+We can then define &alpha;-equivalence, &beta;-reduction, etc. 
+</p>
+
+</section>
+<section id="slide-orgd45e3d4">
+<h3 id="orgd45e3d4">A simple model</h3>
+<p>
+Let us set up a model.
+</p>
+
+<p>
+For each ground type \(\gamma\), choose a set \(\sem{\gamma}\).
+</p>
+
+<p>
+We plan to show that &lambda;-terms behave like functions so we will define
+\[
+ \sem{A \rightarrow B} = \{f \mid f:\sem{A}\rightarrow \sem{B}~\text{is a function}\}
+\]
+</p>
+
+<p>
+We write \(X \Rightarrow Y\) for the set of functions from \(X\) to \(Y\); so this is \(\sem{A}\Rightarrow\sem{B}\). 
+</p>
+
+</section>
+<section>
+<p>
+For each well-typed term \(x_1:A_1, \ldots, x_n:A_n \vdash M:B\) we will define its <i>meaning</i>: a function
+\[
+ \sem{M} :\sem{A_1} \times \cdots \times \sem{A_n} \rightarrow \sem{B}
+\]
+</p>
+
+<p>
+Idea: a term with free variables gives us a <i>function</i> whose inputs are the meanings of its <i>variables</i>.
+</p>
+
+</section>
+<section>
+<p>
+We will define this function <i>compositionally</i>. That is, the meaning of a term will be given by a <i>semantic operation</i> applied to the meanings of its subterms:
+</p>
+
+<div>
+\begin{eqnarray*}
+\sem{\Gamma \vdash x} & = & \text{something}\\
+\sem{\Gamma \vdash \lambda x.M:A\rightarrow B} & = & \Lambda(\sem{\Gamma, x:A\vdash M:B}) \\
+\sem{\Gamma \vdash MN} & = & @ (\sem{\Gamma\vdash M}, \sem{\Gamma\vdash N}) \\
+\end{eqnarray*}
+
+</div>
+
+</section>
+<section>
+
+<p>
+So far we seem to have achieved nothing&#x2026; But if we can complete our plan, we will have shown:
+</p>
+<ul>
+<li>every &lambda;-term describes a function</li>
+<li>the meaning of the type \(A \rightarrow B\) is the set of functions from \(\sem{A}\) to \(\sem{B}\)</li>
+<li>not only does every <i>term</i> have a meaning, every <i>term former</i> has a meaning (compositionality)</li>
+
+</ul>
+
+<p>
+And we can do more: stay tuned
+</p>
+
+</section>
+<section id="slide-org469c8b8">
+<h3 id="org469c8b8">Completing the semantics</h3>
+<ul>
+<li>\(\sem{x_1:A_1, \ldots, x_n:A_n \vdash x_i:A_i}  =  \pi_i\), the \(i\)-th projection</li>
+
+<li>Given \(f: A\times B \rightarrow C\), define \(\Lambda f: A \rightarrow (B \Rightarrow C)\) by</li>
+
+</ul>
+<p>
+\[
+\Lambda f(a)  = g:B \rightarrow C~\text{where}~g(b) = f(a,b) 
+\]
+</p>
+
+<ul>
+<li>Given \(f:A \rightarrow (B \Rightarrow C)\) and \(g:A \rightarrow B\), define</li>
+
+</ul>
+<p>
+\[
+@(f,g)(a) = f(a)g(a). 
+\]
+</p>
+
+</section>
+<section>
+
+<p>
+Note that if \(f\) does not depend on \(a\) then the clause for application reduces to <i>function composition</i>. 
+</p>
+
+</section>
+<section id="slide-orgeaf9e61">
+<h3 id="orgeaf9e61">What about reduction?</h3>
+<p>
+We have shown that lambda-terms can be used as <i>notation</i> for functions. But we can show that the &lambda;-calculus is consistent with this idea:
+</p>
+
+<p>
+<i>Soundness</i> for &beta;-reduction says that
+\[
+ \text{if}~M \rightarrow_\beta N~\text{then}~\sem{M} = \sem{N}. 
+\]
+This is fairly easy to show for our semantics. The proof hinges on understanding the meaning of substitutions \(M[N/x]\). 
+</p>
+
+</section>
+<section id="slide-org05d4057">
+<h3 id="org05d4057">Composition is substitution</h3>
+<p>
+Suppose we have
+\[
+  y:A \vdash N:B \quad\quad x:B \vdash M:C
+\]
+</p>
+
+<p>
+The semantics gives us <i>meanings</i>
+\[
+ \sem{N}: \sem{A} \rightarrow \sem{B} \quad\quad \sem{M}:\sem{B}\rightarrow \sem{C}
+\]
+</p>
+
+</section>
+<section>
+<p>
+\(\sem{x:B \vdash M:C}\) is a function whose input is meant to represent the meaning of the variable \(x\). So if we supply \(\sem{N}\) as the input
+\[
+ \sem{M} \circ \sem{N} : \sem{A} \rightarrow \sem{C}
+\]
+we should get the result of replacing \(x\) with \(N\):
+\[
+ \sem{M[N/x]}
+\]
+</p>
+
+</section>
+<section>
+
+<p>
+This can be proved by induction on the structure of the term \(M\). Most of the hard work comes from the fact that capture-avoiding substitution is tricky.
+</p>
+
+<p>
+Note that composition of functions is a lot less tricky!
+</p>
+
+</section>
+<section>
+
+<p>
+To show that &beta;-reduction is modelled soundly, we argue:
+</p>
+<ul>
+<li>application is interpreted by (a variant of) composition</li>
+<li>composition is substitution</li>
+<li>therefore application becomes substitution: \(\sem{(\lambda x.M)N} = \sem{M[N/x]}\).</li>
+
+</ul>
+
+<p>
+(A lot more detail is required.)
+</p>
+
+</section>
+<section id="slide-org4544898">
+<h3 id="org4544898">What about completeness?</h3>
+<p>
+We know that if \(M =_\beta N\) then \(\sem{M} = \sem{N}\).
+</p>
+
+<p>
+What about the converse? If terms have equal meanings, are they equal in the lambda-calculus?
+</p>
+
+<p>
+This is a much harder problem! But there are answers:
+</p>
+
+</section>
+<section>
+<p>
+<b>Theorem</b> [Friedman 1975]
+Let \(\Gamma \vdash M:\alpha\) and \(\Gamma\vdash N:\alpha\) be two terms
+and let \(\sem{M}\) and \(\sem{N}\) be their denotations in
+the model of sets and functions, where \(\sem{\gamma} = \mathbf{N}\), the set of natural numbers
+</p>
+
+<p>
+Then \(\sem{M} = \sem{N}\) if and only if \(M =_{\beta\eta} N\). 
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-org969a19a">
+<h2 id="org969a19a">Scott&rsquo;s Graph Model</h2>
+<p>
+In the late 1960s, Scott wanted to model <i>untyped lambda-calculus</i>.
+</p>
+
+<p>
+When every term has its meaning in the same set \(D\), the approach we&rsquo;ve taken means you want 
+to be able to view a <i>function</i> \(D \rightarrow D\) as an element of \(D\). 
+</p>
+
+<p>
+This is impossible: for any set with more than one element, the set \(D \Rightarrow D\) is strictly larger than \(D\).
+</p>
+
+<p>
+Scott found more than one solution to this problem and set off a programme of research which is still alive today. We&rsquo;ll look at one of his solutions.
+</p>
+
+</section>
+<section id="slide-orga0e233b">
+<h3 id="orga0e233b">From functions to relations</h3>
+<p>
+Scott realised that functions can be viewed as <i>collections</i> of input-output entries.
+</p>
+
+<p>
+More generally, computations can be viewed as collections of sub-computations: computing
+\[
+ f(0) + f(1)
+\]
+involves:
+</p>
+<ul>
+<li>evaluating \(f\) at 0</li>
+<li>evaluating \(f\) at 1</li>
+<li>adding the answers</li>
+
+</ul>
+
+</section>
+<section>
+
+<p>
+If we know that \(f\) contains \((0,3)\) and \((1,9)\) then we know this computation returns \(12\).
+</p>
+
+<p>
+We are going to model this as something like a pair
+\[
+( \{ (\{0\},3),(\{1\},9)\}, 12 )
+\]
+</p>
+
+<p>
+Let&rsquo;s see how. 
+</p>
+
+</section>
+<section>
+
+<p>
+Big idea: getting a single piece of information out should require only a <i>finite</i> amount of input-information.
+</p>
+
+<p>
+So we can model lambda-terms using <i>relations</i> of the form
+\[
+\mathcal{P}_f A \rightarrow B 
+\]
+</p>
+
+<p>
+A term of type \(B\) with no free variables would be a <i>set</i> of elements of \(B\). 
+</p>
+
+</section>
+<section id="slide-org143dc6d">
+<h3 id="org143dc6d">Modelling untyped terms</h3>
+<p>
+We can use the set of natural numbers to give every term the same (semantic) type. 
+</p>
+
+<p>
+When the types \(A\) and \(B\) are both the set \(\mathbf{N}\), we can <i>encode</i> any pair
+\[
+ (S,n)
+\]
+as a natural number.
+</p>
+
+<p>
+Then a relation (= set of such pairs) is encoded as a set of natural numbers &#x2013; which is the same thing that models a term! 
+</p>
+
+<p>
+So we achieve the desired embedding of <i>functions on terms</i> into <i>terms</i>
+</p>
+
+</section>
+<section id="slide-orgd34b103">
+<h3 id="orgd34b103">Composition in the relational model</h3>
+<p>
+We&rsquo;ll look at how these relations compose. First we recall relational composition.
+</p>
+
+<p>
+Given relations \(f: A\rightarrow B\) and \(g:B \rightarrow C\) we can define
+\[
+ g \circ f = \{ (a,c) \mid \exists (a,b) \in f, (b,c) \in g\}
+\]
+</p>
+
+<p>
+This directly extends function composition.
+</p>
+
+</section>
+<section>
+
+<p>
+But this does not let us compose the interpretations we have in mind!
+</p>
+
+<p>
+Instead we have relations of the form:
+\[
+f : \mathcal{P}_f A \rightarrow B \quad\quad  g : \mathcal{P}_f B \rightarrow C
+\]
+Note the type mismatch in the middle.
+</p>
+
+<p>
+But we can try composing like this: \(g \circ f\) is 
+\[ 
+  \{ (S_1 \cup \ldots \cup S_n,c) \mid (S_i,b_i) \in f, (\{b_1,\ldots,b_n\},c) \in g \}
+\]
+</p>
+
+</section>
+<section>
+
+<div class="org-center">
+
+<div id="orgfa741d0" class="figure">
+<p><img src="graphcomp.png" alt="graphcomp.png" width="80%" />
+</p>
+</div>
+</div>
+
+<p>
+\[
+ (S_1 \cup \cdots \cup S_n, c) \in g \circ f
+\]
+</p>
+
+</section>
+<section id="slide-org1db0c7a">
+<h3 id="org1db0c7a">Reworking our semantics</h3>
+<p>
+We can (almost) now make a model using these ideas:
+</p>
+<ul>
+<li>types are interpreted as sets</li>
+<li>the type \(A \rightarrow B\) is interpreted as the set of relations from \(\mathcal{P}_f \sem{A}\) to \(\sem{B}\).</li>
+<li>we can define the meaning of application using the composition idea above (details skipped!)</li>
+
+</ul>
+
+</section>
+<section id="slide-org9216074">
+<h3 id="org9216074">Problem</h3>
+<p>
+This almost works as stated. However, there is a small problem.
+</p>
+
+<p>
+The enumeration \(\{b_1,\ldots,b_n\}\) is not unique because we could repeat elements without changing anything.
+</p>
+
+<p>
+This means that composition with a relation like \(\{ (\{a\},a) \mid a \in A\}\) &#x2014; which might be the interpretation of \(x:A \vdash x:A\) &#x2014; does not behave as we want. 
+</p>
+
+<p>
+This can be fixed (Scott fixed it!); instead, we&rsquo;ll just try something slightly different. 
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-orgd25825f">
+<h2 id="orgd25825f">From powersets to multisets</h2>
+<p>
+The issue above arises because \(\mathcal{P}_f A\) does not count the <i>multiplicity</i> of its members.
+</p>
+
+<p>
+Replacing \(\mathcal{P}_f\) by \(\mathcal{M}_f\) fixes it immediately.
+</p>
+
+<p>
+\( \mathcal{M}_f A = \) finite multisets drawn from \(A\): &ldquo;subsets with multiplicities&rdquo;. 
+</p>
+
+</section>
+<section>
+<p>
+We get a model in which a term
+\[
+ x_1:A_1, \ldots, x_n:A_n \vdash M:B
+\]
+is interpreted as a set of tuples
+\[
+ (S_1, \ldots, S_n, b)
+\]
+where:
+</p>
+<ul>
+<li>\(b\) is an &ldquo;output event&rdquo;</li>
+<li>each \(S_i\) is a <i>multiset</i> of &ldquo;input events&rdquo; that the term needs to obtain from its variables, in order to produce \(b\).</li>
+
+</ul>
+
+</section>
+<section id="slide-org9f4fd53">
+<h3 id="org9f4fd53">Examples</h3>
+<p>
+Assuming we have a type of Booleans: a term 
+\[
+ x:B, y:B \vdash x \wedge y:B
+\]
+would include tuples
+</p>
+<div>
+\begin{array}{ccc}
+ ( [\mathbf{true}], & [\mathbf{true}], & \mathbf{true}) \\
+ ([\mathbf{true}], & [\mathbf{false}], & \mathbf{false}) \\
+ ([\mathbf{false}], & [\mathbf{true}], & \mathbf{false}) \\
+ ([\mathbf{false}], & [\mathbf{false}], & \mathbf{false}) \\
+\end{array}
+
+</div>
+
+</section>
+<section>
+
+<p>
+And the term \(x:B \vdash x \wedge x:B\) would include
+</p>
+<div>
+\begin{array}{cc}
+ ( [\mathbf{true},\mathbf{true}], & \mathbf{true}) \\
+ ([\mathbf{true},\mathbf{false}], & \mathbf{false}) \\
+ ([\mathbf{false},\mathbf{true}], & \mathbf{false}) \\
+ ([\mathbf{false},\mathbf{false}], & \mathbf{false}) \\
+\end{array}
+
+</div>
+
+<p>
+Notice that the second and third lines are equal: the same entry appears for more than one reason. This will be interesting later.
+</p>
+
+</section>
+<section>
+
+<p>
+We can now distinguish between the &ldquo;full evaluation&rdquo; semantics of \(\wedge\) and a &ldquo;short-circuit&rdquo; semantics that gives \(\mathbf{false}\) as soon as it sees a \(\mathbf{false}\) input:
+</p>
+
+<p>
+In that semantics the term \(x:B \vdash x \wedge x:B\) would include
+</p>
+<div>
+\begin{array}{ccl}
+ ( [\mathbf{true},\mathbf{true}], & \mathbf{true}) \\
+ ([\mathbf{true},\mathbf{false}], & \mathbf{false}) &\text{now only once!}\\
+ ([\mathbf{false}], & \mathbf{false}) \\
+\end{array}
+
+</div>
+
+
+</section>
+<section>
+
+<p>
+Notice also that the model handles <i>nondeterminism</i>.
+</p>
+
+<p>
+No deterministic program can be substituted for \(x\) and deliver \([\mathbf{false},\mathbf{true}]\).
+</p>
+
+<p>
+So the model is flexible (good!) but perhaps too large (bad?).
+</p>
+
+</section>
+<section id="slide-orgb810b80">
+<h3 id="orgb810b80">History</h3>
+<p>
+This model seems to have been known since the late 1980s, where it arose as an early model of <i>linear logic</i>.
+</p>
+
+<p>
+Girard wrote about a slightly more sophisticated version of this model &#x2014; which eliminates the nondeterminism using <i>coherence spaces</i> &#x2014; in 1995.
+</p>
+
+</section>
+<section>
+<p>
+The linear logic point of view splits our definition of composition into two:
+</p>
+<ul>
+<li>first &ldquo;promote&rdquo; \(f:\mathcal{M}_f A \rightarrow B\) to a relation
+\[
+    f^!: \mathcal{M}_f A \rightarrow \mathcal{M}_f B
+   \]</li>
+<li>then compose this with \(g: \mathcal{M}_f B \rightarrow C\) using ordinary relational composition.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org9e74408">
+<h2 id="org9e74408">From relations to weighted relations</h2>
+<p>
+We can view relations as matrices:
+</p>
+<ul>
+<li>a relation from \(A\) to \(B\) is a matrix indexed by \(A\) and \(B\), with entries in the Booleans.</li>
+<li>the entry at \((a,b)\) is \(\mathbf{true}\) if \((a,b)\) is in the relation</li>
+<li>relational composition is matrix multiplication!</li>
+
+</ul>
+
+</section>
+<section>
+<p>
+\[   
+   (a,c) \in g \circ f \Leftrightarrow \exists b\in B. (a,b)\in f \wedge (b,c) \in g
+\]
+</p>
+
+<p>
+\[
+ (g\circ f)_{(a,c)} = \sum_{b \in B} f_{(a,b)} \times g_{(b,c)}
+\]
+if we read the sum  as logical disjunction and product as conjunction. 
+</p>
+
+</section>
+<section id="slide-orgab6132f">
+<h3 id="orgab6132f">Idea: generalise from the Booleans</h3>
+<p>
+More generally we can construct this model using matrices over <i>any</i> structure that lets us compute the required sums and products.
+</p>
+
+<p>
+For example: the natural numbers.
+</p>
+
+<p>
+(To handle infinite sets, which may require infinite sums, we add an \(\infty\) element)
+</p>
+
+</section>
+<section>
+
+<p>
+Now our model can tell us
+</p>
+<ul>
+<li>what input-output computations a term can perform; but also</li>
+<li><i>how many ways</i> the term can perform a computation: the <i>weight</i> of its entry in the matrix</li>
+
+</ul>
+
+</section>
+<section id="slide-org84d3d96">
+<h3 id="org84d3d96">Composition</h3>
+<div class="org-center">
+
+<div id="orga73cb54" class="figure">
+<p><img src="wgraphcomp.png" alt="wgraphcomp.png" width="80%" />
+</p>
+</div>
+</div>
+
+<p>
+\[
+ (S_1 \cup \cdots \cup S_n, c) \in g \circ f
+\]
+This entry contributes weight \(w \times \prod_{i=1}^n w_i\). 
+</p>
+
+</section>
+<section>
+<p>
+The full composition weighs an entry this with the <i>sum of all possible ways</i> to achieve this:
+\((g \circ f)_{(T,c)}\) is given by
+\[
+ \sum_{T = S_1 \cup \cdots \cup S_n} \sum_{b_1,\ldots,b_n} g_{([b_1,\ldots,b_n],c)}\prod_i f_{(S_i,b_i)}
+\]
+</p>
+
+</section>
+<section id="slide-orge51fc04">
+<h3 id="orge51fc04">Example, again</h3>
+<p>
+In this model, the term
+\[
+ x:B, y:B \vdash x \wedge y:B
+\]
+has weights as follows:
+</p>
+<div>
+\begin{array}{cccc}
+ ( [\mathbf{true}], & [\mathbf{true}], & \mathbf{true}): & 1  \\
+ ([\mathbf{true}], & [\mathbf{false}], & \mathbf{false}): & 1  \\
+ ([\mathbf{false}], & [\mathbf{true}], & \mathbf{false}): & 1  \\
+ ([\mathbf{false}], & [\mathbf{false}], & \mathbf{false}):& 1  \\
+\end{array}
+
+</div>
+
+</section>
+<section>
+
+<p>
+But when we identify \(x\) and \(y\) to get the term \(x:B \vdash x \wedge x:B\), we have
+</p>
+<div>
+\begin{array}{ccc}
+ ( [\mathbf{true},\mathbf{true}], & \mathbf{true}): & 1 \\
+ ([\mathbf{true},\mathbf{false}], & \mathbf{false}):& 2  \\
+ ([\mathbf{false},\mathbf{false}], & \mathbf{false}):& 1  \\
+\end{array}
+
+</div>
+
+
+
+</section>
+<section id="slide-org8670895">
+<h3 id="org8670895">Varieties of models</h3>
+<p>
+This turns out to be a relatively simple algebraic generalisation of the relational model.
+</p>
+
+<p>
+With it, we obtain a range of models that let us calculate interesting facts about lambda-terms:
+</p>
+<ul>
+<li>using \(\mathbf{N}\) with \(\times\) and \(+\): how many paths are there?</li>
+<li>using \(\mathbf{N}\) with \(+\) and \(\min\): what is the length of the shortest path?</li>
+<li>using \(\mathbf{R}\) with \(\times\) and \(+\): what is the probability of termination?</li>
+<li>&#x2026; and so on.</li>
+
+</ul>
+
+</section>
+<section id="slide-orgf25767c">
+<h3 id="orgf25767c">History</h3>
+<ul>
+<li>These ideas were first explained by Lamarche in 1992.</li>
+<li>They cropped up again in Ehrhard and Regnier&rsquo;s work on differential linear logic and lambda-calculus around ten years later</li>
+<li>Ten more years later, we (Laird, Manzonetto, Pagani + M) showed how the ideas could extend to model programming languages with recursion</li>
+<li>And the probabilistic model turned out to be <i>complete</i> (Ehrhard, Tasson, Pagani)</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgd89ed2b">
+<h2 id="orgd89ed2b">Summary</h2>
+<ul>
+<li>Denotational semantics models programs <i>compositionally</i></li>
+<li>Models can be built from sets and functions</li>
+<li>&#x2026; or from sets and relations</li>
+<li>Quite good quantitative models are available</li>
+<li>And there is a <i>lot</i> more out there</li>
+
+</ul>
+</section>
+</section>
+</div>
+</div>
+<script src="./reveal.js/dist/reveal.js"></script>
+<script src="./reveal.js/plugin/markdown/markdown.js"></script>
+<script src="./reveal.js/plugin/notes/notes.js"></script>
+<script src="./reveal.js/plugin/search/search.js"></script>
+<script src="./reveal.js/plugin/zoom/zoom.js"></script>
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: false,
+center: true,
+slideNumber: 'c',
+rollingLinks: false,
+keyboard: true,
+mouseWheel: false,
+fragmentInURL: false,
+hashOneBasedIndex: false,
+pdfSeparateFragments: false,
+overview: true,
+
+transition: 'fade',
+transitionSpeed: '10',
+
+// Plugins with reveal.js 4.x
+plugins: [ RevealMarkdown, RevealNotes, RevealSearch, RevealZoom ],
+
+// Optional libraries used to extend reveal.js
+dependencies: [
+]
+
+});
+</script>
+</body>
+</html>

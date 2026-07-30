@@ -1,0 +1,12 @@
+*.org~
+*.html~
+*.tex~
+*.el
+.DS_Store
+/Notes/Lecture Scans/
+/Notes/Tutorial Scans/
+*.zip
+*.*~
+*.png
+*.aux
+*.log

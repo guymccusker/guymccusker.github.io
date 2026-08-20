@@ -1,0 +1,258 @@
+/* ------------------------------------------------------------------------
+   Minimal / clean academic theme for org-mode HTML export.
+   Single accent colour, generous whitespace, content-first typography.
+   ------------------------------------------------------------------------ */
+
+:root {
+  --accent: #7a3b2e;       /* muted brick/terracotta accent */
+  --ink: #1d1d1f;
+  --ink-soft: #4a4a4d;
+  --rule: #e3e0da;
+  --paper: #fbfaf8;
+  --max-width: 46rem;
+  --max-width-wide: 54rem;
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  padding: 0 1.25rem;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.6;
+  --content-width: var(--max-width);
+}
+
+/* the homepage has a .masthead section and gets extra room for the
+   two-column layout below; other pages (e.g. publications) stay narrower
+   for comfortable reading */
+body:has(.masthead) { --content-width: var(--max-width-wide); }
+
+#content,
+#preamble,
+#postamble {
+  max-width: var(--content-width);
+  margin: 0 auto;
+}
+
+#preamble { padding-top: 1.5rem; }
+
+.site-nav {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.site-nav a {
+  color: var(--ink-soft);
+  border-bottom: none;
+}
+
+.site-nav a:hover { color: var(--accent); }
+#postamble {
+  padding: 3rem 0 4rem;
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+  border-top: 1px solid var(--rule);
+  margin-top: 3rem;
+}
+
+/* -- headings ----------------------------------------------------------- */
+
+h1, h2, h3, h4 {
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--ink);
+}
+
+/* org exports a top-level "* Heading" as <h2> (h1 is reserved for the
+   document #+TITLE, which we suppress on the index page). */
+.masthead h2 {
+  font-size: 2rem;
+  margin: 0 0 0.25rem;
+  letter-spacing: -0.01em;
+  text-transform: none;
+  color: var(--ink);
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.masthead p {
+  margin: 0 0 2rem;
+  color: var(--ink-soft);
+  font-size: 1.05rem;
+}
+
+h2 {
+  font-size: 1.15rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  margin: 2.75rem 0 1rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+h3 {
+  font-size: 1.05rem;
+  margin: 1.5rem 0 0.35rem;
+}
+
+h4 { font-size: 0.95rem; margin: 1.25rem 0 0.35rem; }
+
+/* -- body text ------------------------------------------------------------ */
+
+p { margin: 0 0 1rem; }
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+
+a:hover { border-bottom-color: currentColor; }
+
+ul, ol { padding-left: 1.25rem; margin: 0 0 1rem; }
+li { margin-bottom: 0.4rem; }
+
+hr {
+  border: none;
+  border-top: 1px solid var(--rule);
+  margin: 2rem 0;
+}
+
+/* -- homepage two-column layout --------------------------------------------
+   Scoped with :has() so publications.html (no .masthead) keeps the plain
+   single-column flow. Contact runs as a sidebar alongside News/Research/
+   Teaching instead of sitting across the top of the page. */
+
+#content:has(.masthead) {
+  display: grid;
+  grid-template-columns: 14rem 1fr;
+  column-gap: 2.5rem;
+  row-gap: 1.75rem;
+  grid-template-areas:
+    "masthead masthead"
+    "sidebar  about"
+    "sidebar  news"
+    "sidebar  research"
+    "sidebar  teaching";
+}
+
+#content:has(.masthead) .masthead { grid-area: masthead; }
+#content:has(.masthead) .contact { grid-area: sidebar; }
+#content:has(.masthead) .news { grid-area: news; }
+#content:has(.masthead) .research { grid-area: research; }
+#content:has(.masthead) .teaching { grid-area: teaching; }
+
+/* Each grid cell's own h2 is the first thing in it, so the section-spacing
+   top margin (set below in the generic h2 rule) would otherwise push
+   "News" down relative to "Contact" since Contact's is reset separately.
+   Zero it everywhere here; row-gap on the grid handles spacing instead. */
+#content:has(.masthead) > div > h2 { margin-top: 0; }
+
+@media (max-width: 720px) {
+  #content:has(.masthead) {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "masthead"
+      "sidebar"
+      "news"
+      "research"
+      "teaching";
+  }
+}
+
+/* -- contact block -------------------------------------------------------- */
+
+.contact {
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+.contact a { color: var(--ink); }
+
+/* -- news ------------------------------------------------------------------ */
+
+.news ul { list-style: none; padding-left: 0; }
+.news li {
+  padding-left: 1.1rem;
+  position: relative;
+  margin-bottom: 0.85rem;
+}
+.news li::before {
+  content: "\2013"; /* en dash */
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+}
+
+/* -- publications ---------------------------------------------------------- */
+
+.rss-link {
+  text-align: right;
+  margin: -1rem 0 1.5rem;
+}
+
+.rss-link a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+  border-bottom: none;
+}
+
+.rss-link a:hover { color: var(--accent); }
+
+/* pub-year is a top-level "*" headline -> <h2>; pub-entry is "**" -> <h3> */
+.pub-year h2 {
+  font-size: 1.4rem;
+  text-transform: none;
+  letter-spacing: normal;
+  color: var(--ink-soft);
+  font-weight: 500;
+  margin: 2.5rem 0 1rem;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.pub-entry {
+  margin-bottom: 1.35rem;
+  padding-left: 0.9rem;
+  border-left: 2px solid var(--rule);
+}
+
+.pub-entry h3 {
+  font-size: 1rem;
+  color: var(--ink);
+  margin: 0 0 0.25rem;
+  font-weight: 600;
+}
+
+.pub-entry p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+}
+
+.pub-entry a { color: inherit; border-bottom: 1px solid var(--rule); }
+.pub-entry a:hover { border-bottom-color: var(--accent); color: var(--accent); }
+
+/* -- responsive ------------------------------------------------------------- */
+
+@media (max-width: 600px) {
+  body { font-size: 16px; }
+  .masthead h2 { font-size: 1.6rem; }
+}

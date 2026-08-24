@@ -1,3 +1,11 @@
+public/
+venv/
+__pycache__/
+*.pyc
+.DS_Store
+#*#
+*~
+.org-timestamps/
 *.org~
 *.html~
 *.tex~

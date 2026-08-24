@@ -153,6 +153,7 @@ hr {
 
 #content:has(.masthead) .masthead { grid-area: masthead; }
 #content:has(.masthead) .contact { grid-area: sidebar; }
+#content:has(.masthead) .about { grid-area: about; }
 #content:has(.masthead) .news { grid-area: news; }
 #content:has(.masthead) .research { grid-area: research; }
 #content:has(.masthead) .teaching { grid-area: teaching; }
@@ -169,6 +170,7 @@ hr {
     grid-template-areas:
       "masthead"
       "sidebar"
+      "about"
       "news"
       "research"
       "teaching";

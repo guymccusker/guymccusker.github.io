@@ -1,0 +1,4 @@
+ - My presentation of [[file:../talks/checkers/index.html][Interaction Improvement]] given in Birmingham in 2026. 
+ - My ongoing work with Lionel Vaux-Auclair and Pierre Clairambault about Taylor expansion for imperative programs [[file:../talks/ucl-sci/index.html][as presented at UCL]] in March 2025 and [[file:../talks/pps-sci/index.html][at PPS]] in June 2025.
+ - [[file:../talks/dill-cirm/index.html][Tutorial on weighted relational models]] from [[https://conferences.cirm-math.fr/2980.html][Differential λ-Calculus and Differential Linear Logic, 20 Years Later]] which you can also [[https://www.youtube.com/watch?v=ixG6VPCy5OM][watch on YouTube]].
+ - I think we should view [[file:../talks/algebras/index.html][relational models as algebras]]. 

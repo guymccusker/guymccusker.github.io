@@ -1,0 +1,73 @@
+#+TITLE: Guy McCusker
+#+OPTIONS: toc:nil num:nil html-postamble:nil title:nil
+#+HTML_CONTAINER_CLASS: page-index
+
+* Guy McCusker
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: masthead
+:END:
+
+* Contact
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: contact
+:END:
+
+[[https://researchportal.bath.ac.uk/en/persons/guy-mccusker][Guy McCusker]] \\
+[[https://www.bath.ac.uk/departments/department-of-computer-science/][Department of Computer Science]] \\
+[[https://www.bath.ac.uk/][University of Bath]] \\
+Bath, BA2 7AY \\
+United Kingdom
+
+Office: 1W4.54 \\
+Phone: +44 (0)1225 383578 \\
+Email: @@html:<a href="mailto:&#103;&#46;&#97;&#46;&#109;&#99;&#99;&#117;&#115;&#107;&#101;&#114;&#64;&#98;&#97;&#116;&#104;&#46;&#97;&#99;&#46;&#117;&#107;">&#103;&#46;&#97;&#46;&#109;&#99;&#99;&#117;&#115;&#107;&#101;&#114;&#64;&#98;&#97;&#116;&#104;&#46;&#97;&#99;&#46;&#117;&#107;</a>@@
+
+* About me
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: about
+:END:
+
+I am Professor of Computer Science and Deputy Head of Department (People, Culture and Environment) in the [[https://www.bath.ac.uk/departments/department-of-computer-science/][Department of Computer Science]] at the [[https://www.bath.ac.uk/][University of Bath]]. I joined Bath as a Professor in 2006 after working for several years at the [[https://www.sussex.ac.uk/][University of Sussex]]. Previously:Junior Research Fellow at St Johns College in Oxford; PhD at Imperial College, London under the supervision of [[https://en.wikipedia.org/wiki/Samson_Abramsky][Samson Abramsky]]; undergraduate at Oxford.
+
+I enjoy thinking about mathematical models of programs and programming languages, especially so-called "intensional" models which expose how programs compute as well as what they compute. I've done a lot of work on game semantics, and more recently have focussed on relational models which are a little simpler than games but still fascinating.
+
+
+* News
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: news
+:END:
+
+#+INCLUDE: "inc/news.org"
+
+* Research
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: research
+:END:
+
+** Publications
+See the [[file:publications.org][publications list]], generated from the [[https://researchportal.bath.ac.uk/en/persons/guy-mccusker/publications/][University's Research Portal]] which kindly exposes an [[https://researchportal.bath.ac.uk/en/persons/guy-mccusker/publications/?format=rss][RSS feed]] of more recent papers. 
+
+You may be interested in [[https://doi.org/10.1007/978-1-4471-0615-9][my PhD thesis]] (at Springer) or my publications lists on [[https://dblp.org/pid/05/4200.html][DBLP]] or [[https://scholar.google.com/citations?user=kCbGWC4AAAAJ&hl=en][Google scholar]]. 
+
+** Talks
+
+#+INCLUDE: "inc/talks.org"
+      
+** Research students and postdocs, past and present
+
+- [[https://alessio-santamaria.com/][Alessio Santamaria]]
+- [[https://www.canbaskent.net/logic/][Can Başkent]]
+- Etienne Duchesne
+- [[https://fh341.github.io/][Fanny He]]
+- [[http://www.mdchurchill.co.uk/][Martin Churchill]]
+- [[https://www.cardiffmet.ac.uk/technologies/staff-profiles/Pages/Ana-Calderon.aspx][Ana Calderon]]
+- [[http://caiwingfield.net/][Cai Wingfield]]
+
+* Teaching
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: teaching
+:END:
+
+Moodle pages (University of Bath people only):
+
+- [[https://moodle.bath.ac.uk/course/view.php?id=60462][CM12004 Discrete Maths and Databases]] (in conjunction with [[https://nicholaspischke.github.io/][Nicholas Pischke]])

@@ -1,0 +1,274 @@
+#+TITLE: Publications
+#+OPTIONS: toc:nil num:nil
+# This file is generated automatically by fetch_publications.py
+# from the Bath Research Portal RSS feed. Do not hand-edit; changes
+# will be overwritten on the next run.
+
+@@html:<p class="rss-link"><a href="https://researchportal.bath.ac.uk/en/persons/guy-mccusker/publications/?format=rss"><svg width="14" height="14" viewBox="0 0 448 512" aria-hidden="true" focusable="false"><path fill="currentColor" d="M0 64C0 46.3 14.3 32 32 32c229.8 0 416 186.2 416 416c0 17.7-14.3 32-32 32s-32-14.3-32-32C384 253.6 226.4 96 32 96C14.3 96 0 81.7 0 64zM0 416a64 64 0 1 1 128 0A64 64 0 1 1 0 416zM0 192c0-17.7 14.3-32 32-32c123.7 0 224 100.3 224 224c0 17.7-14.3 32-32 32s-32-14.3-32-32c0-88.4-71.6-160-160-160c-17.7 0-32-14.3-32-32z"/></svg> Subscribe via RSS</a></p>@@
+
+* 2026
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-year
+:END:
+
+** [[https://researchportal.bath.ac.uk/en/publications/interaction-improvement/][Interaction Improvement]]
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-entry pub-paper
+:END:
+Lancelot, A., Manzonetto, G., [[https://researchportal.bath.ac.uk/en/persons/guy-mccusker/][*McCusker, G.*]] & Vanoni, G., 29 Apr 2026. (Acceptance date). 44 p.
+# type: Contribution to conference — Paper
+
+* 2023
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-year
+:END:
+
+** [[https://researchportal.bath.ac.uk/en/publications/an-axiomatic-account-ofafully-abstract-game-semantics-forgeneral-/][An Axiomatic Account of a Fully Abstract Game Semantics for General References]]
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-entry pub-book-chapter
+:END:
+[[https://researchportal.bath.ac.uk/en/persons/james-laird/][*Laird, J.*]] & [[https://researchportal.bath.ac.uk/en/persons/guy-mccusker/][*McCusker, G.*]], 2 Aug 2023. /Samson Abramsky on Logic and Structure in Computer Science and Beyond./ Palmigiano, A. & Sadrzadeh, M. (eds.). Cham, Switzerland: Springer, Cham, p. 251-292 42 p. (Outstanding Contributions to Logic; vol. 25).
+# type: Chapter or section in a book/report/conference proceeding — Book chapter
+
+** [[https://researchportal.bath.ac.uk/en/publications/the-functional-machine-calculus-ii-semantics/][The Functional Machine Calculus II: Semantics]]
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-entry pub-paper
+:END:
+Barrett, C., [[https://researchportal.bath.ac.uk/en/persons/willem-heijltjes/][*Heijltjes, W.*]] & [[https://researchportal.bath.ac.uk/en/persons/guy-mccusker/][*McCusker, G.*]], 3 Feb 2023. 18 p.
+# type: Contribution to conference — Paper
+
+* 2021
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-year
+:END:
+
+** [[https://researchportal.bath.ac.uk/en/publications/composing-dinatural-transformations-towards-a-calculus-of-substit/][Composing dinatural transformations: Towards a calculus of substitution]]
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-entry pub-article
+:END:
+[[https://researchportal.bath.ac.uk/en/persons/guy-mccusker/][*McCusker, G.*]] & Santamaria, A., 31 Oct 2021. In: Journal of Pure and Applied Algebra. 225, 10, 57 p., 106689.
+# type: Contribution to journal — Article
+
+* 2019
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-year
+:END:
+
+** [[https://researchportal.bath.ac.uk/en/publications/a-history-based-logic-for-dynamic-preference-updates/][A History Based Logic for Dynamic Preference Updates]]
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-entry pub-article
+:END:
+[[https://researchportal.bath.ac.uk/en/persons/guy-mccusker/][*McCusker, G.*]] & Baskent, C., 12 Nov 2019. In: Journal of Logic, Language and Information. p. 1-31 31 p.
+# type: Contribution to journal — Article
+
+* 2018
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-year
+:END:
+
+** [[https://researchportal.bath.ac.uk/en/publications/on-compositionality-of-dinatural-transformations/][On Compositionality of Dinatural Transformations]]
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-entry pub-chapter-in-a-published-conference-proceeding
+:END:
+[[https://researchportal.bath.ac.uk/en/persons/guy-mccusker/][*McCusker, G.*]] & Santamaria, A., 31 Dec 2018. /27th EACSL Annual Conference on Computer Science Logic (CSL 2018)./ Ghica, D. & Jung, A. (eds.). Dagstuhl, Germany: Leibniz International Proceedings in Informatics, Vol. 119. p. 33:1-33:22 22 p. 33. (Leibniz International Proceedings in Informatics (LIPIcs); vol. 119).
+# type: Chapter or section in a book/report/conference proceeding — Chapter in a published conference proceeding
+
+* 2016
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-year
+:END:
+
+** [[https://researchportal.bath.ac.uk/en/publications/a-logic-for-the-compliance-budget/][A Logic for the Compliance Budget]]
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-entry pub-book-chapter
+:END:
+Anderson, G., [[https://researchportal.bath.ac.uk/en/persons/guy-mccusker/][*McCusker, G.*]] & Pym, D., 2016. /Proceedings, GameSec 2016- Decision and Game Theory for Security: 7th International Conference, GameSec 2016, New York, NY, USA, November 2-4, 2016./ Zhu, Q., Alpcan, T., Panaousis, E., Tambe, M. & Casey, W. (eds.). Springer Verlag, p. 370-381 (Lecture Notes in Computer Science; vol. 9996).
+# type: Chapter or section in a book/report/conference proceeding — Book chapter
+
+* 2015
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-year
+:END:
+
+** [[https://researchportal.bath.ac.uk/en/publications/a-graphical-foundation-for-interleaving-in-game-semantics/][A graphical foundation for interleaving in game semantics]]
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-entry pub-article
+:END:
+[[https://researchportal.bath.ac.uk/en/persons/guy-mccusker/][*McCusker, G.*]], Power, J. & Wingfield, C., 1 Apr 2015. In: Journal of Pure and Applied Algebra. 219, 4, p. 1131-1174 44 p.
+# type: Contribution to journal — Article
+
+* 2013
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-year
+:END:
+
+** [[https://researchportal.bath.ac.uk/en/publications/imperative-programs-as-proofs-via-game-semantics-2/][Imperative programs as proofs via game semantics]]
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-entry pub-article
+:END:
+Churchill, M., [[https://researchportal.bath.ac.uk/en/persons/james-laird/][*Laird, J.*]] & [[https://researchportal.bath.ac.uk/en/persons/guy-mccusker/][*McCusker, G.*]], Nov 2013. In: Annals of Pure and Applied Logic. 164, 11, p. 1038-1078 41 p.
+# type: Contribution to journal — Article
+
+** [[https://researchportal.bath.ac.uk/en/publications/weighted-relational-models-of-typed-lambda-calculi/][Weighted relational models of typed Lambda-Calculi]]
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-entry pub-chapter-in-a-published-conference-proceeding
+:END:
+[[https://researchportal.bath.ac.uk/en/persons/james-laird/][*Laird, J. D.*]], Manzonetto, G., [[https://researchportal.bath.ac.uk/en/persons/guy-mccusker/][*Mccusker, G.*]] & Pagani, M., 1 Jun 2013. /2013 28th Annual IEEE/ACM Symposium on Logic in Computer Science (LICS)./ Los Alamitos, California: IEEE, p. 301-310 10 p. (Annual IEEE/ACM Symposium on Logic in Computer Science (LICS)).
+# type: Chapter or section in a book/report/conference proceeding — Chapter in a published conference proceeding
+
+** [[https://researchportal.bath.ac.uk/en/publications/constructing-differential-categories-and-deconstructing-categorie/][Constructing differential categories and deconstructing categories of games]]
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-entry pub-article
+:END:
+[[https://researchportal.bath.ac.uk/en/persons/james-laird/][*Laird, J.*]], Manzonetto, G. & [[https://researchportal.bath.ac.uk/en/persons/guy-mccusker/][*McCusker, G.*]], Jan 2013. In: Information and Computation. 222, p. 247-264 18 p.
+# type: Contribution to journal — Article
+
+* 2012
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-year
+:END:
+
+** [[https://researchportal.bath.ac.uk/en/publications/a-graphical-foundation-for-schedules/][A graphical foundation for schedules]]
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-entry pub-article
+:END:
+[[https://researchportal.bath.ac.uk/en/persons/guy-mccusker/][*McCusker, G.*]], Power, J. & Wingfield, C., 24 Sept 2012. In: Electronic Notes in Theoretical Computer Science. 286, p. 273-289 16 p.
+# type: Contribution to journal — Article
+
+* 2011
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-year
+:END:
+
+** [[https://researchportal.bath.ac.uk/en/publications/constructing-differential-categories-and-deconstructing-categorie-2/][Constructing differential categories and deconstructing categories of games]]
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-entry pub-book-chapter
+:END:
+[[https://researchportal.bath.ac.uk/en/persons/james-laird/][*Laird, J.*]], Manzonetto, G. & [[https://researchportal.bath.ac.uk/en/persons/guy-mccusker/][*McCusker, G.*]], 2011. /Automata, Languages and Programming - 38th International Colloquium, ICALP 2011, Proceedings./ Aceto, L., Henzinger, M. & Sgall, J. (eds.). Heidelberg, Germany: Springer, p. 186-197 12 p. (Lecture Notes in Computer Science; vol. 6756).
+# type: Chapter or section in a book/report/conference proceeding — Book chapter
+
+** [[https://researchportal.bath.ac.uk/en/publications/coalgebraic-semantics-for-parallel-derivation-strategies-in-logic/][Coalgebraic semantics for parallel derivation strategies in logic programming]]
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-entry pub-book-chapter
+:END:
+Komendantskaya, E., [[https://researchportal.bath.ac.uk/en/persons/guy-mccusker/][*McCusker, G.*]] & Power, J., 2011. /Algebraic Methodology and Software Technology./ Johnson, M. & Pavlovic, D. (eds.). Springer, Vol. 6486. p. 111-127 17 p. (Lecture Notes in Computer Science).
+# type: Chapter or section in a book/report/conference proceeding — Book chapter
+
+** [[https://researchportal.bath.ac.uk/en/publications/imperative-programs-as-proofs-via-game-semantics-3/][Imperative programs as proofs via game semantics]]
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-entry pub-chapter-in-a-published-conference-proceeding
+:END:
+Churchill, M., [[https://researchportal.bath.ac.uk/en/persons/james-laird/][*Laird, J.*]] & [[https://researchportal.bath.ac.uk/en/persons/guy-mccusker/][*McCusker, G.*]], 2011. /26th Annual IEEE Symposium on Logic in Computer Science (LICS) 2011./ IEEE, p. 65-74 10 p. (Annual Symposium on Logic in Computer Science).
+# type: Chapter or section in a book/report/conference proceeding — Chapter in a published conference proceeding
+
+* 2010
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-year
+:END:
+
+** [[https://researchportal.bath.ac.uk/en/publications/understanding-game-semantics-through-coherence-spaces/][Understanding game semantics through coherence spaces]]
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-entry pub-article
+:END:
+Calderon, A. C. & [[https://researchportal.bath.ac.uk/en/persons/guy-mccusker/][*McCusker, G. A.*]], 6 Sept 2010. In: Electronic Notes in Theoretical Computer Science. 265, p. 231-244 14 p.
+# type: Contribution to journal — Article
+
+** [[https://researchportal.bath.ac.uk/en/publications/modelling-local-variables-possible-worlds-and-object-spaces/][Modelling local variables: possible worlds and object spaces]]
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-entry pub-article
+:END:
+[[https://researchportal.bath.ac.uk/en/persons/guy-mccusker/][*McCusker, G. A.*]] & Power, J., 6 Sept 2010. In: Electronic Notes in Theoretical Computer Science. 265, p. 389-402 14 p.
+# type: Contribution to journal — Article
+
+** [[https://researchportal.bath.ac.uk/en/publications/a-graph-model-for-imperative-computation/][A graph model for imperative computation]]
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-entry pub-article
+:END:
+[[https://researchportal.bath.ac.uk/en/persons/guy-mccusker/][*McCusker, G. A.*]], 12 Jan 2010. In: Logical Methods in Computer Science. 6, 1, 35 p., Paper 2.
+# type: Contribution to journal — Article
+
+* 2008
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-year
+:END:
+
+** [[https://researchportal.bath.ac.uk/en/publications/logic-programs-as-coalgebras/][Logic Programs as Coalgebras]]
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-entry pub-book-chapter
+:END:
+[[https://researchportal.bath.ac.uk/en/persons/guy-mccusker/][*McCusker, G.*]] & Power, J., 2008. /Proc. CMCS Short Contributions 2008./
+# type: Chapter or section in a book/report/conference proceeding — Book chapter
+
+** [[https://researchportal.bath.ac.uk/en/publications/foreword-for-special-issue-of-apal-for-galop-2005/][Foreword for special issue of APAL for GaLoP 2005]]
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-entry pub-article
+:END:
+[[https://researchportal.bath.ac.uk/en/persons/guy-mccusker/][*McCusker, G.*]] & Ghica, D., 2008. In: Annals of Pure and Applied Logic. 151, 2-3, p. 69-69 1 p.
+# type: Contribution to journal — Article
+
+* 2007
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-year
+:END:
+
+** [[https://researchportal.bath.ac.uk/en/publications/categorical-semantics-of-syntactic-control-of-interference-revisi/][Categorical semantics of Syntactic Control of Interference Revisited, Revisited]]
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-entry pub-article
+:END:
+[[https://researchportal.bath.ac.uk/en/persons/guy-mccusker/][*McCusker, G.*]], 2007. In: London Mathematical Society Journal of Computation and Mathematics. 10, p. 176-206 31 p.
+# type: Contribution to journal — Article
+
+** [[https://researchportal.bath.ac.uk/en/publications/a-games-model-of-bunched-implications/][A games model of bunched implications]]
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-entry pub-book-chapter
+:END:
+[[https://researchportal.bath.ac.uk/en/persons/guy-mccusker/][*McCusker, G.*]] & Pym, D., 2007. /Computer Science Logic: Proceedings of 21st International Workshop, CSL 2007, 16th Annual Conference of the EACSL, Lausanne, Switzerland, September 11-15, 2007. Proceedings./ Duparc, J. & Henzinger, T. A. (eds.). Berlin, Germany: Springer, Vol. 4646. p. 573-588 16 p. (Lecture Notes in Computer Science).
+# type: Chapter or section in a book/report/conference proceeding — Book chapter
+
+* 2004
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-year
+:END:
+
+** [[https://researchportal.bath.ac.uk/en/publications/on-the-semantics-of-the-bad-variable-constructor-in-algol-like-la/][On the semantics of the bad-variable constructor in Algol-like languages]]
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-entry pub-book-chapter
+:END:
+[[https://researchportal.bath.ac.uk/en/persons/guy-mccusker/][*McCusker, G.*]], Mar 2004. /Proceedings, 19th International Conference on the Mathematical Foundations of Programming Semantics, MFPS XIX./ Brookes, S. & Panagaden, P. (eds.). Elsevier, Vol. 83. (Electronic Notes in Theoretical Computer Science).
+# type: Chapter or section in a book/report/conference proceeding — Book chapter
+
+* 2003
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-year
+:END:
+
+** [[https://researchportal.bath.ac.uk/en/publications/the-regular-language-semantics-of-second-order-idealized-algol/][The regular-language semantics of second-order Idealized Algol]]
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-entry pub-article
+:END:
+[[https://researchportal.bath.ac.uk/en/persons/guy-mccusker/][*McCusker, G.*]] & Ghica, D., 2003. In: Theoretical Computer Science. 309, 1-3, p. 469-502 34 p.
+# type: Contribution to journal — Article
+
+* 2002
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-year
+:END:
+
+** [[https://researchportal.bath.ac.uk/en/publications/a-fully-abstract-relational-model-of-syntactic-control-of-interfe/][A fully abstract relational model of syntactic control of interference]]
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-entry pub-book-chapter
+:END:
+[[https://researchportal.bath.ac.uk/en/persons/guy-mccusker/][*McCusker, G.*]], 2002. /Computer Science Logic: Proceedings of 16th International Workshop, CSL 2002 11th Annual Conference of the EACSL./ Bradfield, J. (ed.). Berlin, Germany: Springer, Vol. 2471. p. 247-261.
+# type: Chapter or section in a book/report/conference proceeding — Book chapter
+
+* 1998
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-year
+:END:
+
+** [[https://researchportal.bath.ac.uk/en/publications/a-fully-abstract-game-semantics-for-general-references/][A fully abstract game semantics for general references]]
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: pub-entry pub-chapter-in-a-published-conference-proceeding
+:END:
+Abramsky, S., Honda, K. & [[https://researchportal.bath.ac.uk/en/persons/guy-mccusker/][*McCusker, G.*]], 1 Jan 1998. /Proceedings - 13th Annual IEEE Symposium on Logic in Computer Science, LICS 1998./ IEEE, Vol. 1998-June. p. 334-344 11 p.
+# type: Chapter or section in a book/report/conference proceeding — Chapter in a published conference proceeding

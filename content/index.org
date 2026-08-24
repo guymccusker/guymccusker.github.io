@@ -27,7 +27,7 @@ Email: @@html:<a href="mailto:&#103;&#46;&#97;&#46;&#109;&#99;&#99;&#117;&#115;&
 :HTML_CONTAINER_CLASS: about
 :END:
 
-I am Professor of Computer Science and Deputy Head of Department (People, Culture and Environment) in the [[https://www.bath.ac.uk/departments/department-of-computer-science/][Department of Computer Science]] at the [[https://www.bath.ac.uk/][University of Bath]]. I joined Bath as a Professor in 2006 after working for several years at the [[https://www.sussex.ac.uk/][University of Sussex]]. Previously:Junior Research Fellow at St Johns College in Oxford; PhD at Imperial College, London under the supervision of [[https://en.wikipedia.org/wiki/Samson_Abramsky][Samson Abramsky]]; undergraduate at Oxford.
+I am Professor of Computer Science and Deputy Head of Department (People, Culture and Environment) in the [[https://www.bath.ac.uk/departments/department-of-computer-science/][Department of Computer Science]] at the [[https://www.bath.ac.uk/][University of Bath]]. I joined Bath as a Professor in 2006 after working for several years at the [[https://www.sussex.ac.uk/][University of Sussex]]. Previously: I was a Junior Research Fellow at St Johns College in Oxford; completed a PhD at Imperial College, London under the supervision of [[https://en.wikipedia.org/wiki/Samson_Abramsky][Samson Abramsky]]; and was an undergraduate at Oxford.
 
 I enjoy thinking about mathematical models of programs and programming languages, especially so-called "intensional" models which expose how programs compute as well as what they compute. I've done a lot of work on game semantics, and more recently have focussed on relational models which are a little simpler than games but still fascinating.
 

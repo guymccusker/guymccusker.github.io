@@ -10,10 +10,7 @@ __pycache__/
 *.html~
 *.tex~
 .DS_Store
-/Notes/Lecture Scans/
-/Notes/Tutorial Scans/
 *.zip
 *.*~
-*.png
 *.aux
 *.log

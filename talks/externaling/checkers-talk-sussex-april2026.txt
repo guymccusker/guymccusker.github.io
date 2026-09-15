@@ -1,0 +1,392 @@
+#+TITLE: Interaction Improvement
+#+AUTHOR: Guy McCusker, University of Bath 
+#+DATE: Birmingham, May 2026 
+
+
+#+bibliography: ~/Library/texmf/bibtex/bib/bigbib.bib
+#+CITE_EXPORT: csl ~/Documents/Papers/bibstyles/harvard-university-of-bath.csl
+
+#+begin_src latex-macros
+\newcommand{\sem}[1]{{[\![#1]\!]}}
+\newcommand{\obs}[1]{\mathsf{obs}(#1)}
+\newcommand{\lectx}{\sqsubseteq^{\mathrm{ctx}}}
+\newcommand{\leden}{\sqsubseteq^{\mathrm{den}}}
+\newcommand{\BT}[1]{\mathsf{BT}(#1)}
+#+end_src
+
+#+include: "./lecture-preamble-light.org"
+
+* COMMENT Overview
+ - Resource sensitive denotational and operational semantics
+ - Characterize a quantitative denotational semantics -- the relational model -- in terms of a quantitative observational preorder -- interaction improvement
+
+* COMMENT Denotational semantics and observations
+
+** Operational semantics
+Reduction relation:
+\[
+ M \rightarrow^{*} N
+\]
+
+Use this to define a notion of /observation/ \(\obs{M}\). Examples:
+ - \(M \rightarrow^* 0\) in some typed language with constants
+ - \(M \rightarrow^* \mathsf{hnf}\)  (aka \(M\) is /solvable/ in untyped \lambda-calculus)
+
+From this we define a contextual preorder: \(M \lectx N\) means
+\[
+\text{for all contexts}~C[-]. \obs{C[M]} \subseteq \obs{C[N]}
+\]
+
+** Denotational semantics
+
+Interpret (or perhaps "represent") programs as mathematical entities:
+
+for a program phrase \(M\), its interpretation is \(\sem{M}\).
+
+Typically \(\sem{M}\) is some kind of function
+ - continuous functions between complete partial orders
+ - homomorphisms of some algebraic structure
+
+We'll mostly consider the case where \(\sem{M}\) is a /relation/.
+
+Other kinds of models exist e.g. game semantics. 
+
+** Denotational preorder
+
+If the universe of interpretations carries a natural partial order, we obtain a /denotational/ preorder on programs:
+\[
+M \leden N \Leftrightarrow \sem{M} \sqsubseteq \sem{N}. 
+\]
+
+** Observations in denotational semantics
+
+Typically, denotational models also allow us to make "observations": for example
+ - denotational evaluation to values e.g. \(0 \in \sem{M}\)
+ - denotational /definedness/: \(\sem{M} \not = \perp\)
+
+We usually expect that the denotational partial order preserves observations i.e.
+\[
+ \sem{M} \sqsubseteq \sem{N} \Rightarrow \obs{\sem{M}} \subseteq \obs{\sem{N}}. 
+\]
+
+** Operational/denotational correspondence properties
+
+*** Observational soundness
+
+\[
+ \obs{M} \subseteq \obs{\sem{M}}
+\]
+
+Typically easy to prove. It sometimes follows readily from  /reduction invariance/
+\[
+ M \rightarrow N \quad \Rightarrow \quad \sem{M} = \sem{N}. 
+\]
+plus simple facts about the semantics of normal forms. 
+
+*** Computational adequacy
+
+\[
+\obs{\sem{M}} \subseteq \obs{M}. 
+\]
+
+This says that the operational semantics is /adequate/ to generate all observations predicted by the model.
+
+*** Soundness
+
+\[
+ M \leden N \Rightarrow M \lectx N. 
+\]
+
+This follows from the observational soundness and adequacy properties, provided the denotational semantics is /compositional/ and /monotone/.
+
+*** Completeness
+
+\[
+ M \lectx N \Rightarrow M \leden N 
+\]
+
+This property is notoriously difficult to establish for many kinds of programming language. For PCF this is the famous /full abstraction problem/.
+
+In the \lambda-calculus, the situation is different. 
+
+
+* COMMENT Lambda calculus
+
+\[
+ M ::= x \mid MM \mid \lambda x.M 
+\]
+
+In the pure \lambda-calculus there is another important class of preorders based on /B\ouml{}hm-trees/. 
+
+If $M\rightarrow^* \lambda x_{1}\ldots x_{n}.y\,M_{1}\cdots M_{k}$:
+
+{{{graphic(bohmtree)}}}
+	#+begin_src latex
+   	\begin{tikzpicture}\usetikzlibrary{calc}
+				\node (root) at (-70pt,8pt) {~};
+				\node (BT) at (0,0) {$\mathsf{BT}(M)=$};
+				\node[right of = BT, node distance =2cm] (head) {$\lambda x_{1} \ldots x_{n}.y\, $};
+				\node (BTN1) at ($(head)+(-.25,-.75)$) {$\mathsf{BT}(M_1)$};
+				\draw ($(head.south east)+(-0.5,0.1)$) -- ($(BTN1.north)-(0.,0)$);
+				\node (BTNk) at ($(head)+(2.,-.75)$) {$\mathsf{BT}(M_k)$};
+				\draw ($(head.south east)+(-0.1,0.1)$) -- ($(BTNk.north)-(0.,0)$);
+				\node at ($(head)+(.9,-.75)$) {$\cdots$};
+				\end{tikzpicture}
+	#+end_src
+
+Otherwise, \(M\) is head diverging:
+\[ \BT{M} = \bot. 
+\]
+
+** Bohm preorder
+
+{{{graphic(bohmorder)}}}
+		#+begin_src latex
+\usetikzlibrary{calc}
+			\begin{tikzpicture}[baseline]
+			\node (BT) at (0,0) {$\mathsf{BT}(M)=$};
+			\node[right of = BT, node distance =1.8cm] (head) {$\lambda x_{1} \ldots x_{n}.y\, $};
+			\node (BTN1) at ($(head)+(-.25,-.75)$) {$\vdots$};
+			\draw ($(head.south east)+(-0.5,0.1)$) -- ($(BTN1.north)-(0.,0)$);
+			\node (BTNk) at ($(head)+(2.,-.75)$) {$\bot$};
+			\draw ($(head.south east)+(-0.1,0.1)$) -- ($(BTNk.north)-(0.,0)$);
+			\node at ($(head)+(.9,-.75)$) {$\cdots$};
+			\end{tikzpicture} 
+             \(\sqsubseteq_{\mathcal{B}}\)
+			\begin{tikzpicture}[baseline]
+			\node (BT) at (0,0) {$\mathsf{BT}(N)=$};
+			\node[right of = BT, node distance =1.8cm] (head) {$\lambda x_{1} \ldots x_{n}.y\, $};
+			\node (BTN1) at ($(head)+(-.25,-.75)$) {$\vdots$};
+			\draw ($(head.south east)+(-0.5,0.1)$) -- ($(BTN1.north)-(0.,0)$);
+			\node (BTNk) at ($(head)+(2.,-.75)$) {~~$\lambda y_1 \ldots y_p . z$};
+			\draw ($(head.south east)+(-0.1,0.1)$) -- ($(BTNk.north)-(0.,0)$);
+			\node at ($(head)+(.9,-.75)$) {$\cdots$};
+			
+			
+			\node (BTN1') at ($(BTNk)+(-0,-.75)$) {};
+			\draw ($(BTNk.south east)+(-0.3,0.1)$) -- ($(BTN1'.north)-(0.,0)$);
+			\node (BTNk') at ($(BTNk)+(1.,-.75)$) {};
+			\draw ($(BTNk.south east)+(-0.1,0.1)$) -- ($(BTNk'.north)-(0.,0)$);
+			
+			\node at ($(BTNk)+(.5,-.75)$) {$\cdots$};
+			\end{tikzpicture}
+		#+end_src
+
+
+** B\ouml{}hm preorder up to extensionality
+
+** \(D_\infty\) models
+
+In the standard domain-theoretic models of \lambda-calculus -- the so-called \(D_\infty\) models -- we have the correspondence
+\[
+ \sem{M} \not = \bot \Leftrightarrow M\rightarrow^*\mathsf{hnf}. 
+\]
+
+Taking a contextual preorder based on observing reduction to head normal form, we get
+\[
+ M \leden N \Rightarrow M \lectx N. 
+\]
+
+We also have
+\[
+ M \sqsubseteq_{\mathcal{B}\eta} N \Rightarrow M \leden N. 
+\]
+
+The "B\ouml{}hm-out" technique builds contexts that distinguish terms with distinct B\ouml{}hm-trees:
+\[
+ M \not \sqsubseteq_{\mathcal{B}\eta} N \Rightarrow \exists C[-]. C[M] \rightarrow^*\mathsf{hnf}~\text{but}~C[N]\not\rightarrow^*\mathsf{hnf}
+\]
+
+Therefore
+\[
+ \sem{M} \sqsubseteq \sem{N} \Leftrightarrow M \lectx N. 
+\]
+
+* Relational semantics
+
+This talk is about the /relational semantics/ of the \lambda-calculus.
+
+Relational semantics grew from Girard's /quantitative semantics/ and can be seen as a simple, degenerate model of linear logic.
+
+** COMMENT A Cartesian closed category of relations
+
+Our model will interpret programs as certain kinds of /relations/. They can be seen as morphisms of a cartesian closed category defined by:
+ - objects: sets
+ - morphisms \(A\rightarrow B\): relations from \(\mathbf{M}_f(A)\) to \(B\)
+
+Here \(\mathbf{M}_f(A)\) is the set of /finite multisets/ drawn from \(A\).
+
+#+reveal:split
+
+Given relations 
+\[
+f : \mathbf{M}_f A \rightarrow B \quad\quad  g : \mathbf{M}_f B \rightarrow C
+\]
+we can compose like this: $g \circ f$ is 
+\[ 
+  \{ (S_1 \uplus \ldots \uplus S_n,c) \mid (S_i,b_i) \in f, ([b_1,\ldots,b_n],c) \in g \}
+\]
+
+#+reveal:split
+{{{graphic(graphcomp)}}}
+   #+BEGIN_SRC latex 
+    \begin{tikzpicture}
+    \tikzstyle{level 2}=[sibling distance=0.8cm]
+    \node  at (0,0) {$c$}
+          child {node {$[b_1$} edge from parent[draw=none]
+            child {node {$S_1$} edge from parent node[left] {$f$}}}
+          child {node {$\ldots$} edge from parent[draw=none]
+            child {node {$\ldots$} edge from parent[draw=none] } }           
+          child {node {$b_i$} 
+            child {node {$S_i$} edge from parent node[left] {$f$}}
+            edge from parent node[left] {$g$}
+          }
+          child {node {$\ldots$} edge from parent[draw=none] 
+            child {node {$\ldots$} edge from parent[draw=none] } }           
+          child {node {$b_n]$} edge from parent[draw=none]
+            child  {node {$S_n$} edge from parent node[left] {$f$}}
+          }          ; 
+    \end{tikzpicture}
+   #+END_SRC
+#+begin_center
+#+attr_html: :width 80% 
+   #+RESULTS: graphcomp
+#+end_center
+
+\[
+ (S_1 \uplus \cdots \uplus S_n, c) \in g \circ f
+\]
+
+#+reveal:split
+
+If we can find a /reflexive object/ in this category then we have a model of the untyped \lambda-calculus.
+
+However, the model is easier to explain in the form of a /non-idempotent intersection type/ system.
+
+** Relational semantics as a type system
+
+Idea: give a system of /type derivations/ yielding judgements of the form
+\[
+ x_1: \mu_1, \ldots, x_n:\mu_n \vdash M: \alpha
+\]
+The denotation of a term is the set of its valid typings.
+
+In this case, each "type" \(\mu_i\) is a multiset of types, so we get something akin to the morphisms in the category described above.
+
+** Intersection types
+
+\begin{array}{rcll}
+  \alpha  & ::=  & a \mid \mu \rightarrow \alpha \\
+  \mu  & ::=  & [\alpha_1, \ldots, \alpha_n] & n \geq 0\\
+\end{array}
+
+\[
+\frac{}{x:[\alpha] \vdash x:\alpha}~\text{ax} \quad\quad
+\frac{\Gamma_i \vdash M: \alpha_i~~(i \in I~\text{finite})}{\uplus_{i \in I}\Gamma_i \vdash M: [\alpha_i]_{i \in I}}~\text{many}
+\]
+
+\[
+\frac{\Gamma, x:\mu \vdash M: \alpha}{\Gamma \vdash \lambda x.M: \mu \rightarrow \alpha}~\lambda
+\]
+
+\[
+\frac{\Gamma \vdash M: \mu \rightarrow \alpha \quad \Delta \vdash N: \mu}
+{\Gamma \uplus \Delta \vdash MN : \alpha}~\text{@}
+\]
+
+** Facts about the type system
+
+- A term may have many types: the types are /elements of the denotational semantics/ rather than traditional types
+- The @ and /many/ rules together implement the relational composition we defined above
+- A term in head normal form trivially has a type. For example
+  \[
+   x: [] \rightarrow [] \rightarrow a \vdash x M N : \alpha
+  \]
+  Note that a term such as \( x \Omega\) has a type, though \(\Omega\) does not. 
+- Subject reduction and expansion hold
+
+** Subject reduction / expansion
+
+If \( M \rightarrow_\beta N \) then
+\[
+ \Gamma \vdash M: \alpha \Leftrightarrow \Gamma \vdash N:\alpha
+\]
+
+Taking \(\sem{M}\) to be the set of typings of \(M\), this says:
+\[
+\text{if}~M\rightarrow_\beta N~\text{then}~\sem{M} = \sem{N}. 
+\]
+
+** Quantitative aspects
+
+This model has /quantitative/ content: the semantic entities count something. But what?
+
+The multisets keep track of how many times an argument is used: for example
+\[
+ \cfrac{\cfrac{\vdots}{f: [[\alpha] \rightarrow [\alpha'] \rightarrow \alpha] \vdash \lambda x. f~x~x:[\alpha, \alpha']\rightarrow \alpha}\quad \cfrac{\vdash M: \alpha \quad \vdash M: \alpha'}{\vdash M: [\alpha,\alpha']}}{\vdash (\lambda x. f~x~x) M: \alpha }~@
+\]
+
+The function uses \(M\) twice, so we need /two/ derivations of \(M\).
+
+Though substitution may duplicate or discard /terms/, it does not duplicate or discard their /type derivations/! 
+
+** Quantitative subject reduction
+
+
+For /head reductions/ we can say more.
+
+A head reduction is the contraction of a redex of the form
+\[
+ \lambda x_1 \ldots x_n. R~M_1 \ldots M_k 
+\]
+
+Write \(M \rightarrow_h N\) to say that \(M\) reduces by a head-reduction to \(N\).
+
+Quantitative subject reduction: if \(M \rightarrow_h N\) and \(\Gamma \vdash M:\alpha\) with a typing derivation containing \(k\) instances of the @-rule, then \(\Gamma \vdash N:\alpha\) with a derivation containing \(k-1\) instances of the @-rule.
+
+The restriction to head reductions is essential here: for example \(x \Omega \rightarrow_\beta x \Omega\), but this is never a head reduction. 
+
+As a corollary:
+a term \(M\) has a head normal form if and only if it has a type in this system.
+
+In denotational terms:
+\[
+\sem{M} \not = \emptyset \Leftrightarrow M \rightarrow^* \mathsf{hnf}. 
+\]
+
+
+
+
+
+
+** Example
+
+
+Question about the quantitative content
+
+* Improvement orders
+
+ - improvement orders
+
+Note that an order that counts reductions /cannot/ be the order induced by a denotational semantics that is sound for beta-reduction.    
+
+* Checkers calculus   
+
+Interaction head reduction
+
+Quick study of eta
+
+Improvement ordering, and painting of lambda-terms 
+
+* Checkers semantics
+
+Annotations
+Eta = 1 whiter 1 cheaper
+
+Whiter-cheaper ordering
+
+If PWC is compositional then it captures the improvement ordering
+
+Compositionality argument.
+
+* Summary of semantics and orders etc

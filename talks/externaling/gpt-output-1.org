@@ -1,0 +1,329 @@
+* Big Picture
+- We want to understand:
+  - how programs interact with contexts
+  - and how to measure "efficiency" of that interaction
+
+#+ATTR_REVEAL: :frag (appear)
+- Relational semantics *already* tracks resources
+- But:
+  - the induced theory looks purely qualitative
+
+---
+
+* The Problem
+- The relational model:
+  - comes from linear logic
+  - tracks usage via multisets
+
+#+ATTR_REVEAL: :frag (appear)
+- However:
+  - its preorder is characterised by Böhm trees
+  - which ignore quantitative information
+
+- So:
+  - where did the quantitative content go?
+
+---
+
+* A First Attempt
+- Classic idea (Sands):
+  - count number of steps
+
+#+ATTR_REVEAL: :frag (appear)
+- Define:
+  - t improves u if it takes fewer steps
+
+- Problem:
+  - counts *all* computation steps
+  - too sensitive to internal reductions
+
+---
+
+* Key Insight
+- Not all steps are observable
+
+#+ATTR_REVEAL: :frag (appear)
+- Internal steps:
+  - invisible to the context
+
+- Interaction steps:
+  - observable
+  - matter for performance
+
+---
+
+* Idea of This Work
+- Only count:
+  - interactions between program and context
+
+#+ATTR_REVEAL: :frag (appear)
+- Ignore:
+  - purely internal computation
+
+---
+
+* Modelling Interaction
+- Introduce:
+  - ~checkers calculus~
+
+- Idea:
+  - colour code the term
+
+#+ATTR_REVEAL: :frag (appear)
+- Black:
+  - program
+- White:
+  - context
+
+---
+
+* How Interaction Appears
+- Redex:
+  - (λᶜ x.t) ·ᵈ u
+
+#+ATTR_REVEAL: :frag (appear)
+- Two cases:
+  - c = d → silent
+  - c ≠ d → interaction
+
+---
+
+* Interpretation
+- Silent step:
+  - internal computation
+
+- Interaction step:
+  - program ↔ context communication
+
+---
+
+* Interaction Improvement
+- Define preorder:
+
+#+ATTR_REVEAL: :frag (appear)
+- t ⊑imp u if:
+  - for all contexts C
+  - if C[t] terminates with k interactions
+  - then C[u] terminates with ≤ k
+
+---
+
+* Why This is Reasonable
+- Captures optimisation
+
+#+ATTR_REVEAL: :frag (appear)
+- Fewer interactions:
+  - less communication
+  - better behaviour
+
+- Robust:
+  - ignores irrelevant internal steps
+
+---
+
+* Back to Relational Semantics
+- Recall:
+  - terms interpreted via types
+
+#+ATTR_REVEAL: :frag (appear)
+- Types already encode:
+  - how many times arguments are used
+
+---
+
+* Where Quantitative Data Lives
+- Not in:
+  - the set of types itself
+
+#+ATTR_REVEAL: :frag (appear)
+- But in:
+  - the structure of derivations
+
+- Key fact:
+  - derivations carry *counts*
+
+---
+
+* Bridging the Gap
+- Want to compare:
+  - interaction improvement
+  - relational preorder
+
+#+ATTR_REVEAL: :frag (appear)
+- Need:
+  - a refined semantic ordering
+
+---
+
+* First Idea (Doesn't Work)
+- Compare types directly:
+  - same type, lower cost
+
+#+ATTR_REVEAL: :frag (appear)
+- Fails because:
+  - η-expansion breaks correspondence
+  - colours mismatch
+
+---
+
+* Fix: Allow Colour Changes
+- Key idea:
+  - allow "whitening" of types
+
+#+ATTR_REVEAL: :frag (appear)
+- Interpretation:
+  - term becomes more compatible with contexts
+
+---
+
+* Whiter-Cheaper Ordering
+- Compare:
+  - cost (k)
+  - colour information
+
+#+ATTR_REVEAL: :frag (appear)
+- Improved term:
+  - cheaper
+  - more context-friendly
+
+---
+
+* Technical Constraint
+- Cannot freely recolour everything
+
+#+ATTR_REVEAL: :frag (appear)
+- Must respect:
+  - polarity (positive / negative positions)
+
+---
+
+* Resulting Preorder
+- Define:
+  - t ⊑pwc u
+
+#+ATTR_REVEAL: :frag (appear)
+- Every typing of t:
+  - matched by a whiter + cheaper typing of u
+
+---
+
+* Why This is Subtle
+- Typings must still compose
+
+#+ATTR_REVEAL: :frag (appear)
+- Application:
+  - requires matching argument types
+
+- Whitening:
+  - may break compatibility
+
+---
+
+* Key Technical Idea
+- Repainting
+
+#+ATTR_REVEAL: :frag (appear)
+- Adjust types dynamically:
+  - propagate colour changes
+  - maintain consistency
+
+---
+
+* Intuition Behind Repainting
+- Think:
+  - types are "resources + interface"
+
+#+ATTR_REVEAL: :frag (appear)
+- Changing interface (colour):
+  - must be reflected everywhere
+
+---
+
+* Main Result
+For λ-terms:
+
+#+ATTR_REVEAL: :frag (appear)
+These are equivalent:
+1. Interaction improvement
+2. Whiter-cheaper preorder
+3. Böhm preorder (η)
+4. Relational preorder
+
+---
+
+* Interpretation
+- The relational model:
+  - *does* contain quantitative information
+
+#+ATTR_REVEAL: :frag (appear)
+- But:
+  - it is encoded indirectly
+  - via interaction structure
+
+---
+
+* Conceptual Takeaway
+- Cost ≠ number of reductions
+
+#+ATTR_REVEAL: :frag (appear)
+- Cost = number of interactions
+
+- This aligns with:
+  - communication-based models
+  - game semantics intuition
+
+---
+
+* Consequence
+- No need for:
+  - external counters
+  - instrumentation
+
+#+ATTR_REVEAL: :frag (appear)
+- The model already knows:
+  - how expensive programs are
+
+---
+
+* Broader View
+- Programs behave like:
+  - interactive agents
+
+#+ATTR_REVEAL: :frag (appear)
+- Cost arises from:
+  - interaction with environment
+
+---
+
+* Outlook
+- Extend to:
+  - richer languages (PCF, call-by-value)
+
+#+ATTR_REVEAL: :frag (appear)
+- Apply to:
+  - program optimisation
+  - complexity analysis
+
+---
+
+* Summary
+- Introduced:
+  - interaction-based cost model
+
+- Built:
+  - checkers calculus
+
+- Showed:
+  - exact correspondence with semantics
+
+---
+
+* Final Message
+- Quantitative behaviour is:
+  - not lost
+  - just hidden
+
+#+ATTR_REVEAL: :frag (appear)
+- This work:
+  - makes it explicit
+``

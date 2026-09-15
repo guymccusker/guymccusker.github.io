@@ -1,0 +1,186 @@
+span[class|=section-number] {
+  display: none;
+}
+
+.reveal h1 {
+  /* font-size: 3.77em;  */
+  font-size: 2.0em; }
+
+.reveal h2 {
+  /* font-size: 2.11em;  */
+  font-size: 1.33em; }
+
+.reveal h3 {
+  /* font-size: 1.55em;  */
+  font-size: 1.1em; }
+
+.reveal h4 { font-size: 1em; }
+
+.reveal p { font-size: 0.60em;}
+
+.reveal pre code { font-size: 0.60em; }
+
+.reveal ul, .reveal ol { font-size: 0.60em; }
+
+.reveal ul p { font-size: 1em;}
+.reveal ol p { font-size: 1em;}
+
+.reveal ul ul {font-size: 1em;}
+
+.reveal ul ol {font-size: 1em;}
+
+.reveal p, ul, li {
+    text-align: left; 
+}
+
+ol ol { list-style-type: lower-alpha }
+
+.org-center p {
+    text-align: center; 
+}
+#sec-title-slide p {
+    text-align: center; 
+}
+
+.figure p {
+    text-align: center; 
+}
+
+
+.figure img {
+    box-shadow: none;
+    background: none;
+    border: none; 
+}
+
+.reveal section img { border:none; box-shadow:none; }
+
+.theorem, .definition, .proof, .lemma {
+    display:block;
+    margin-left:10px;
+    margin-bottom:20px;
+    font-style:normal;
+}
+.theorem:before{
+    content:"Theorem.\00a0\00a0";
+    float:left;
+    font-weight:bold;
+    font-size: 0.6em; 
+}
+.lemma:before{
+    content:"Lemma.\00a0\00a0";
+    float:left;
+    font-weight:bold;
+    font-size: 0.6em; 
+}
+.proof:before{
+    content:"Proof.\00a0\00a0";
+    float:left;
+    font-weight:bold;
+    font-size: 0.6em; 
+}
+
+.definition:before{
+    content:"Definition.\00a0\00a0 ";
+    float:left;
+    font-weight:bold;
+    font-size: 0.6em; 
+}
+
+.content .theorem:before{
+    content:"Theorem " counter(section-counter) "." counter(thm-counter) ".\00a0\00a0";
+    float:left;
+    font-weight:bold;
+    font-size: 1em; 
+}
+.content .definition:before{
+    content:"Definition " counter(section-counter) "." counter(def-counter) ".\00a0\00a0";    
+    float:left;
+    font-weight:bold;
+    font-size: 1em; 
+}
+
+.content .lemma:before{
+    content:"Lemma " counter(section-counter) "." counter(lem-counter) ".\00a0\00a0";
+    float:left;
+    font-weight:bold;
+    font-size: 1em; 
+}
+
+.content .proof:before{
+    content:"Proof.\00a0\00a0";
+    float:left;
+    font-weight:bold;
+    font-size: 1em; 
+}
+
+.definition {
+    counter-increment: def-counter 1; 
+}
+
+.theorem {
+    counter-increment: thm-counter 1; 
+}
+
+.lemma {
+    counter-increment: lem-counter 1; 
+}
+
+.content .definition:before{
+    content:"Definition " counter(section-counter) "."  counter(def-counter) ".\00a0\00a0 ";
+    float:left;
+    font-weight:bold;
+}
+
+.content h2 {
+    counter-increment: section-counter 1;
+    counter-set: subsection-counter 0 def-counter 0 lem-counter 0 thm-counter 0;
+}
+
+.content h3 {
+    counter-increment: subsection-counter 1;
+}
+
+.content h2:before {
+    content: counter(section-counter) ". "; 
+}
+
+.content .nonumber h2:before {
+    content: none; 
+}
+
+h2.footnotes:before {
+    content: none; 
+}
+
+.content h3:before {
+    content: counter(section-counter) "." counter(subsection-counter) ". "; 
+}
+
+
+.content .nonumber h3:before {
+    content: none; 
+}
+
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6 {
+  text-transform: none;
+}
+
+
+.MathJax_CHTML {
+    font-size: 50% !important;
+}
+
+.MathJax {
+    font-size: 1.0em !important;
+}
+
+.csl-entry { font-size: 0.35em;
+	     text-align: left; 
+          }
+

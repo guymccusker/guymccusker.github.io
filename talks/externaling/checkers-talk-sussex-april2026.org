@@ -1,0 +1,93 @@
+#+TITLE: External examining -- what and why
+#+AUTHOR: Guy McCusker
+#+DATE: CSEG , September 2026 
+
+
+
+#+begin_src latex-macros
+\newcommand{\sem}[1]{{[\![#1]\!]}}
+\newcommand{\obs}[1]{\mathsf{obs}(#1)}
+\newcommand{\lectx}{\sqsubseteq^{\mathrm{ctx}}}
+\newcommand{\leden}{\sqsubseteq^{\mathrm{den}}}
+\newcommand{\leimp}{\sqsubseteq^{\mathrm{imp}}}
+\newcommand{\lepwc}{\sqsubseteq^{\mathrm{pwc}}}
+\newcommand{\BT}[1]{\mathsf{BT}(#1)}
+\newcommand{\interact}{\bullet\circ}
+\newcommand{\intred}{\stackrel{\interact}{\rightarrow}}
+#+end_src
+
+#+include: "./lecture-preamble-light.org"
+
+* The role of External Examiner
+
+ - A network of QA between universities which autonomously award degrees
+ - Overseeing quality and standards
+
+** What it involves
+
+ - Appointments for 2 -- 4 years to oversee one or more degree programmes
+ - QA and feedback on assessments throughout the year
+ - Review of marking and QA processes
+ - Attendance at exam boards to oversee process
+ - Discussion with students
+ - Writing an annual report
+
+** In the old days...
+
+Pre-pandemic, a great deal of the work was done in person.
+
+Typically visit the university two or three times in the year:
+ - reviewing exam papers and a selection of coursework assignments
+ - reviewing marking of exams and projects
+ - attending exam board
+
+On at least one of these occasions there would be a meeting with students.
+
+** In today's world
+
+ - You'll be given access to Moodle or equivalent and expected to review everything
+ - This is not practical!
+ - So pick and choose! Or seek guidance from the Director of Teaching or equivalent
+
+Around one week of work seems a reasonable estimate.
+
+* Am I qualified to do this?
+
+If you've taught a course and attended an exam board, then yes!
+
+ - Focus on /process/ over content where you don't know the topics in detail
+   - are the setting, checking and marking processes appropriate?
+   - are they being followed?
+   - what happens when something goes wrong?
+ - Sometimes you'll spot obvious things:
+   - assignments solvable by AI
+   - 90% of students scoring 80% or more on a unit, or everyone failing
+   - project double-marking not being done in good faith
+ - And you do have subject expertise!
+
+* Why would I do this?
+
+ - Helping out a friend's department and the sector
+ - Seeing how other universities work is interesting and can be useful
+ - Sharing ideas
+ - [and they pay you]
+
+   
+
+
+ 
+     
+
+
+
+
+
+
+
+
+
+
+
+
+
+

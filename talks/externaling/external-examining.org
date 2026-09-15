@@ -1,0 +1,94 @@
+#+TITLE: External examining -- what and why
+#+AUTHOR: Guy McCusker
+#+DATE: CSEG , September 2026 
+
+#+include: "./lecture-preamble-light.org"
+
+* The role of External Examiner
+
+#+ATTR_REVEAL: :frag (appear)
+ - A network of QA between universities which autonomously award degrees
+ - Overseeing quality and standards
+
+** What it involves
+
+#+ATTR_REVEAL: :frag (appear)
+ - Appointments for 2 -- 4 years to oversee one or more degree programmes
+ - QA and feedback on assessments throughout the year
+ - Review of marking and QA processes
+ - Attendance at exam boards to oversee process
+ - Discussion with students
+ - Writing an annual report
+
+** In the old days...
+
+Pre-pandemic, a great deal of the work was done in person.
+
+#+ATTR_REVEAL: :frag (appear)
+Typically visit the university two or three times in the year:
+#+ATTR_REVEAL: :frag (appear)
+ - reviewing exam papers and a selection of coursework assignments
+ - reviewing marking of exams and projects
+ - attending exam board
+#+ATTR_REVEAL: :frag (appear)
+On at least one of these occasions there would be a meeting with students.
+
+** In today's world
+
+
+#+ATTR_REVEAL: :frag (appear)
+ - You'll be given access to Moodle or equivalent and expected to review everything
+ - This is not practical!
+ - So pick and choose. Remember that in the past it was all done in a few days.
+ - Seek guidance from the relevant Director of Teaching or equivalent
+
+
+#+ATTR_REVEAL: :frag (appear)
+Around one week of work seems a reasonable estimate.
+
+* Am I qualified to do this?
+
+If you've taught a course and attended an exam board, then yes!
+
+#+ATTR_REVEAL: :frag (appear)
+ - Focus on /process/ over content where you don't know the topics in detail
+   - are the setting, checking and marking processes appropriate?
+   - are they being followed?
+   - what happens when something goes wrong?
+ - Sometimes you'll spot obvious things:
+   - assignments solvable by AI
+   - 90% of students scoring 80% or more on a unit, or everyone failing
+   - project double-marking not being done in good faith
+ - And you do have subject expertise!
+
+* Why would I do this?
+
+#+ATTR_REVEAL: :frag (appear)
+ - Helping out a friend's department and the sector
+ - Seeing how other universities work is interesting and can be useful
+ - Sharing ideas
+ - Growing your academic network 
+ - [and they pay you]
+
+
+
+
+   
+
+
+ 
+     
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,85 @@
+* Example: Counting Interactions
+Consider:
+
+#+BEGIN_SRC latex
+I^\bullet := \lambda^\bullet x.x
+\qquad
+D^\circ := \lambda^\circ y.\lambda^\circ x.\, x^\circ (y^\circ x)
+#+END_SRC
+
+---
+
+* Example: Silent vs Interaction
+Apply both ways:
+
+#+ATTR_REVEAL: :frag (appear)
+- Black application:
+#+BEGIN_SRC latex
+I^\bullet \bullet D^\circ \;\to_\beta^\tau\; D^\circ
+#+END_SRC
+
+- White application:
+#+BEGIN_SRC latex
+I^\bullet \circ D^\circ \;\to_\beta\; D^\circ
+#+END_SRC
+
+---
+
+* What Happened?
+#+ATTR_REVEAL: :frag (appear)
+- First case:
+  - colours match (black / black)
+  - ⇒ *silent step*
+
+- Second case:
+  - colours differ (black / white)
+  - ⇒ *interaction step*
+
+---
+
+* Counting Interaction Steps
+Now consider a small computation:
+
+#+BEGIN_SRC latex
+I^\bullet \circ I^\bullet
+#+END_SRC
+
+#+ATTR_REVEAL: :frag (appear)
+- Step 1:
+#+BEGIN_SRC latex
+I^\bullet \circ I^\bullet \;\to\; I^\bullet
+#+END_SRC
+
+- This is an interaction step
+
+---
+
+* Comparison Example
+Compare:
+
+#+BEGIN_SRC latex
+I^\bullet
+\qquad\text{vs}\qquad
+(I^\bullet \circ I^\circ)
+#+END_SRC
+
+#+ATTR_REVEAL: :frag (appear)
+- Both reduce to the same result
+
+- But:
+  - $I^\bullet$:
+    - 0 interaction steps
+
+  - $I^\bullet \circ I^\circ$:
+    - 1 interaction step
+
+---
+
+* Interpretation
+#+ATTR_REVEAL: :frag (appear)
+- Same *extensional behaviour*
+
+- Different *interaction cost*
+
+⟹ second term is *worse* under interaction improvement
+``

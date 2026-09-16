@@ -1,0 +1,203 @@
+#+TITLE: Undecidability: what it is and why it matters
+#+AUTHOR: Guy McCusker
+#+DATE: September 2026 
+
+
+#+begin_comment
+
+,#+begin_src latex-macros
+\newcommand{\sem}[1]{{[\![#1]\!]}}
+\newcommand{\obs}[1]{\mathsf{obs}(#1)}
+\newcommand{\lectx}{\sqsubseteq^{\mathrm{ctx}}}
+\newcommand{\leden}{\sqsubseteq^{\mathrm{den}}}
+\newcommand{\leimp}{\sqsubseteq^{\mathrm{imp}}}
+\newcommand{\lepwc}{\sqsubseteq^{\mathrm{pwc}}}
+\newcommand{\BT}[1]{\mathsf{BT}(#1)}
+\newcommand{\interact}{\bullet\circ}
+\newcommand{\intred}{\stackrel{\interact}{\rightarrow}}
+,#+end_src
+#+end_comment
+
+
+#+include: "./lecture-preamble-light.org"
+
+* What if things go wrong?
+
+Jacob Coxon, formerly of Anthropic, 9/9/2026
+#+begin_quote
+The people building AI earnestly believe that it could kill us all by the end of the decade. 
+#+end_quote
+
+#+ATTR_REVEAL: :frag (appear)
+That would probably be bad.
+
+** Software Verification
+
+For decades, the field of software verification has sought solutions to questions like:
+ - can we be sure this program will do what it is supposed to?
+ - can we be sure this program will not do something bad?
+
+We have sophisticated ways of building /verification tools/: programs that can analyse other programs to provide answers.    
+
+The area draws upon a wide range of theoretical and practical work in computer science.
+
+** So, no problem, right?
+
+An AI model is a computer program.
+
+We can just use a verifier to check that it can't kill us all.
+
+#+reveal: split
+
+Or can we?
+
+My goal in the rest of this short talk is to convince you that there are some things that /no program can ever tell you/. 
+
+* Easy example: printing decimal numbers
+
+Suppose we want to write programs to print out the decimal expansions of numbers.
+
+- The number one can be handled: we print
+  #+begin_src
+  1.000000000...
+  #+end_src
+
+- One half can be handled:
+  #+begin_src
+  0.5000000000...
+  #+end_src
+
+- So can a third:
+  #+begin_src
+  0.33333...
+  #+end_src
+
+- And even pi can be programmed if you are smart enough:
+  #+begin_src
+  3.14159265358979...
+  #+end_src
+
+Can we handle any number?
+
+** What is a program?
+
+A computer program is a /finite sequence of characters/.
+
+Each character can be represented as a /number/.
+
+If we concatenate all those numbers we get a /really big number/ but it is still just a whole number. 
+
+So every program can be represented as a whole number.
+
+#+reveal: split
+
+That means that we can put all the programs in an order: there's a first one, a second one, a third one, and so on.
+
+This list goes on forever, but /every program appears in it/.
+
+#+begin_src
+Program 1: "Print 1.0000..."
+Program 2: "Print 0.5000..."
+Program 3: "Print 0.3333..."
+Program 4: "Print 3.1415..."
+            .
+            .
+            .
+#+end_src
+
+#+reveal: split
+
+Question: is there a program for every possible decimal sequence?
+
+** What about this sequence?
+
+Here is a description of a decimal expansion:
+
+#+ATTR_REVEAL: :frag (appear)
+ - It begins with ~0~ followed by the decimal point ~.~ 
+ - The next digit is the first decimal place from Program 1, plus 1; if the first digit is 9, wrap around to zero 
+ - The next digit is the second decimal place from Program 2, plus 1; if that digit is 9, wrap around to zero 
+ - The next digit is the third decimal place from Program 3, plus 1; if that digit is 9, wrap around to zero 
+ - The next digit is the fourth decimal place from Program 4, plus 1; if that digit is 9, wrap around to zero
+ - Continue forever 
+
+#+reveal:split
+
+In our example the first four programs produced
+#+begin_src
+ 1.0000...   0.5000...    0.3333...    3.1415...
+#+end_src
+
+#+ATTR_REVEAL: :frag appear
+So our new sequence would be
+#+ATTR_REVEAL: :frag appear
+#+begin_src
+ 0.1146...
+#+end_src
+
+** This sequence is not the output of any program!
+
+/Every/ program you can write appears somewhere in our list.
+
+If a program appears at position 23874, then our new sequence differs from the output of this program at decimal place 23874.
+
+Wherever our program appears, this sequence differs from it.
+
+So this sequence can /never/ be programmed.
+
+** Computability and Decidability
+
+Conclusion: there are some things that can never be programmed.
+
+Things that can be programmed are called /computable/.
+
+Questions which can be answered yes/no by a program are called /decidable/.
+
+Those that cannot are called /incomputable/ or /undecidable/.
+
+** Rice's Theorem
+
+A powerful theorem called Rice's Theorem tells us (roughly):
+
+#+begin_quote
+any property concerning what a program does is undecidable.
+#+end_quote
+
+The key is that this is about properties of behaviour rather than syntax.
+
+Properties like "this program is over 1000 lines long" can be decidable (and this particular example is.)
+
+** Will AI kill us all?
+
+The property "This program will kill us all" is therefore undecidable, by Rice's theorem. So we can never verify it.
+
+But it might be possible to construct a verifier that says "This program is safe" to /only/ but not /all/ the safe programs.
+
+It will refuse to authorise some safe programs, so it does not answer an undecidable question. But we hope it says yes to enough safe programs that we can make use of it.
+
+* Computer Science is fascinating
+
+I love thinking about computation in this way.
+
+ - Abstract arguments revealing powerful concepts
+ - Real consequences for practical tools that influence, support and secure our daily lives.
+
+You'll learn these things and more in your time here. I hope you enjoy it!
+
+
+ 
+     
+
+
+
+
+
+
+
+
+
+
+
+
+
+

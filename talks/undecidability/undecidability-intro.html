@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Generated on 2026-09-16 Wed 15:55 -->
+<meta charset="utf-8"/>
+<title>Undecidability: what it is and why it matters</title>
+<meta name="author" content="Guy McCusker"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="./reveal.js/dist/reveal.css"/>
+
+<link rel="stylesheet" href="./reveal.js/dist/theme/serif.css" id="theme"/>
+<link rel="stylesheet" href="./reveal.js/plugin/highlight/zenburn.css"/>
+<link rel="stylesheet" type="text/css" href="mystyle.css" />
+<style type="text/css">body {color: black; background: white;}</style>
+<style type="text/css">pre {background: #ccdddd;}</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide">
+<h2>Undecidability: what it is and why it matters</h2><h4>Guy McCusker</h4><h5>September 2026</h5>
+</section>
+<section>
+<section id="slide-1">
+<h2 id="1"><span class="section-number-2">1.</span> What if things go wrong?</h2>
+<p>
+Jacob Coxon, formerly of Anthropic, 9/9/2026
+</p>
+<blockquote>
+<p>
+The people building AI earnestly believe that it could kill us all by the end of the decade. 
+</p>
+</blockquote>
+
+<p class="fragment (appear)">
+That would probably be bad.
+</p>
+</section>
+<section id="slide-1-1">
+<h3 id="1-1"><span class="section-number-3">1.1.</span> Software Verification</h3>
+<p>
+For decades, the field of software verification has sought solutions to questions like:
+</p>
+<ul>
+<li>can we be sure this program will do what it is supposed to?</li>
+<li>can we be sure this program will not do something bad?</li>
+
+</ul>
+
+<p>
+We have sophisticated ways of building <i>verification tools</i>: programs that can analyse other programs to provide answers.    
+</p>
+
+<p>
+The area draws upon a wide range of theoretical and practical work in computer science.
+</p>
+</section>
+<section id="slide-1-2">
+<h3 id="1-2"><span class="section-number-3">1.2.</span> So, no problem, right?</h3>
+<p>
+An AI model is a computer program.
+</p>
+
+<p>
+We can just use a verifier to check that it can&rsquo;t kill us all.
+</p>
+
+</section>
+<section>
+
+<p>
+Or can we?
+</p>
+
+<p>
+My goal in the rest of this short talk is to convince you that there are some things that <i>no program can ever tell you</i>. 
+</p>
+</section>
+</section>
+<section>
+<section id="slide-2">
+<h2 id="2"><span class="section-number-2">2.</span> Easy example: printing decimal numbers</h2>
+<p>
+Suppose we want to write programs to print out the decimal expansions of numbers.
+</p>
+
+<ul>
+<li><p>
+The number one can be handled: we print
+</p>
+<pre>
+  1.000000000...
+</pre></li>
+
+<li><p>
+One half can be handled:
+</p>
+<pre>
+  0.5000000000...
+</pre></li>
+
+<li><p>
+So can a third:
+</p>
+<pre>
+  0.33333...
+</pre></li>
+
+<li><p>
+And even pi can be programmed if you are smart enough:
+</p>
+<pre>
+  3.14159265358979...
+</pre></li>
+
+</ul>
+
+<p>
+Can we handle any number?
+</p>
+</section>
+<section id="slide-2-1">
+<h3 id="2-1"><span class="section-number-3">2.1.</span> What is a program?</h3>
+<p>
+A computer program is a <i>finite sequence of characters</i>.
+</p>
+
+<p>
+Each character can be represented as a <i>number</i>.
+</p>
+
+<p>
+If we concatenate all those numbers we get a <i>really big number</i> but it is still just a whole number. 
+</p>
+
+<p>
+So every program can be represented as a whole number.
+</p>
+
+</section>
+<section>
+
+<p>
+That means that we can put all the programs in an order: there&rsquo;s a first one, a second one, a third one, and so on.
+</p>
+
+<p>
+This list goes on forever, but <i>every program appears in it</i>.
+</p>
+
+<pre>
+Program 1: "Print 1.0000..."
+Program 2: "Print 0.5000..."
+Program 3: "Print 0.3333..."
+Program 4: "Print 3.1415..."
+            .
+            .
+            .
+</pre>
+
+</section>
+<section>
+
+<p>
+Question: is there a program for every possible decimal sequence?
+</p>
+</section>
+<section id="slide-2-2">
+<h3 id="2-2"><span class="section-number-3">2.2.</span> What about this sequence?</h3>
+<p>
+Here is a description of a decimal expansion:
+</p>
+
+<ul>
+<li class="fragment appear">It begins with <code>0</code> followed by the decimal point <code>.</code></li>
+<li class="fragment appear">The next digit is the first decimal place from Program 1, plus 1; if the first digit is 9, wrap around to zero</li>
+<li class="fragment appear">The next digit is the second decimal place from Program 2, plus 1; if that digit is 9, wrap around to zero</li>
+<li class="fragment appear">The next digit is the third decimal place from Program 3, plus 1; if that digit is 9, wrap around to zero</li>
+<li class="fragment appear">The next digit is the fourth decimal place from Program 4, plus 1; if that digit is 9, wrap around to zero</li>
+<li class="fragment appear">Continue forever</li>
+
+</ul>
+
+</section>
+<section>
+
+<p>
+In our example the first four programs produced
+</p>
+<pre>
+ 1.0000...   0.5000...    0.3333...    3.1415...
+</pre>
+
+<p class="fragment appear">
+So our new sequence would be
+</p>
+<pre class="fragment appear">
+ 0.1146...
+</pre>
+</section>
+<section id="slide-2-3">
+<h3 id="2-3"><span class="section-number-3">2.3.</span> This sequence is not the output of any program!</h3>
+<p>
+<i>Every</i> program you can write appears somewhere in our list.
+</p>
+
+<p>
+If a program appears at position 23874, then our new sequence differs from the output of this program at decimal place 23874.
+</p>
+
+<p>
+Wherever our program appears, this sequence differs from it.
+</p>
+
+<p>
+So this sequence can <i>never</i> be programmed.
+</p>
+</section>
+<section id="slide-2-4">
+<h3 id="2-4"><span class="section-number-3">2.4.</span> Computability and Decidability</h3>
+<p>
+Conclusion: there are some things that can never be programmed.
+</p>
+
+<p>
+Things that can be programmed are called <i>computable</i>.
+</p>
+
+<p>
+Questions which can be answered yes/no by a program are called <i>decidable</i>.
+</p>
+
+<p>
+Those that cannot are called <i>incomputable</i> or <i>undecidable</i>.
+</p>
+</section>
+<section id="slide-2-5">
+<h3 id="2-5"><span class="section-number-3">2.5.</span> Rice&rsquo;s Theorem</h3>
+<p>
+A powerful theorem called Rice&rsquo;s Theorem tells us (roughly):
+</p>
+
+<blockquote>
+<p>
+any property concerning what a program does is undecidable.
+</p>
+</blockquote>
+
+<p>
+The key is that this is about properties of behaviour rather than syntax.
+</p>
+
+<p>
+Properties like &ldquo;this program is over 1000 lines long&rdquo; can be decidable (and this particular example is.)
+</p>
+</section>
+<section id="slide-2-6">
+<h3 id="2-6"><span class="section-number-3">2.6.</span> Will AI kill us all?</h3>
+<p>
+The property &ldquo;This program will kill us all&rdquo; is therefore undecidable, by Rice&rsquo;s theorem. So we can never verify it.
+</p>
+
+<p>
+But it might be possible to construct a verifier that says &ldquo;This program is safe&rdquo; to <i>only</i> but not <i>all</i> the safe programs.
+</p>
+
+<p>
+It will refuse to authorise some safe programs, so it does not answer an undecidable question. But we hope it says yes to enough safe programs that we can make use of it.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-3">
+<h2 id="3"><span class="section-number-2">3.</span> Computer Science is fascinating</h2>
+<p>
+I love thinking about computation in this way.
+</p>
+
+<ul>
+<li>Abstract arguments revealing powerful concepts</li>
+<li>Real consequences for practical tools that influence, support and secure our daily lives.</li>
+
+</ul>
+
+<p>
+You&rsquo;ll learn these things and more in your time here. I hope you enjoy it!
+</p>
+</section>
+</section>
+</div>
+</div>
+<script src="./reveal.js/dist/reveal.js"></script>
+<script src="./reveal.js/plugin/markdown/markdown.js"></script>
+<script src="./reveal.js/plugin/notes/notes.js"></script>
+<script src="./reveal.js/plugin/search/search.js"></script>
+<script src="./reveal.js/plugin/highlight/highlight.js"></script>
+<script src="./reveal.js/plugin/zoom/zoom.js"></script>
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: true,
+center: true,
+slideNumber: 'c',
+rollingLinks: false,
+keyboard: true,
+mouseWheel: false,
+fragmentInURL: false,
+hashOneBasedIndex: false,
+pdfSeparateFragments: false,
+overview: true,
+
+transition: 'fade',
+transitionSpeed: '10',
+
+// Plugins with reveal.js 4.x
+plugins: [ RevealMarkdown, RevealNotes, RevealSearch, RevealHighlight, RevealZoom ],
+
+// Optional libraries used to extend reveal.js
+dependencies: [
+]
+
+});
+</script>
+</body>
+</html>

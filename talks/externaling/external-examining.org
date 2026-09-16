@@ -46,6 +46,33 @@ On at least one of these occasions there would be a meeting with students.
 #+ATTR_REVEAL: :frag (appear)
 Around one week of work seems a reasonable estimate.
 
+** A look at the form
+
+- Please comment on whether the standards set by the University are, in your view, appropriate for the qualification being studied.
+
+- Please comment on the appropriateness of the published marking criteria.
+
+- Please comment on whether you believe standards of student performance and achievement are comparable to those of similar courses in other higher education institutions?
+
+- Please comment on whether you believe existing assessment processes measure student achievement rigorously and fairly against the intended course and module learning outcomes.
+
+#+reveal:split
+
+- On the basis of the sample of assessments that you have reviewed, please comment on the appropriateness of the application of the marking and moderation processes as evidenced by the annotated scripts and marks and feedback given.
+
+- Please indicate whether you are satisfied that the processes for assessment, examination and the determination of awards have been sound, appropriate and fairly conducted.
+
+- Do you have any comments on resources as they impact on student performance in assessment processes?
+
+- Please comment on any good practice that you have observed related to teaching, learning and assessment
+#+reveal:split  
+
+- Please comment on the quality of teaching and learning methods and learning opportunities (based on the standard set of materials sent, not observation of teaching or access to teaching resources).
+
+- Have you had sufficient access to and the power to call upon any materials needed to make the required judgements? If not, please give details.
+
+- Are there any other issues on which you wish to comment? Please consider if issues raised in previous reports have been addressed satisfactorily and/or if you are required to comment on any issues related to a PSB.
+
 * Am I qualified to do this?
 
 If you've taught a course and attended an exam board, then yes!

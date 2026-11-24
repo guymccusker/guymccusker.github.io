@@ -16,11 +16,20 @@ span[class|=section-number] {
 
 .reveal h4 { font-size: 1em; }
 
-.reveal p { font-size: 0.60em;}
+.reveal p { font-size: 0.6em;}
+
+/* Org exports LaTeX environments (array, eqnarray*, ...) as <div>s rather
+   than <p>s; size them like paragraphs so their maths matches. */
+.reveal section > div:not([class]),
+.reveal section > div.fragment {
+    font-size: 0.6em;
+}
 
 .reveal pre code { font-size: 0.60em; }
 
 .reveal ul, .reveal ol { font-size: 0.60em; }
+
+.reveal table { font-size: 0.8em; }
 
 .reveal ul p { font-size: 1em;}
 .reveal ol p { font-size: 1em;}

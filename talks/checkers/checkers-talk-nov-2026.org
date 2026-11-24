@@ -1,0 +1,1044 @@
+#+TITLE: Interaction Improvement
+#+AUTHOR: Guy McCusker
+#+DATE: joint work with Adrienne Lancelot, Giulio Manzonetto, Gabriele Vanoni @@html:<br/>@@
+#+DATE: FoSS Seminar, University of Sussex, November 2026
+
+
+
+#+begin_src latex-macros
+\newcommand{\sem}[1]{{[\![#1]\!]}}
+\newcommand{\csem}[1]{{[\![#1]\!]^{\interact}}}
+\newcommand{\obs}[1]{\mathsf{obs}(#1)}
+\newcommand{\lectx}{\sqsubseteq^{\mathrm{ctx}}}
+\newcommand{\leden}{\sqsubseteq^{\mathrm{den}}}
+\newcommand{\lesands}{\sqsubseteq^{\mathrm{Sands}}}
+\newcommand{\leimp}{\sqsubseteq^{\mathrm{imp}}}
+\newcommand{\leint}{\sqsubseteq^{\mathrm{int}}}
+\newcommand{\lerel}{\sqsubseteq^{\mathrm{rel}}}
+\newcommand{\lepwc}{\sqsubseteq^{\mathrm{pwc}}}
+\newcommand{\leBconv}{\sqsubseteq_{\mathbf{B}\eta_\infty}}
+\newcommand{\leBred}{\sqsubseteq_{\mathbf{B}\eta^{\text{red}}_\infty}}
+\newcommand{\BT}[1]{\mathsf{BT}(#1)}
+\newcommand{\interact}{\bullet\circ}
+\newcommand{\intred}{\stackrel{\interact}{\rightarrow}}
+#+end_src
+
+#+bibliography: ~/Library/texmf/bibtex/bib/bigbib.bib
+#+CITE_EXPORT: csl ~/Documents/Papers/bibstyles/harvard-university-of-bath.csl
+
+#+REVEAL_TITLE_SLIDE_BACKGROUND: "./checkers_calc_highdef.jpg"
+#+include: "./lecture-preamble-light.org"
+
+# Drafting conventions:
+#  - Slides copied (possibly lightly edited) from the Sussex/Birmingham talk have no note.
+#  - "#+begin_comment TODO ..." blocks are drafting notes: they do not export.
+#  - Notation (decided): M, N for terms; \alpha, \mu for linear/multi types, as in
+#    the old talk. The paper uses t, u for terms and L, M for types: translate
+#    when copying from it.
+
+* The relational model counts something
+This talk is about the /relational semantics/ of the \lambda-calculus.
+
+Relational semantics grew from Girard's /quantitative semantics/ [cite/na:@GirardJY:norfps]
+and can be seen as a simple model of linear logic [cite//c:@GirardJY:linl].
+
+It is easiest to present as a system of /non-idempotent intersection types/ (multi types) [cite//c:@DeCarvalhoD:exetlt]: the denotation of a term is the set of its typings
+\[
+ x_1: \mu_1, \ldots, x_n:\mu_n \vdash M: \alpha
+\]
+
+** Multi types
+
+\begin{array}{rcll}
+  \alpha  & ::=  & a \mid \mu \rightarrow \alpha \\
+  \mu  & ::=  & [\alpha_1, \ldots, \alpha_n] & n \geq 0\\
+\end{array}
+
+\[
+\frac{}{x:[\alpha] \vdash x:\alpha}~\text{ax} \quad\quad
+\frac{\Gamma_i \vdash M: \alpha_i~~(i \in I~\text{finite})}{\uplus_{i \in I}\Gamma_i \vdash M: [\alpha_i]_{i \in I}}~\text{many}
+\]
+
+\[
+\frac{\Gamma, x:\mu \vdash M: \alpha}{\Gamma \vdash \lambda x.M: \mu \rightarrow \alpha}~\lambda
+\quad\quad
+\frac{\Gamma \vdash M: \mu \rightarrow \alpha \quad \Delta \vdash N: \mu}
+{\Gamma \uplus \Delta \vdash MN : \alpha}~\text{@}
+\]
+
+A term may have many types: types are /elements of the model/, not traditional types.
+
+** Quantitative aspects
+
+This model has /quantitative/ content: the multisets count something. But what?
+#+ATTR_REVEAL: :frag (appear)
+They keep track of how many times an argument is used: for example we can type
+\[
+f: [[\alpha] \rightarrow [\alpha'] \rightarrow \alpha] \vdash \lambda x. f~x~x:[\alpha, \alpha']\rightarrow \alpha.
+\]
+#+ATTR_REVEAL: :frag (appear)
+The /many/ rule means that these multiplicities are also seen in /derivations/.
+\[
+ \cfrac{\cfrac{\vdots}{f: [[\alpha] \rightarrow [\alpha'] \rightarrow \alpha] \vdash \lambda x. f~x~x:[\alpha, \alpha']\rightarrow \alpha}\quad \cfrac{\vdash M: \alpha \quad \vdash M: \alpha'}{\vdash M: [\alpha,\alpha']}}{f: [[\alpha] \rightarrow [\alpha'] \rightarrow \alpha]\vdash (\lambda x. f~x~x) M: \alpha }~@
+\]
+The function uses \(M\) twice, so we need /two/ derivations of \(M\).
+#+ATTR_REVEAL: :frag (appear)
+Though substitution may duplicate or discard /terms/, it does not duplicate or discard their /type derivations/.
+
+** Quantitative facts
+
+#+begin_comment
+This merges the old "Facts about the type system", "Subject reduction /
+expansion" and "Quantitative subject reduction" slides. Check it fits on one
+slide; if not, split before the first theorem. (done)
+#+end_comment
+
+#+ATTR_REVEAL: :frag (appear)
+- A term in head normal form trivially has a type, e.g. \( x: [] \rightarrow [] \rightarrow a \vdash x\, M\, N : a \).
+  Note that \( x \Omega\) has a type, though \(\Omega\) does not.
+- Subject reduction and expansion: if \(M \rightarrow_\beta N\) then \(\sem{M} = \sem{N}\).
+- /Quantitative/ subject reduction: a head step removes /exactly one/ @-rule from a derivation.
+
+#+reveal: split
+
+#+begin_theorem
+\(M\) has a type if and only if \(M\) has a head normal form; and the number of @-rules in a derivation bounds the length of the head reduction.
+#+end_theorem
+
+The restriction to head reduction is essential: \(x \Omega \rightarrow_\beta x \Omega\), but this is never a head reduction.
+
+* B\ouml{}hm trees
+We can also compare \lambda-terms by means of their /B\ouml{}hm trees/. 
+
+\[
+ M ::= x \mid MM \mid \lambda x.M  \quad\quad (\lambda x.M)N \rightarrow_\beta M[N/x]
+\]
+
+If $M\rightarrow^* \lambda x_{1}\ldots x_{n}.y\,M_{1}\cdots M_{k}$:
+
+{{{graphic(bohmtree)}}}
+	#+begin_src latex
+   	\begin{tikzpicture}\usetikzlibrary{calc}
+				\node (root) at (-70pt,8pt) {~};
+				\node (BT) at (0,0) {$\mathsf{BT}(M)=$};
+				\node[right of = BT, node distance =2cm] (head) {$\lambda x_{1} \ldots x_{n}.y\, $};
+				\node (BTN1) at ($(head)+(-.25,-.75)$) {$\mathsf{BT}(M_1)$};
+				\draw ($(head.south east)+(-0.5,0.1)$) -- ($(BTN1.north)-(0.,0)$);
+				\node (BTNk) at ($(head)+(2.,-.75)$) {$\mathsf{BT}(M_k)$};
+				\draw ($(head.south east)+(-0.1,0.1)$) -- ($(BTNk.north)-(0.,0)$);
+				\node at ($(head)+(.9,-.75)$) {$\cdots$};
+				\end{tikzpicture}
+	#+end_src
+
+#+begin_center
+#+attr_html: :width 70%
+   #+RESULTS: bohmtree
+#+end_center
+
+Otherwise, \(M\) is head diverging: \( \BT{M} = \bot.\)
+
+** B\ouml{}hm preorder
+
+{{{graphic(bohmorder)}}}
+		#+begin_src latex
+\usetikzlibrary{calc}
+			\begin{tikzpicture}[baseline]
+			\node (BT) at (0,0) {$\mathsf{BT}(M)=$};
+			\node[right of = BT, node distance =1.8cm] (head) {$\lambda x_{1} \ldots x_{n}.y\, $};
+			\node (BTN1) at ($(head)+(-.25,-.75)$) {$\vdots$};
+			\draw ($(head.south east)+(-0.5,0.1)$) -- ($(BTN1.north)-(0.,0)$);
+			\node (BTNk) at ($(head)+(2.,-.75)$) {$\bot$};
+			\draw ($(head.south east)+(-0.1,0.1)$) -- ($(BTNk.north)-(0.,0)$);
+			\node at ($(head)+(.9,-.75)$) {$\cdots$};
+			\end{tikzpicture}
+             \(\sqsubseteq_{\mathbf{B}}\)
+			\begin{tikzpicture}[baseline]
+			\node (BT) at (0,0) {$\mathsf{BT}(N)=$};
+			\node[right of = BT, node distance =1.8cm] (head) {$\lambda x_{1} \ldots x_{n}.y\, $};
+			\node (BTN1) at ($(head)+(-.25,-.75)$) {$\vdots$};
+			\draw ($(head.south east)+(-0.5,0.1)$) -- ($(BTN1.north)-(0.,0)$);
+			\node (BTNk) at ($(head)+(2.,-.75)$) {~~$\lambda y_1 \ldots y_p . z$};
+			\draw ($(head.south east)+(-0.1,0.1)$) -- ($(BTNk.north)-(0.,0)$);
+			\node at ($(head)+(.9,-.75)$) {$\cdots$};
+
+
+			\node (BTN1') at ($(BTNk)+(-0,-.75)$) {};
+			\draw ($(BTNk.south east)+(-0.3,0.1)$) -- ($(BTN1'.north)-(0.,0)$);
+			\node (BTNk') at ($(BTNk)+(1.,-.75)$) {};
+			\draw ($(BTNk.south east)+(-0.1,0.1)$) -- ($(BTNk'.north)-(0.,0)$);
+
+			\node at ($(BTNk)+(.5,-.75)$) {$\cdots$};
+			\end{tikzpicture}
+		#+end_src
+
+** B\ouml{}hm preorder up to extensionality
+We also define two extensions:
+ -  \(M \leBconv N\) means that the B\ouml{}hm tree of \(M\) is contained in that of \(N\) /up to (possibly infinite) \eta-conversion/
+ -  \(M \leBred N\) means that the B\ouml{}hm tree of \(M\) is contained in that of \(N\) /up to (possibly infinite) \eta-reduction/
+
+\[
+ x \not  \sqsubseteq_{\mathbf{B}} \lambda y. xy \quad  \lambda y. xy \not \sqsubseteq_{\mathbf{B}} x
+\]
+\[
+ x \leBconv \lambda y. xy \quad  \lambda y. xy  \leBconv x
+\]
+\[
+ x \not \leBred \lambda y. xy \quad  \lambda y. xy \leBred x
+\]
+
+#+begin_comment
+TODO: one sentence aloud on "infinite": J = Y(\lambda zxy.x(zy)) is an
+infinite \eta-expansion of the identity, with no \eta-redex at any finite depth,
+and J \leBred \lambda x.x. Full example is in the backup slides.
+#+end_comment
+
+#+reveal: split
+
+#+begin_theorem
+(Hyland, Wadsworth) Taking the contextual preorder that observes head normal forms,
+\[
+ M \lectx N \quad\Leftrightarrow\quad M \leBconv N
+\]
+and both coincide with the order induced by Scott's \(D_\infty\) models.
+#+end_theorem
+
+#+ATTR_REVEAL: :frag (appear)
+ - \(\Leftarrow\): via \(D_\infty\): \(M \leBconv N\) implies \(\sem{M} \sqsubseteq \sem{N}\), and the model is compositional and adequate (\(\sem{M} \neq \bot\) iff \(M\) has a hnf).
+ - \(\Rightarrow\): the "B\ouml{}hm-out" technique [cite//c:@HylandJME:synces] builds a context that distinguishes terms with different B\ouml{}hm trees:
+#+ATTR_REVEAL: :frag (appear)   
+\[
+ M \not \leBconv N \Rightarrow \exists C[-]. C[M] \rightarrow^*\mathsf{hnf}~\text{but}~C[N]\not\rightarrow^*\mathsf{hnf}
+\]
+
+#+begin_comment
+This slide is the anchor for "quantitative Hyland--Wadsworth" later, and for
+the first row of the "Characterizing preorders" table.
+#+end_comment
+
+** Understanding the relational preorder
+
+Using adequacy (typable iff head normalising) and compositionality:
+ \[ \text{if}~\sem{M} \subseteq \sem{N}~\text{then for all}~C[-]. C[M]\rightarrow^* \mathsf{hnf} \Rightarrow C[N]\rightarrow^* \mathsf{hnf}\]
+i.e. \(M \lectx N\), so by Hyland--Wadsworth the denotational order implies the extensional B\ouml{}hm-tree order
+ \(M \leBconv N\).
+
+The converse is not true. For example \(x \leBconv \lambda y. x y \) but
+\[
+ x : [a] \vdash x: a \quad\quad   x : [a] \not\vdash \lambda y. x y: a \quad
+\]
+
+#+reveal: split
+
+In fact thanks to [cite/t:@BreuvartF:relgmw] we know that
+\[
+\sem{M} \subseteq \sem{N} \quad\Leftrightarrow\quad M \leBred N
+\]
+
+But this is /qualitative/. Where have the quantities gone?
+
+Can we recover a contextual ordering by paying attention to quantities?
+
+* Improvement
+
+[cite/t:@SandsD:impta] introduced the idea of a contextual /improvement/ order.
+
+Idea: observe not just what happens but how long it takes.
+
+For example: observe the /length/ of a head-reduction sequence.
+
+We write \( M \Downarrow_h^k \) if \(M\) reduces to hnf in \(k\) head reduction steps.
+
+Then we can define /improvement/: \(M \lesands N \) iff
+\[
+ \text{for all contexts}~C[-]. C[M]\Downarrow_h^k \Rightarrow \exists k'\leq k. C[N]\Downarrow_h^{k'}
+\]
+
+\(N\) does the same things as \(M\) in fewer steps.
+
+** Improvement is not \beta-invariant
+
+\[
+ (\lambda x.x)\,y \Downarrow_h^1 \qquad\qquad y \Downarrow_h^0
+\]
+so \(y \not\lesands (\lambda x.x)\,y\), although they are \beta-equal.
+
+An order that counts reductions /cannot/ be the order induced by a denotational semantics that is sound for \beta-reduction.
+
+(There are very few denotational models of improvement orders as a result. One exception is Ghica's /slot games/ [cite/na:@GhicaDR:slog], which expose every internal step through a global counter.)
+
+#+ATTR_REVEAL: :frag (appear)
+So our plan to use this idea to capture the relational order must fail. Yet here we are...
+
+** Idea: count only interactions
+
+{{{graphic(contextual)}}}
+#+begin_src latex
+\begin{tikzpicture}
+			\draw[rounded corners,fill=white!40] (-4.5,-.5) rectangle +(3,2.5);
+			\node at (-1.77,1.75) {$C$};
+			\draw[rounded corners,draw=black!40,fill=black] (-4,0) rectangle +(2,1.5);
+			\node[color=white] at (-3,.75) {\Large \(M\)};
+			\node[font=\footnotesize] (ou1) at (-.5,.5) {};
+			%%%
+			\draw[rounded corners,fill=white!40] (1.5,-.5) rectangle +(3,2.5);
+			\node at (4.27,1.75) {$C$};
+			\draw[rounded corners,draw=black!40,fill=black] (2,0) rectangle +(2,1.5);
+			\node[color=white] at (3,.75) {\Large \(N\)};
+			\node[font=\footnotesize] (in2) at (.5,.5) {};
+                   	\draw[->]  (ou1) -- (in2) node [midway,above] {silent};
+                        %%%
+			\draw[rounded corners,fill=white!40] (-4.5,-5.5) rectangle +(3,2.5);
+			\node at (-1.77,-3.25) {$C'$};
+			\draw[rounded corners,draw=black!40,fill=black] (-4,-5) rectangle +(2,1.5);
+			\node[color=white] at (-3,-4.25) {\Large \(M'\)};
+                        \draw[->] (-3,-1) -- (-3,-2.5) node [midway,left] {interaction};
+
+	\end{tikzpicture}
+#+end_src
+
+#+begin_center
+#+ATTR_HTML: :width 50%
+#+results: contextual
+#+end_center
+
+#+begin_comment
+TODO: say aloud (or put as a fragment) the client/server analogy from the
+paper's introduction: local computation inside a client or server is cheap or
+easily optimised; communication between them is the bottleneck. Relational
+(and game) semantics only see the communication, which is why they are
+invariant under internal reduction. So: count interactions, ignore internal
+steps. Credit [cite/t:@AccattoliB:inte] for the checkers calculus here.
+#+end_comment
+
+* Main result
+#+begin_theorem
+For \lambda-terms \(M, N\), the following are equivalent:
+ 1. \(M \leBred N\) (B\ouml{}hm trees up to \eta-reduction)
+ 2. \(M \lepwc N\) (a refined, annotated relational semantics)
+ 3. \(M \leimp N\) (/interaction improvement/: a quantitative contextual preorder)
+ 4. \(M \lerel N\), i.e. \(\sem{M} \subseteq \sem{N}\) in the relational model
+#+end_theorem
+
+#+ATTR_REVEAL: :frag (appear)
+A /quantitative/ Hyland--Wadsworth theorem: the relational model's preorder is an improvement order, counting interactions.
+
+** Roadmap
+#+begin_comment
+{{{graphic(roadmap)}}}
+,#+begin_src latex
+% \csq{decoration}: \sqsubseteq with its sub/superscript, padded on the left
+% by an invisible copy of the decoration so that the \sqsubseteq glyph sits
+% at the centre of the node and arrows aim at it.
+\newcommand{\csq}[1]{\phantom{{}#1}\sqsubseteq#1}
+\begin{tikzcd}[column sep=6em, row sep=4em]
+  \csq{^{\mathrm{rel}}}
+    \arrow[r, Leftrightarrow, "\text{Breuvart et al.}"]
+  & \csq{_{\mathbf{B}\eta^{\mathrm{red}}_\infty}}
+    \arrow[dr, Rightarrow, "\text{whiter-cheaper}"]
+  & \\
+  & \csq{^{\mathrm{imp}}}
+    \arrow[u, Rightarrow, "\text{B\"ohm-out}"]
+  & \csq{^{\mathrm{pwc}}}
+    \arrow[l, Rightarrow, "\text{compositionality}"]
+\end{tikzcd}
+,#+end_src
+#+end_comment
+
+{{{graphic(roadmap)}}}
+#+begin_src latex
+\newcommand{\sem}[1]{{[\![#1]\!]}}
+\newcommand{\csem}[1]{{[\![#1]\!]^{\interact}}}
+\newcommand{\obs}[1]{\mathsf{obs}(#1)}
+\newcommand{\lectx}{\sqsubseteq^{\mathrm{ctx}}}
+\newcommand{\leden}{\sqsubseteq^{\mathrm{den}}}
+\newcommand{\lesands}{\sqsubseteq^{\mathrm{Sands}}}
+\newcommand{\leimp}{\sqsubseteq^{\mathrm{imp}}}
+\newcommand{\leint}{\sqsubseteq^{\mathrm{int}}}
+\newcommand{\lerel}{\sqsubseteq^{\mathrm{rel}}}
+\newcommand{\lepwc}{\sqsubseteq^{\mathrm{pwc}}}
+\newcommand{\leBconv}{\sqsubseteq_{\mathbf{B}\eta_\infty}}
+\newcommand{\leBred}{\sqsubseteq_{\mathbf{B}\eta^{\text{red}}_\infty}}
+\newcommand{\BT}[1]{\mathsf{BT}(#1)}
+\newcommand{\interact}{\bullet\circ}
+\newcommand{\intred}{\stackrel{\interact}{\rightarrow}}
+
+        \begin{tikzpicture}
+                \node at (4,-.4){
+                        \begin{tikzcd}[row sep=small]
+                {\leBred} \arrow[rr, "\text{whiter-cheaper}", bend left, shift left] \arrow[dd, "\text{Breuvart et al \checkmark}", swap, leftrightarrow] &  & {\lepwc} \arrow[rr, "\text{compositionality}", bend left, shift left] &  & {\leimp} \arrow[llll, "\text{B\"ohm out}", bend left, shift left] 
+                \\\\
+                {\lerel}                                                                                 &  &                                                       &  &                                                          
+        \end{tikzcd}
+                };
+        \end{tikzpicture}
+#+end_src
+
+#+begin_center
+#+attr_html: :width 85%
+   #+RESULTS: roadmap
+#+end_center
+
+
+
+* The checkers calculus
+[cite/t:@AccattoliB:inte]: colour every abstraction and application black \(\bullet\) or white \(\circ\).
+
+Intuition: the program (player) is black, the context (opponent) is white. The calculus is entirely symmetric.
+\[
+ M, N ::= x \mid \lambda_\bullet x. M \mid \lambda_\circ x. M \mid M \bullet N \mid M \circ N
+\]
+
+Silent reductions (colours match):
+\[
+ (\lambda_\bullet x.M)\bullet N \rightarrow M[N/x]  \quad  (\lambda_\circ x.M)\circ N \rightarrow M[N/x]
+\]
+
+Interaction reductions (colours differ):
+\[
+ (\lambda_\bullet x.M)\circ N \stackrel{\interact}{\rightarrow} M[N/x]  \quad  (\lambda_\circ x.M)\bullet N \stackrel{\interact}{\rightarrow} M[N/x]
+\]
+
+We can embed the ordinary \lambda-calculus by painting everything \(\bullet\). Every reduction is then silent.
+
+The fun starts when we embed a \(\bullet\)-painted term in a \(\circ\)-painted context.
+
+** Counting interactions
+
+#+begin_comment
+TODO: walk through this with fragments, marking each step silent or
+interaction. Alternatively use the paper's Example 1.2
+(D∘ • I• • I• with D∘ = \lambda∘y.\lambda∘x.x∘(y∘x)), which is longer.
+#+end_comment
+
+\begin{eqnarray*}
+(\lambda_\bullet f. f \bullet y) \bullet (\lambda_\circ x.x)
+ & \rightarrow & (\lambda_\circ x.x) \bullet y \qquad \text{silent}\\
+ & \intred & y \qquad\qquad\qquad \text{interaction}
+\end{eqnarray*}
+
+#+ATTR_REVEAL: :frag (appear)
+One interaction step. Only the steps where black meets white are counted.
+
+** Example: \eta-expansion costs an interaction
+
+Two versions of the identity function in the context \(- \circ  (\lambda_\circ x.x) \).
+
+\begin{eqnarray*}
+(\lambda_\bullet x. x) \circ (\lambda_\circ x.x) & \intred & \lambda_\circ x.x
+\end{eqnarray*}
+
+#+ATTR_REVEAL: :frag (appear)
+\begin{eqnarray*}
+ (\lambda_\bullet x. \lambda_\bullet y. x \bullet y) \circ (\lambda_\circ x.x) & \intred & \lambda_\bullet y. (\lambda_\circ x.x) \bullet y \\
+ & \intred & \lambda_\bullet y. y
+\end{eqnarray*}
+
+#+ATTR_REVEAL: :frag (appear)
+\eta-expansion increases the number of interaction steps, and also changes the colouring of the result: \(\lambda_\circ x.x\) versus \(\lambda_\bullet y.y\).
+
+** Interaction improvement
+
+We observe the /number of interaction steps/ in a head-reduction sequence.
+
+We write \( M \Downarrow_{\interact}^k \) if \(M\) reduces to hnf with \(k\) head interaction steps (silent steps are free).
+
+Then we define /interaction improvement/: \(M \leimp N \) iff
+\[
+ \text{for all checkers contexts}~C[-]. C[M]\Downarrow_{\interact}^k \Rightarrow \exists k'\leq k. C[N]\Downarrow_{\interact}^{k'}
+\]
+
+For \lambda-terms, \(M \leimp N\) means \(M^\bullet \leimp N^\bullet\) (paint them black; quantify over all checkers contexts).
+
+#+reveal: split
+
+The /interaction preorder/ \(\leint\) [cite//c:@AccattoliB:inte] asks instead for /exactly/ the same \(k\).
+
+\[
+ (\lambda_\bullet x.x) \circ (\lambda_\circ x.x) \;\leimp\; \lambda_\circ x.x
+ \qquad\text{but}\qquad
+ (\lambda_\bullet x.x) \circ (\lambda_\circ x.x) \;\not\leint\; \lambda_\circ x.x
+\]
+Same head normal form, but the left-hand side needs one more interaction to reach it.
+
+** \eta-reduction is an improvement
+
+For a regular \lambda-term painted \(\bullet\) throughout, /all steps are silent/: \beta-equivalent terms are equivalent in \(\leimp\).
+
+But \(\circ\)-painted contexts distinguish \eta-convertible terms, and \eta-reduction delivers improvement:
+\[
+ \lambda_\bullet x. \lambda_\bullet y. x \bullet y \;\leimp\; \lambda_\bullet x. x
+ \qquad
+ \lambda_\bullet x. x \;\not\leimp\; \lambda_\bullet x. \lambda_\bullet y. x \bullet y
+\]
+
+#+ATTR_REVEAL: :frag (appear)
+The first of these was only a conjecture in [cite/t:@AccattoliB:inte]: it is a corollary of our main theorem.
+
+
+* Interaction improvement is included in B\ouml{}hm trees up to \eta-reduction
+#+begin_comment
+TODO: sketch the interaction Böhm-out (paper Lemma 5): given
+M \sqsubseteq_{B\eta} N but M \not\leBred N, find a white head context
+C^\circ with C^\circ[M^\bullet] \Downarrow_{\interact}^i and C^\circ[N^\bullet] \Downarrow_{\interact}^{i'}
+with i' > i. Idea: Böhm-out to the position where the trees differ by an
+\eta-expansion in N, then feed it \lambda_\circ x.x, as in the identity
+example, so that N pays an extra interaction.
+#+end_comment
+
+#+begin_theorem
+If \(M \leimp N\) then \(M \leBred N\) (and hence \(\sem{M} \subseteq \sem{N}\)).
+#+end_theorem
+
+Proof:
+ - if \(M \not\leBconv N\), Hyland's B\ouml{}hm-out gives a context in which \(M\) converges and \(N\) diverges [cite//c:@HylandJME:synces];
+ - if \(M \leBconv N\) but \(M \not\leBred N\), an /interaction/ B\ouml{}hm-out gives a white context in which \(N\) needs more interactions than \(M\).
+
+#+ATTR_REVEAL: :frag (appear)
+The separating contexts are /white applicative head contexts/: these alone suffice to determine \(\leimp\).
+
+#+reveal: split
+{{{graphic(roadmap2)}}}
+#+begin_src latex
+\newcommand{\sem}[1]{{[\![#1]\!]}}
+\newcommand{\csem}[1]{{[\![#1]\!]^{\interact}}}
+\newcommand{\obs}[1]{\mathsf{obs}(#1)}
+\newcommand{\lectx}{\sqsubseteq^{\mathrm{ctx}}}
+\newcommand{\leden}{\sqsubseteq^{\mathrm{den}}}
+\newcommand{\lesands}{\sqsubseteq^{\mathrm{Sands}}}
+\newcommand{\leimp}{\sqsubseteq^{\mathrm{imp}}}
+\newcommand{\leint}{\sqsubseteq^{\mathrm{int}}}
+\newcommand{\lerel}{\sqsubseteq^{\mathrm{rel}}}
+\newcommand{\lepwc}{\sqsubseteq^{\mathrm{pwc}}}
+\newcommand{\leBconv}{\sqsubseteq_{\mathbf{B}\eta_\infty}}
+\newcommand{\leBred}{\sqsubseteq_{\mathbf{B}\eta^{\text{red}}_\infty}}
+\newcommand{\BT}[1]{\mathsf{BT}(#1)}
+\newcommand{\interact}{\bullet\circ}
+\newcommand{\intred}{\stackrel{\interact}{\rightarrow}}
+
+        \begin{tikzpicture}
+                \node at (4,-.4){
+                        \begin{tikzcd}[row sep=small]
+                {\leBred} \arrow[rr, "\text{whiter-cheaper}", bend left, shift left] \arrow[dd, "\text{Breuvart et al \checkmark}", swap, leftrightarrow] &  & {\lepwc} \arrow[rr, "\text{compositionality}", bend left, shift left] &  & {\leimp} \arrow[llll, "\text{B\"ohm out \checkmark}", bend left, shift left] 
+                \\\\
+                {\lerel}                                                                                 &  &                                                       &  &                                                          
+        \end{tikzcd}
+                };
+        \end{tikzpicture}
+#+end_src
+
+#+begin_center
+#+attr_html: :width 85%
+   #+RESULTS: roadmap2
+#+end_center
+
+* Checkers semantics
+
+To complete the picture, we use a refined relational model.
+
+We annotate the types:
+\begin{array}{rcll}
+  \alpha  & ::=  & a \mid \mu \stackrel{\bullet}{\rightarrow} \alpha \mid \mu \stackrel{\circ}{\rightarrow} \alpha \\
+  \mu  & ::=  & [\alpha_1, \ldots, \alpha_n] & n \geq 0\\
+\end{array}
+and the judgements:
+\[
+ \Gamma \vdash^k M : \alpha
+\]
+
+#+reveal:split
+
+Judgement annotations track the number of interaction applications:
+\[
+\frac{}{x:[\alpha] \vdash^0 x:\alpha}~\text{ax} \quad\quad
+\frac{\Gamma_i \vdash^{k_i} M: \alpha_i~~(i \in I~\text{finite})}{\uplus_{i \in I}\Gamma_i \vdash^{\sum_i k_i} M: [\alpha_i]_{i \in I}}~\text{many}
+\]
+
+\[
+\frac{\Gamma, x:\mu \vdash^k M: \alpha}{\Gamma \vdash^k \lambda_{\bullet/\circ} x.M: \mu \stackrel{\bullet/\circ}{\rightarrow} \alpha}~\lambda
+\]
+
+\[
+\frac{\Gamma \vdash^k M: \mu \stackrel{\bullet}{\rightarrow} \alpha \quad \Delta \vdash^{k'} N: \mu}
+{\Gamma \uplus \Delta \vdash^{k+k'} M \bullet N : \alpha}~\text{@-silent}
+\]
+
+\[
+\frac{\Gamma \vdash^k M: \mu \stackrel{\bullet}{\rightarrow} \alpha \quad \Delta \vdash^{k'} N: \mu}
+{\Gamma \uplus \Delta \vdash^{k+k'+1} M \circ N : \alpha}~\text{@-interact}
+\]
+(plus rules exchanging \(\bullet\) with \(\circ\)).
+
+The /annotated semantics/ \(\csem{M}\) is the set of typings \((\Gamma, k, \alpha)\) with \(\Gamma \vdash^k M : \alpha\).
+
+Erasing colours and indices gives back the relational model \(\sem{M}\).
+
+** Correctness of the semantics
+
+With the same techniques as for the regular relational semantics, we can prove
+#+begin_theorem
+For any term \(M\) of the checkers calculus:
+ - If \(M \Downarrow_{\interact}^k\) then there is a typing \(\Gamma \vdash^k M: \alpha\)
+ - If there is a typing \(\Gamma \vdash^k M: \alpha\) then \(M \Downarrow_{\interact}^{k'}\) for some \(k' \leq k\).
+#+end_theorem
+
+As a corollary,
+\[
+\text{if}~\csem{M} \subseteq \csem{N}~\text{then}~M \leimp N.
+\]
+
+#+ATTR_REVEAL: :frag appear
+But inclusion of \(\csem{-}\) is still not what we want: it fails for \(\lambda_\bullet x. \lambda_\bullet y. x \bullet y \leimp \lambda_\bullet x. x\).
+
+** A look at \eta-reduction 
+
+#+begin_comment
+TODO: build this with fragments, one rule at a time, pointing at where the +1
+comes from. This is paper section 3.2 with the atom a for L.
+#+end_comment
+
+The black \eta-expansion of \(x\), with a white arrow for \(x\):
+\[
+\cfrac{
+  \cfrac{}{x:[[] \stackrel{\circ}{\rightarrow} a] \vdash^0 x : [] \stackrel{\circ}{\rightarrow} a}~\text{ax}
+  \quad
+  \cfrac{}{\vdash^0 y : []}~\text{many}
+}{
+  \cfrac{x:[[] \stackrel{\circ}{\rightarrow} a] \vdash^1 x \bullet y : a}
+  {x:[[] \stackrel{\circ}{\rightarrow} a] \vdash^1 \lambda_\bullet y. x \bullet y : [] \stackrel{\bullet}{\rightarrow} a}~\lambda
+}~\text{@-interact}
+\]
+
+#+ATTR_REVEAL: :frag (appear)
+\(x\) itself does not have this typing: the axiom forces both arrows to be the same colour. But it has
+\[
+x:[[] \stackrel{\circ}{\rightarrow} a] \vdash^0 x : [] \stackrel{\circ}{\rightarrow} a
+\]
+which is /whiter/ (one arrow changed \(\bullet \mapsto \circ\)) and /cheaper/ (\(0 < 1\)).
+
+** COMMENT The naive order fails
+
+#+begin_comment
+TODO: one slide, possibly folded into the previous one. The point: the
+obvious quantitative order
+   M \le N iff every \Gamma \vdash^k M : \alpha has \Gamma \vdash^{k'} N : \alpha with k' \le k
+(same types, cheaper) fails for exactly the same reason as inclusion: it
+rejects \lambda_\bullet y.x \bullet y \le x, as the previous slide shows.
+We need to allow the type to change colour as well as the cost to drop.
+#+end_comment
+
+** A closer look 
+
+In the plain relational semantics we have the following typings for identity-like terms
+\[
+ \vdash \lambda x. x: [[a] \rightarrow a] \rightarrow [a] \rightarrow a
+\]
+\[
+ \vdash \lambda x. \lambda y. x y: [[a] \rightarrow a] \rightarrow [a] \rightarrow a
+\]
+
+#+ATTR_REVEAL: :frag appear
+In the checkers calculus we have these annotations:
+\[
+ \vdash^0 \lambda_\bullet x. x : [[a] \stackrel{\bullet}{\rightarrow} a] \stackrel{\bullet}{\rightarrow} [a] \stackrel{\bullet}{\rightarrow} a
+ \quad\quad
+ \vdash^0 \lambda_\bullet x. \lambda_\bullet y. x \bullet y :
+ [[a] \stackrel{\bullet}{\rightarrow} a] \stackrel{\bullet}{\rightarrow} [a] \stackrel{\bullet}{\rightarrow} a
+\]
+\[
+ \vdash^0 \lambda_\bullet x. x : [[a] \stackrel{\circ}{\rightarrow} a] \stackrel{\bullet}{\rightarrow} [a] \stackrel{\circ}{\rightarrow} a
+ \quad\quad
+\vdash^1 \lambda_\bullet x. \lambda_\bullet y. x \bullet y :
+ [[a] \stackrel{\circ}{\rightarrow} a] \stackrel{\bullet}{\rightarrow} [a] \stackrel{\bullet}{\rightarrow} a
+\]
+Key insight: \eta-reductions lead to typings that are either the same, or "whiter and cheaper".
+
+** Whiter and cheaper
+
+We write \(\alpha \leq_k^+ \alpha'\) if \(\alpha\) can be obtained from \(\alpha'\) by changing \(k\) /positively occurring/ instances of \(\bullet\) to \(\circ\).
+
+We write \(\alpha \leq_k^- \alpha'\) if \(\alpha\) can be obtained from \(\alpha'\) by changing \(k\) /negatively occurring/ instances of \(\bullet\) to \(\circ\).
+
+For example
+\[
+ [a] \stackrel{\circ}{\rightarrow} a \leq_1^+ [a] \stackrel{\bullet}{\rightarrow} a
+\]
+\[
+ [[a] \stackrel{\circ}{\rightarrow} a] \stackrel{\bullet}{\rightarrow} a \leq_1^- [[a] \stackrel{\bullet}{\rightarrow} a] \stackrel{\bullet}{\rightarrow} a
+ \]
+
+#+reveal:split
+
+#+begin_definition
+For closed checkers terms \(M\), \(N\), we write \(M \lepwc N\) if and only if
+\[
+\text{if}~\vdash^k M: \alpha~\text{then there exists}~\vdash^{k'} N:\alpha'~\text{and}~d~\text{such that}~\alpha' \leq_d^+ \alpha, k'+d \leq k.
+\]
+#+end_definition
+
+The typing of \(N\) is \(d\)-whiter and at least \(d\)-cheaper.
+
+(The definition extends to terms with free variables in a natural way.)
+
+#+begin_comment
+If asked about open terms: the paper's Def. 10 whitens the pair <\Gamma, \alpha>
+positively (so \Gamma is whitened negatively).
+#+end_comment
+
+** COMMENT Why polarity? \eta-expansions of a variable
+
+#+begin_comment
+TODO: proof sketch of paper Lemma 3, about 3-4 minutes. Statement: if
+M \leBred x and \Gamma \vdash^k M^\bullet : \alpha, then \Gamma = x:[\alpha'] where
+   \alpha'' \le^-_{k'} \alpha   and   \alpha'' \le^+_{k''} \alpha',   k = k' + k''
+(i.e. there is a common type \alpha'' between the term's type \alpha and x's
+type \alpha', reached by negative whitening from one and positive whitening
+from the other, and the cost k is exactly the number of whitenings).
+Intuition to check before presenting: an \eta-expansion of x inserts black
+\lambda/@ pairs, each of which costs one interaction exactly when it mediates
+between a white arrow and a black one. Use the derivation
+slide above as the base case, then one inductive step (\lambda_\bullet y.x\bullet(N
+y) where N is an \eta-expansion of y). This is the answer to "why only
+positive whitening in \lepwc?".
+#+end_comment
+
+** B\ouml{}hm trees and \(\lepwc\)
+
+The observations we made about \eta-expansions of variables extend to whole B\ouml{}hm trees:
+#+begin_theorem
+If \(M \leBred N\) then \(M \lepwc N\).
+#+end_theorem
+
+This is proved by a detailed analysis of \(\leBred\) on B\ouml{}hm trees.
+
+#+reveal:split
+{{{graphic(roadmap3)}}}
+#+begin_src latex
+\newcommand{\sem}[1]{{[\![#1]\!]}}
+\newcommand{\csem}[1]{{[\![#1]\!]^{\interact}}}
+\newcommand{\obs}[1]{\mathsf{obs}(#1)}
+\newcommand{\lectx}{\sqsubseteq^{\mathrm{ctx}}}
+\newcommand{\leden}{\sqsubseteq^{\mathrm{den}}}
+\newcommand{\lesands}{\sqsubseteq^{\mathrm{Sands}}}
+\newcommand{\leimp}{\sqsubseteq^{\mathrm{imp}}}
+\newcommand{\leint}{\sqsubseteq^{\mathrm{int}}}
+\newcommand{\lerel}{\sqsubseteq^{\mathrm{rel}}}
+\newcommand{\lepwc}{\sqsubseteq^{\mathrm{pwc}}}
+\newcommand{\leBconv}{\sqsubseteq_{\mathbf{B}\eta_\infty}}
+\newcommand{\leBred}{\sqsubseteq_{\mathbf{B}\eta^{\text{red}}_\infty}}
+\newcommand{\BT}[1]{\mathsf{BT}(#1)}
+\newcommand{\interact}{\bullet\circ}
+\newcommand{\intred}{\stackrel{\interact}{\rightarrow}}
+
+        \begin{tikzpicture}
+                \node at (4,-.4){
+                        \begin{tikzcd}[row sep=small]
+                {\leBred} \arrow[rr, "\text{whiter-cheaper \checkmark}", bend left, shift left] \arrow[dd, "\text{Breuvart et al \checkmark}", swap, leftrightarrow] &  & {\lepwc} \arrow[rr, "\text{compositionality}", bend left, shift left] &  & {\leimp} \arrow[llll, "\text{B\"ohm out \checkmark}", bend left, shift left] 
+                \\\\
+                {\lerel}                                                                                 &  &                                                       &  &                                                          
+        \end{tikzcd}
+                };
+        \end{tikzpicture}
+#+end_src
+
+#+begin_center
+#+attr_html: :width 85%
+   #+RESULTS: roadmap3
+#+end_center
+
+It remains to prove that \(M \lepwc N\) implies \(M \leimp N\).
+
+* Compositionality
+
+Compositionality is the key!
+
+Suppose the \(\lepwc\) ordering is preserved by term constructors, that is, \(M \lepwc N\) implies \(C[M] \lepwc C[N]\) for any context \(C[-]\).
+
+If \(C[M] \Downarrow_{\interact}^k\) then \(C[M]\) has a typing \(\vdash^k C[M] : \alpha\).
+
+By \(\lepwc\) we obtain a typing \(\vdash^{k'} C[N]:\alpha'\) with \(k' \leq k\).
+
+Hence \(C[N]\Downarrow_{\interact}^{k''}\) for some \(k'' \leq k' \leq k\).
+
+So \(M \leimp N\).
+
+#+ATTR_REVEAL: :frag (appear)
+But is \(\lepwc\) compositional?
+
+** The compositionality challenge
+
+Consider an application
+\[
+ \frac{\vdash^k M: [\alpha] \stackrel{\bullet}{\rightarrow} \beta \quad \vdash^{k'} N: \alpha}{\vdash^{k+k'} M \bullet N: \beta}
+\]
+
+If we replace \(N\) by an improved (whiter-cheaper) term
+\[
+ \vdash^{k''} N': \alpha'
+\]
+where \(\alpha' \leq_d^+ \alpha\), we can no longer apply the rule.
+
+We'd like to find a new typing for \(M\) of the form
+\[
+\vdash^{l} M: [\alpha'] \stackrel{\bullet}{\rightarrow} \beta
+\]
+
+** Repainting typings
+
+#+begin_theorem
+Suppose \(\vdash^k M : \alpha\) and \(\alpha' \leq_1^- \alpha\). Then there exists a typing
+\[
+ \vdash^{k'} M: \alpha''
+\]
+such that one of the following holds:
+ - \(k = k'\) and \(\alpha'' \leq_1^+ \alpha'\)
+ - \(\alpha'' = \alpha'\) and \(|k' - k| = 1\)
+#+end_theorem
+
+Whitening an input either forces an output to whiten, or is absorbed by an interaction step appearing or disappearing.
+
+** Repainting by example
+
+#+begin_comment
+TODO: replaces the old talk's three "propagation" slides. Use paper
+Example 4.2: \lambda_\bullet x.x \bullet \lambda_\bullet z.y \bullet z \lepwc \lambda_\bullet x.x \bullet y,
+both applied to an argument s with \Gamma \vdash^k s : [[\mu \stackrel{\bullet}{\to} a] \stackrel{c}{\to} a'].
+Show: (1) the whiter typing of the improved function wants
+[\mu \stackrel{\circ}{\to} a] \stackrel{c}{\to} a' for its argument, a negative change in s's type;
+(2) repainting s either whitens something positive in s's typing, which pushes
+back into the function, or adds/removes an interaction; (3) the back-and-forth
+stops. Draw it as a ping-pong between function and argument: this is
+the point to say it looks like composition of strategies in game semantics.
+Old "Repainting: propagation back and forth" slide (commented out below) has
+the abstract version if you prefer it.
+#+end_comment
+
+Let
+\[
+M \triangleq \lambda_\bullet x.x \bullet \lambda_\bullet z.y \bullet z
+\]
+
+Consider the \(\bullet\)-application of
+\[
+y:[\mu \stackrel{\circ}{\to} a] \vdash^1 M: [[\mu \stackrel{\bullet}{\to} a] \stackrel{\bullet}{\to} a'] \stackrel{\bullet}{\to} a' \quad \text{to} \quad \vdash^k N : [[\mu \stackrel{\bullet}{\to} a] \stackrel{\bullet}{\to} a']
+\]
+The overall type is
+\[
+y:[\mu \stackrel{\circ}{\to} a] \vdash^{k+1} M\bullet N : a'
+\]
+
+Eta-reducing \(M\) gives a whiter-cheaper typing:
+\[
+y:[\mu \stackrel{\circ}{\to} a] \vdash^0 \lambda_\bullet x.x \bullet y: [[\mu \stackrel{\circ}{\to} a] \stackrel{\bullet}{\to} a'] \stackrel{\bullet}{\to} a'
+\]
+The type has been /positively/ whitened. 
+
+We need to change the type of \(N\) to match. From its perspective, the type has been /negatively/ whitened, so we can apply the theorem to obtain a new typing. 
+
+#+reveal:split
+If repainting \(N\) changes the /index/
+\[
+\vdash^{k'} N : [[\mu \stackrel{\circ}{\to} a] \stackrel{\bullet}{\to} a'] \quad k' \leq k+1
+\]
+we get
+\[
+y:[\mu \stackrel{\circ}{\to} a] \vdash^{k'} (\lambda_\bullet x.x \bullet y) \bullet N : a'
+\]
+and we're done. 
+
+#+reveal:split
+If the repainting changes the /type/
+\[
+\vdash^k N : [[\mu \stackrel{\circ}{\to} a] \stackrel{\circ}{\to} a']
+\]
+we must go back and repaint the function:
+\[
+y:[\mu \stackrel{\circ}{\to} a] \vdash^1 \lambda_\bullet x.x \bullet y: [[\mu \stackrel{\circ}{\to} a] \stackrel{\circ}{\to} a'] \stackrel{\bullet}{\to} a'
+\]
+and finally we get
+\[
+y:[\mu \stackrel{\circ}{\to} a] \vdash^{k+1} (\lambda_\bullet x.x \bullet y)\bullet N: a' 
+\]
+
+** COMMENT Repainting: propagation back and forth (old version)
+We may need to repaint more steps in the derivation: given
+\[
+ \frac{\vdash^k M: \mu \stackrel{\bullet}{\rightarrow} \alpha \quad \vdash^{k'} N: \mu}{\vdash^{k+k'} M\bullet N: \alpha}
+\]
+Repaint \(N:\mu\) to \(\mu' \leq_1^+ \mu\):
+\[
+ \frac{\vdash^k M: \mu \stackrel{\bullet}{\rightarrow} \alpha \quad \vdash^{k'} N: \mu'}{\not\vdash^{k+k'} M\bullet N: \alpha}
+\]
+repainting propagates to \(M\):
+\[
+ \frac{\not\vdash^k M: \mu' \stackrel{\bullet}{\rightarrow} \alpha \quad \vdash^{k'} N: \mu'}{\not\vdash^{k+k'} M\bullet N: \alpha}
+\]
+which requires repainting \(\mu'\) to \(\mu'' \leq_1^- \mu'\):
+\[
+ \frac{\vdash^k M: \mu'' \stackrel{\bullet}{\rightarrow} \alpha \quad \vdash^{k'} N: \mu'}{\not\vdash^{k+k'} M\bullet N: \alpha}
+\]
+#+reveal: split
+This is still not valid! But the process may terminate at the next step with e.g.
+\[
+ \frac{\vdash^k M: \mu'' \stackrel{\bullet}{\rightarrow} \alpha \quad \vdash^{k''} N: \mu''}{\vdash^{k+k''} M\bullet N: \alpha}
+\]
+
+** Termination, and compositionality
+
+In any context, we can replace a term \(M\) by a whiter-cheaper term \(N\) and /repaint/ the type derivation of \(C[M]\) to construct a new type derivation for \(C[N]\). 
+
+Repaintings propagate throughout a type derivation as shown. The process always terminates:
+
+ - every non-final step just changes one \(\bullet\) to \(\circ\) 
+ - there are a finite number of annotations in a type
+
+So we get:   
+#+begin_theorem
+If \(M \lepwc N\) then \(C[M] \lepwc C[N]\) for any context \(C[-]\) and hence \(M \leimp N\).
+#+end_theorem
+
+#+reveal:split
+{{{graphic(roadmap4)}}}
+#+begin_src latex
+\newcommand{\sem}[1]{{[\![#1]\!]}}
+\newcommand{\csem}[1]{{[\![#1]\!]^{\interact}}}
+\newcommand{\obs}[1]{\mathsf{obs}(#1)}
+\newcommand{\lectx}{\sqsubseteq^{\mathrm{ctx}}}
+\newcommand{\leden}{\sqsubseteq^{\mathrm{den}}}
+\newcommand{\lesands}{\sqsubseteq^{\mathrm{Sands}}}
+\newcommand{\leimp}{\sqsubseteq^{\mathrm{imp}}}
+\newcommand{\leint}{\sqsubseteq^{\mathrm{int}}}
+\newcommand{\lerel}{\sqsubseteq^{\mathrm{rel}}}
+\newcommand{\lepwc}{\sqsubseteq^{\mathrm{pwc}}}
+\newcommand{\leBconv}{\sqsubseteq_{\mathbf{B}\eta_\infty}}
+\newcommand{\leBred}{\sqsubseteq_{\mathbf{B}\eta^{\text{red}}_\infty}}
+\newcommand{\BT}[1]{\mathsf{BT}(#1)}
+\newcommand{\interact}{\bullet\circ}
+\newcommand{\intred}{\stackrel{\interact}{\rightarrow}}
+
+        \begin{tikzpicture}
+                \node at (4,-.4){
+                        \begin{tikzcd}[row sep=small]
+                {\leBred} \arrow[rr, "\text{whiter-cheaper \checkmark}", bend left, shift left] \arrow[dd, "\text{Breuvart et al \checkmark}", swap, leftrightarrow] &  & {\lepwc} \arrow[rr, "\text{compositionality \checkmark}", bend left, shift left] &  & {\leimp} \arrow[llll, "\text{B\"ohm out \checkmark}", bend left, shift left] 
+                \\\\
+                {\lerel}                                                                                 &  &                                                       &  &                                                          
+        \end{tikzcd}
+                };
+        \end{tikzpicture}
+#+end_src
+
+#+begin_center
+#+attr_html: :width 85%
+   #+RESULTS: roadmap4
+#+end_center
+
+#+begin_comment
+re-show the roadmap here with all arrows now proved. done. 
+#+end_comment
+
+** Characterizing preorders 
+
+#+begin_comment
+The first row is the Hyland--Wadsworth slide from the Böhm-tree section;
+just point back to it. The middle row is the POPL'25 result.
+The middle row's model is Engeler's graph model (cf. Manzonetto and Barendregt 2022).
+#+end_comment
+
+| Contextual preorder                       | Trees                                         | Model                    |
+|-------------------------------------------+-----------------------------------------------+--------------------------|
+| observe hnf: \(\lectx\)                   | BT up to \eta: \(\leBconv\) | \(D_\infty\)             |
+| interaction preorder: \(\leint\)          | BT inclusion: \(\sqsubseteq_{\mathbf{B}}\)    | Engeler                  |
+| *interaction improvement*: \(\leimp\)     | *BT up to \eta-reduction*: \(\leBred\)        | *relational*             |
+
+* Summary
+We introduced an /interaction-based improvement order/ on checkers terms, and hence on \lambda-terms.
+
+We developed an /annotated relational semantics/ and associated denotational improvement ordering \(\lepwc\).
+
+On \lambda-terms, the order induced by the ordinary relational model coincides with interaction improvement and \(\lepwc\): a /quantitative/ analogue of the Hyland--Wadsworth theorem.
+
+#+ATTR_REVEAL: :frag (appear)
+So what does the relational model count? Not reduction steps, but /interactions/ between a term and its context.
+
+**  COMMENT Future work
+
+#+begin_comment
+TODO: say for each item what you expect to break or need, not just the list.
+Source: paper section 6.
+#+end_comment
+
+ - /More applied calculi/: typed (PCF), and calculi with sharing (call-by-value, call-by-need).
+ - /Revisiting improvement theory/: can this recover Sands-style results on program transformations? Probably need to allow a linear overhead in \(\leimp\).
+ - /Categorical analysis/: what structure beyond a CCC captures the colours? How does this relate to game semantics, which inspired it?
+
+* Bibliography
+:PROPERTIES:
+:CUSTOM_ID: bibliography
+:END:
+
+#+print_bibliography:
+
+* COMMENT Backup slides
+
+** No \eta-rule in the checkers calculus
+
+#+begin_comment
+TODO: possibly move to backup. This is Remark 1 of the paper. It explains
+why \eta shows up only as an improvement, never as a reduction.
+#+end_comment
+
+Let \(1_\bullet = \lambda_\bullet x.\lambda_\bullet y. x \bullet y\) and \(I_\bullet = \lambda_\bullet x.x\). A black \eta-rule \(1_\bullet \rightarrow_\eta I_\bullet\) would break confluence:
+\begin{eqnarray*}
+ 1_\bullet \circ z \circ w & \rightarrow & (\lambda_\bullet y. z \bullet y) \circ w \;\rightarrow\; z \bullet w \\
+ 1_\bullet \circ z \circ w & \rightarrow_\eta & I_\bullet \circ z \circ w \;\rightarrow\; z \circ w
+\end{eqnarray*}
+
+** Infinite \eta-expansions
+
+#+begin_comment
+TODO: paper Example 3. J := Y(\lambda zxy.x(zy)) satisfies
+  J =_\beta \lambda x y_0. x (J y_0) =_\beta \lambda x y_0. x(\lambda y_1. y_0 (J y_1)) =_\beta ...
+It has no \eta-redex at any finite depth, yet J \leBred \lambda x.x, hence
+J^\bullet \leimp I^\bullet but J^\circ \not\leint \lambda_\circ x.x (context - \bullet I_\bullet).
+By contextuality \lambda y.x(\lambda z.y(Jz)) \lepwc \lambda y.xy; the paper gives the
+derivation with a 1-whiter, 1-cheaper typing. Use if someone asks about
+"infinite" in \leBred.
+#+end_comment
+
+** Why not inclusion of coloured interpretations?
+
+#+begin_comment
+TODO: likely question. Erasing colours from \csem{M^\bullet} gives exactly the
+relational interpretation, but \sem{M} \subseteq \sem{N} does not
+imply \csem{M^\bullet} \subseteq \csem{N^\bullet}, because one relational point has
+several colourings with different costs. Example: \lambda_\bullet y.x\bullet y vs x,
+from the derivation slide.
+#+end_comment
+
+
+* COMMENT Original plan
+
+** Relational semantics of lambda-calculus
+
+ - it counts something, but what?
+** Head normal forms have a type
+** Head reduction reduces size of typings
+** Breuvart result: relational semantics is bohm trees up to eta reduction
+
+** Our contribution: a quantitative, contextual preorder that coincides with this
+
+** Improvement orders
+** But the relational model is sound for beta so cannot be an improvement order
+
+** Idea: internal vs external reductions
+
+** The checkers calculus
+
+** Checkers improvement order
+
+** Checkers intersection type system (relational semantics)
+
+** eta-reductions: whiter-cheaper order
+
+** congruence of whiter-cheaper
+
+** main theorem

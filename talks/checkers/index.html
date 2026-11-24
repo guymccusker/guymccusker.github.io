@@ -9,7 +9,7 @@
 </style>
 <link rel="stylesheet" href="./reveal.js/dist/reveal.css"/>
 
-<link rel="stylesheet" href="./reveal.js/dist/theme/serif.css" id="theme"/>
+<link rel="stylesheet" href="./reveal.js/dist/theme/white.css" id="theme"/>
 <link rel="stylesheet" href="./reveal.js/plugin/highlight/zenburn.css"/>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 <div style="display: none"> \(
@@ -29,15 +29,16 @@
 \newcommand{\interact}{\bullet\circ}
 \newcommand{\intred}{\stackrel{\interact}{\rightarrow}}
 \)</div>
+<link rel="stylesheet" type="text/css" href="bath.css" />
 <link rel="stylesheet" type="text/css" href="mystyle.css" />
 <style type="text/css">body {color: black; background: white;}</style>
-<style type="text/css">pre {background: #ccdddd;}</style>
+<script src="theme-switcher.js" defer></script>
 </head>
 <body>
 <div class="reveal">
 <div class="slides">
-<section id="sec-title-slide" data-background=""./checkers_calc_highdef.jpg"">
-<h2>Interaction Improvement</h2><h4>Guy McCusker</h4><h5>joint work with Adrienne Lancelot, Giulio Manzonetto, Gabriele Vanoni <br/> FoSS Seminar, University of Sussex, November 2026</h5>
+<section id="sec-title-slide" data-background="#ABDBFA">
+<h2>Interaction Improvement</h2>
 </section>
 <section>
 <section id="slide-1">
@@ -123,7 +124,7 @@ Note that \( x \Omega\) has a type, though \(\Omega\) does not.</li>
 </section>
 <section>
 
-<div class="theorem" id="org527dec7">
+<div class="theorem" id="org711844e">
 <p>
 \(M\) has a type if and only if \(M\) has a head normal form; and the number of @-rules in a derivation bounds the length of the head reduction.
 </p>
@@ -155,7 +156,7 @@ If \(M\rightarrow^* \lambda x_{1}\ldots x_{n}.y\,M_{1}\cdots M_{k}\):
 
 <div class="org-center">
 
-<div id="org660b078" class="figure">
+<div id="orgd2ac1a5" class="figure">
 <p><img src="bohmtree.png" alt="bohmtree.png" width="70%" />
 </p>
 </div>
@@ -168,7 +169,7 @@ Otherwise, \(M\) is head diverging: \( \BT{M} = \bot.\)
 <section id="slide-2-1">
 <h3 id="2-1"><span class="section-number-3">2.1.</span> B&ouml;hm preorder</h3>
 
-<div id="org330b7ba" class="figure">
+<div id="org670a68b" class="figure">
 <p><img src="bohmorder.png" alt="bohmorder.png" />
 </p>
 </div>
@@ -199,7 +200,7 @@ We also define two extensions:
 </section>
 <section>
 
-<div class="theorem" id="orgde5275d">
+<div class="theorem" id="org60191fe">
 <p>
 (Hyland, Wadsworth) Taking the contextual preorder that observes head normal forms,
 \[
@@ -311,7 +312,7 @@ So our plan to use this idea to capture the relational order must fail. Yet here
 <h3 id="3-2"><span class="section-number-3">3.2.</span> Idea: count only interactions</h3>
 <div class="org-center">
 
-<div id="orgf067443" class="figure">
+<div id="org5bd7763" class="figure">
 <p><img src="contextual.png" alt="contextual.png" width="50%" />
 </p>
 </div>
@@ -321,7 +322,7 @@ So our plan to use this idea to capture the relational order must fail. Yet here
 <section>
 <section id="slide-4">
 <h2 id="4"><span class="section-number-2">4.</span> Main result</h2>
-<div class="theorem" id="org167b1cb">
+<div class="theorem" id="orgd30accc">
 <p>
 For &lambda;-terms \(M, N\), the following are equivalent:
 </p>
@@ -343,7 +344,7 @@ A <i>quantitative</i> Hyland&ndash;Wadsworth theorem: the relational model&rsquo
 <h3 id="4-1"><span class="section-number-3">4.1.</span> Roadmap</h3>
 <div class="org-center">
 
-<div id="orgb89f7f0" class="figure">
+<div id="org456fbc7" class="figure">
 <p><img src="roadmap.png" alt="roadmap.png" width="85%" />
 </p>
 </div>
@@ -486,7 +487,7 @@ The first of these was only a conjecture in Accattoli et al. (<a href="#/slide-b
 <section>
 <section id="slide-6">
 <h2 id="6"><span class="section-number-2">6.</span> Interaction improvement is included in B&ouml;hm trees up to &eta;-reduction</h2>
-<div class="theorem" id="orgead55b0">
+<div class="theorem" id="org566a31d">
 <p>
 If \(M \leimp N\) then \(M \leBred N\) (and hence \(\sem{M} \subseteq \sem{N}\)).
 </p>
@@ -511,7 +512,7 @@ The separating contexts are <i>white applicative head contexts</i>: these alone 
 
 <div class="org-center">
 
-<div id="org0f24a6e" class="figure">
+<div id="orgf0f2a14" class="figure">
 <p><img src="roadmap2.png" alt="roadmap2.png" width="85%" />
 </p>
 </div>
@@ -587,7 +588,7 @@ Erasing colours and indices gives back the relational model \(\sem{M}\).
 <p>
 With the same techniques as for the regular relational semantics, we can prove
 </p>
-<div class="theorem" id="org44238df">
+<div class="theorem" id="org09dd82e">
 <p>
 For any term \(M\) of the checkers calculus:
 </p>
@@ -686,13 +687,15 @@ For example
 </section>
 <section>
 
-<div class="definition" id="org7674444">
+<div class="definition" id="orgd72cd36">
 <p>
 For closed checkers terms \(M\), \(N\), we write \(M \lepwc N\) if and only if
-\[
-\text{if}~\vdash^k M: \alpha~\text{then there exists}~\vdash^{k'} N:\alpha'~\text{and}~d~\text{such that}~\alpha' \leq_d^+ \alpha, k'+d \leq k.
-\]
 </p>
+<div class="org-center">
+<p>
+if \(\vdash^k M: \alpha\) then there exists \(\vdash^{k'} N:\alpha'\) and  \(d\) such that \(\alpha' \leq_d^+ \alpha\) and \(k'+d \leq k.\)
+</p>
+</div>
 
 </div>
 
@@ -709,7 +712,7 @@ The typing of \(N\) is \(d\)-whiter and at least \(d\)-cheaper.
 <p>
 The observations we made about &eta;-expansions of variables extend to whole B&ouml;hm trees:
 </p>
-<div class="theorem" id="org832cd7d">
+<div class="theorem" id="org6b10307">
 <p>
 If \(M \leBred N\) then \(M \lepwc N\).
 </p>
@@ -725,7 +728,7 @@ This is proved by a detailed analysis of \(\leBred\) on B&ouml;hm trees.
 
 <div class="org-center">
 
-<div id="orgb9785da" class="figure">
+<div id="org15e10b4" class="figure">
 <p><img src="roadmap3.png" alt="roadmap3.png" width="85%" />
 </p>
 </div>
@@ -793,7 +796,7 @@ We&rsquo;d like to find a new typing for \(M\) of the form
 </section>
 <section id="slide-8-2">
 <h3 id="8-2"><span class="section-number-3">8.2.</span> Repainting typings</h3>
-<div class="theorem" id="org017b739">
+<div class="theorem" id="org336b4aa">
 <p>
 Suppose \(\vdash^k M : \alpha\) and \(\alpha' \leq_1^- \alpha\). Then there exists a typing
 \[
@@ -895,7 +898,7 @@ Repaintings propagate throughout a type derivation as shown. The process always 
 <p>
 So we get:   
 </p>
-<div class="theorem" id="orgaa5eada">
+<div class="theorem" id="orgf82c2d3">
 <p>
 If \(M \lepwc N\) then \(C[M] \lepwc C[N]\) for any context \(C[-]\) and hence \(M \leimp N\).
 </p>
@@ -907,7 +910,7 @@ If \(M \lepwc N\) then \(C[M] \lepwc C[N]\) for any context \(C[-]\) and hence \
 
 <div class="org-center">
 
-<div id="orgfc0c38f" class="figure">
+<div id="org761ec3d" class="figure">
 <p><img src="roadmap4.png" alt="roadmap4.png" width="85%" />
 </p>
 </div>

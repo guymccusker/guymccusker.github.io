@@ -1,0 +1,267 @@
+/*
+ * University of Bath theme for reveal.js (2025/26 brand refresh).
+ *
+ * Load on top of the reveal.js "white" theme:
+ *   #+REVEAL_THEME: white
+ *   #+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="bath.css" />
+ *
+ * Colours and type are taken from www.bath.ac.uk (assembly stylesheet).
+ * The hero heading on bath.ac.uk is set in Kensington Compressed Demi
+ * (Fort Foundry), a commercial font. It is used if installed on the
+ * presenting machine, or if a licensed copy is placed at
+ * fonts/Kensington-CompressedDemi.woff2; otherwise the free Google font
+ * Sofia Sans Extra Condensed stands in for it.
+ */
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,700;1,9..40,400;1,9..40,700&family=Sofia+Sans+Extra+Condensed:wght@600;700&display=swap");
+
+@font-face {
+  font-family: "Kensington Compressed Demi";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local("Kensington Compressed Demi"),
+       local("KensingtonCompressed-Demi"),
+       url("fonts/Kensington-CompressedDemi.woff2") format("woff2");
+}
+
+:root {
+  /* Brand palette */
+  --bath-black: #05050F;
+  --bath-dark-brown: #291F14;
+  --bath-dark-brown-100: #CBC9C6;
+  --bath-dark-brown-200: #A29E99;
+  --bath-dark-brown-300: #7A746D;
+  --bath-dark-brown-400: #514940;
+  --bath-limestone: #D6C2A6;
+  --bath-limestone-100: #F5F0E9;
+  --bath-limestone-200: #EDE4D8;
+  --bath-limestone-600: #AB9B84;
+  --bath-limestone-800: #554D42;
+  --bath-pale-blue: #ABDBFA;
+  --bath-pale-blue-100: #EAF6FD;
+  --bath-pale-blue-600: #88AFC8;
+  --bath-pale-blue-800: #445764;
+
+  /* reveal.js theme variables */
+  --r-background-color: #fff;
+  --r-main-font: "DM Sans", Arial, sans-serif;
+  --r-main-color: var(--bath-black);
+  --r-heading-font: "DM Sans", Arial, sans-serif;
+  --r-heading-color: var(--bath-dark-brown);
+  --r-heading-font-weight: 700;
+  --r-heading-letter-spacing: 0.01em;
+  --r-heading-line-height: 1.2;
+  --r-heading-text-transform: none;
+  --r-link-color: var(--bath-dark-brown);
+  --r-link-color-hover: var(--bath-dark-brown-400);
+  --r-selection-background-color: var(--bath-pale-blue);
+  --r-selection-color: var(--bath-black);
+
+  /* reveal.js 4.x (pre-4.2) uses unprefixed names */
+  --background-color: var(--r-background-color);
+  --main-font: var(--r-main-font);
+  --main-color: var(--r-main-color);
+  --heading-font: var(--r-heading-font);
+  --heading-color: var(--r-heading-color);
+  --heading-font-weight: var(--r-heading-font-weight);
+  --heading-letter-spacing: var(--r-heading-letter-spacing);
+  --heading-text-transform: none;
+  --link-color: var(--r-link-color);
+  --link-color-hover: var(--r-link-color-hover);
+  --selection-background-color: var(--r-selection-background-color);
+  --selection-color: var(--r-selection-color);
+}
+
+.reveal-viewport {
+  background: #fff;
+}
+
+.reveal {
+  font-family: "DM Sans", Arial, sans-serif;
+  color: var(--bath-black);
+}
+
+.reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
+  font-family: "DM Sans", Arial, sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--bath-dark-brown);
+  text-transform: none;
+  text-shadow: none;
+}
+
+/* Slide headings are left-aligned, as on bath.ac.uk */
+.reveal .slides section > h2,
+.reveal .slides section > h3 {
+  text-align: left;
+}
+
+/* Limestone bar under slide headings, as under section headings on bath.ac.uk */
+.reveal .slides section > h2::after,
+.reveal .slides section > h3::after {
+  content: "";
+  display: block;
+  width: 133px;
+  height: 12px;
+  margin: 0.45em 0 0.2em 0;
+  background-color: var(--bath-limestone);
+}
+.reveal .slides section > h3::after {
+  width: 96px;
+  height: 8px;
+}
+
+.reveal a {
+  color: var(--bath-dark-brown);
+  text-decoration: underline;
+  text-decoration-color: var(--bath-limestone);
+  text-decoration-thickness: 0.12em;
+  text-underline-offset: 0.15em;
+}
+.reveal a:hover {
+  color: var(--bath-dark-brown-400);
+  text-decoration-color: var(--bath-dark-brown);
+}
+
+.reveal strong, .reveal b {
+  color: var(--bath-dark-brown);
+}
+
+.reveal ul li::marker, .reveal ol li::marker {
+  color: var(--bath-limestone-600);
+}
+
+/* ---------- Title slide: pale-blue hero, as on bath.ac.uk ---------- */
+.reveal .slides section#sec-title-slide {
+  text-align: left;
+}
+.reveal .slides section#sec-title-slide h1,
+.reveal .slides section#sec-title-slide h2 {
+  font-family: "Kensington Compressed Demi", "Sofia Sans Extra Condensed", "DM Sans", Arial, sans-serif;
+  font-weight: 400;
+  color: var(--bath-black);
+  font-size: 2.6em;
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+  text-align: left;
+}
+.reveal .slides section#sec-title-slide h2::after {
+  background-color: var(--bath-dark-brown);
+  margin-top: 0.4em;
+}
+.reveal .slides section#sec-title-slide p {
+  font-family: "DM Sans", Arial, sans-serif;
+  color: var(--bath-black);
+  text-align: left;
+}
+
+/* Any slide with a dark background (title slide, or data-background on a slide) */
+.reveal section.has-dark-background,
+.reveal section.has-dark-background h1,
+.reveal section.has-dark-background h2,
+.reveal section.has-dark-background h3,
+.reveal section.has-dark-background h4 {
+  color: #fff;
+}
+.reveal section.has-dark-background a {
+  color: var(--bath-pale-blue);
+  text-decoration-color: var(--bath-pale-blue);
+}
+
+/* ---------- Definitions, theorems, lemmas, proofs ---------- */
+.reveal .definition,
+.reveal .theorem,
+.reveal .lemma,
+.reveal .proof {
+  margin: 0.4em 0 0.6em 0;
+  padding: 0.35em 0.7em;
+  border-left: 8px solid var(--bath-limestone);
+  background-color: var(--bath-limestone-100);
+}
+.reveal .theorem,
+.reveal .lemma {
+  border-left-color: var(--bath-pale-blue-600);
+  background-color: var(--bath-pale-blue-100);
+}
+.reveal .proof {
+  border-left-color: var(--bath-dark-brown-100);
+  background-color: transparent;
+}
+.reveal .definition::before,
+.reveal .theorem::before,
+.reveal .lemma::before,
+.reveal .proof::before {
+  color: var(--bath-dark-brown);
+  float: none;
+  display: block;
+  margin-bottom: 0.15em;
+  text-align: left;
+}
+.reveal .definition > p:first-of-type,
+.reveal .theorem > p:first-of-type,
+.reveal .lemma > p:first-of-type,
+.reveal .proof > p:first-of-type {
+  margin-top: 0;
+}
+
+/* ---------- Code ---------- */
+.reveal pre {
+  background: var(--bath-limestone-100);
+  border-left: 8px solid var(--bath-limestone);
+  box-shadow: none;
+}
+.reveal pre code {
+  background: transparent;
+  color: var(--bath-black);
+}
+.reveal code {
+  font-family: "DejaVu Sans Mono", Menlo, Consolas, monospace;
+}
+
+/* ---------- Tables (bath.ac.uk bg-white table scheme) ---------- */
+.reveal table {
+  border-collapse: collapse;
+  font-size: 0.6em;
+}
+.reveal table th {
+  background-color: var(--bath-dark-brown-100);
+  color: var(--bath-black);
+  font-weight: 700;
+}
+.reveal table th,
+.reveal table td {
+  border: 1px solid var(--bath-dark-brown-300);
+  padding: 0.25em 0.6em;
+}
+.reveal table tbody tr:nth-child(even) {
+  background-color: #eee;
+}
+
+.reveal blockquote {
+  background: var(--bath-limestone-100);
+  border-left: 8px solid var(--bath-limestone);
+  box-shadow: none;
+  font-style: normal;
+}
+
+/* ---------- reveal.js chrome ---------- */
+.reveal .progress {
+  color: var(--bath-dark-brown);
+  height: 6px;
+}
+.reveal .controls {
+  color: var(--bath-dark-brown);
+}
+.reveal .slide-number {
+  background-color: transparent;
+  color: var(--bath-dark-brown-300);
+  font-family: "DM Sans", Arial, sans-serif;
+}
+
+::selection {
+  background: var(--bath-pale-blue);
+  color: var(--bath-black);
+}
+.reveal.has-dark-background .slide-number {
+  color: var(--bath-limestone);
+}

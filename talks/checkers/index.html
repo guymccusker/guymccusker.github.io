@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <title>Interaction Improvement</title>
-<meta name="author" content="Guy McCusker"/>
+<meta name="author" content="Guy McCusker (with Adrienne Lancelot, Giulio Manzonetto, Gabriele Vanoni)"/>
 <style type="text/css">
 .underline { text-decoration: underline; }
 </style>
@@ -38,7 +38,7 @@
 <div class="reveal">
 <div class="slides">
 <section id="sec-title-slide" data-background="#ABDBFA">
-<h2>Interaction Improvement</h2>
+<h2>Interaction Improvement</h2><h4>Guy McCusker (with Adrienne Lancelot, Giulio Manzonetto, Gabriele Vanoni)</h4><h5>FoSS Seminar, University of Sussex, November 2026</h5>
 </section>
 <section>
 <section id="slide-1">
@@ -124,7 +124,7 @@ Note that \( x \Omega\) has a type, though \(\Omega\) does not.</li>
 </section>
 <section>
 
-<div class="theorem" id="org711844e">
+<div class="theorem" id="orgd147290">
 <p>
 \(M\) has a type if and only if \(M\) has a head normal form; and the number of @-rules in a derivation bounds the length of the head reduction.
 </p>
@@ -156,7 +156,7 @@ If \(M\rightarrow^* \lambda x_{1}\ldots x_{n}.y\,M_{1}\cdots M_{k}\):
 
 <div class="org-center">
 
-<div id="orgd2ac1a5" class="figure">
+<div id="org5e611fd" class="figure">
 <p><img src="bohmtree.png" alt="bohmtree.png" width="70%" />
 </p>
 </div>
@@ -169,7 +169,7 @@ Otherwise, \(M\) is head diverging: \( \BT{M} = \bot.\)
 <section id="slide-2-1">
 <h3 id="2-1"><span class="section-number-3">2.1.</span> B&ouml;hm preorder</h3>
 
-<div id="org670a68b" class="figure">
+<div id="orgbc1af07" class="figure">
 <p><img src="bohmorder.png" alt="bohmorder.png" />
 </p>
 </div>
@@ -200,7 +200,7 @@ We also define two extensions:
 </section>
 <section>
 
-<div class="theorem" id="org60191fe">
+<div class="theorem" id="org089e5de">
 <p>
 (Hyland, Wadsworth) Taking the contextual preorder that observes head normal forms,
 \[
@@ -312,7 +312,7 @@ So our plan to use this idea to capture the relational order must fail. Yet here
 <h3 id="3-2"><span class="section-number-3">3.2.</span> Idea: count only interactions</h3>
 <div class="org-center">
 
-<div id="org5bd7763" class="figure">
+<div id="org83ddab3" class="figure">
 <p><img src="contextual.png" alt="contextual.png" width="50%" />
 </p>
 </div>
@@ -322,7 +322,7 @@ So our plan to use this idea to capture the relational order must fail. Yet here
 <section>
 <section id="slide-4">
 <h2 id="4"><span class="section-number-2">4.</span> Main result</h2>
-<div class="theorem" id="orgd30accc">
+<div class="theorem" id="org9807acf">
 <p>
 For &lambda;-terms \(M, N\), the following are equivalent:
 </p>
@@ -344,7 +344,7 @@ A <i>quantitative</i> Hyland&ndash;Wadsworth theorem: the relational model&rsquo
 <h3 id="4-1"><span class="section-number-3">4.1.</span> Roadmap</h3>
 <div class="org-center">
 
-<div id="org456fbc7" class="figure">
+<div id="orgc193f68" class="figure">
 <p><img src="roadmap.png" alt="roadmap.png" width="85%" />
 </p>
 </div>
@@ -487,7 +487,7 @@ The first of these was only a conjecture in Accattoli et al. (<a href="#/slide-b
 <section>
 <section id="slide-6">
 <h2 id="6"><span class="section-number-2">6.</span> Interaction improvement is included in B&ouml;hm trees up to &eta;-reduction</h2>
-<div class="theorem" id="org566a31d">
+<div class="theorem" id="org69ffce3">
 <p>
 If \(M \leimp N\) then \(M \leBred N\) (and hence \(\sem{M} \subseteq \sem{N}\)).
 </p>
@@ -512,7 +512,7 @@ The separating contexts are <i>white applicative head contexts</i>: these alone 
 
 <div class="org-center">
 
-<div id="orgf0f2a14" class="figure">
+<div id="orgca78ad3" class="figure">
 <p><img src="roadmap2.png" alt="roadmap2.png" width="85%" />
 </p>
 </div>
@@ -588,7 +588,7 @@ Erasing colours and indices gives back the relational model \(\sem{M}\).
 <p>
 With the same techniques as for the regular relational semantics, we can prove
 </p>
-<div class="theorem" id="org09dd82e">
+<div class="theorem" id="orgbea0e39">
 <p>
 For any term \(M\) of the checkers calculus:
 </p>
@@ -687,13 +687,13 @@ For example
 </section>
 <section>
 
-<div class="definition" id="orgd72cd36">
+<div class="definition" id="org9659f63">
 <p>
 For closed checkers terms \(M\), \(N\), we write \(M \lepwc N\) if and only if
 </p>
 <div class="org-center">
 <p>
-if \(\vdash^k M: \alpha\) then there exists \(\vdash^{k'} N:\alpha'\) and  \(d\) such that \(\alpha' \leq_d^+ \alpha\) and \(k'+d \leq k.\)
+if \(\vdash^k M: \alpha\) then there exist \(\vdash^{k'} N:\alpha'\) and  \(d\) such that \(\alpha' \leq_d^+ \alpha\) and \(k'+d \leq k.\)
 </p>
 </div>
 
@@ -712,7 +712,7 @@ The typing of \(N\) is \(d\)-whiter and at least \(d\)-cheaper.
 <p>
 The observations we made about &eta;-expansions of variables extend to whole B&ouml;hm trees:
 </p>
-<div class="theorem" id="org6b10307">
+<div class="theorem" id="orgc9448d6">
 <p>
 If \(M \leBred N\) then \(M \lepwc N\).
 </p>
@@ -728,7 +728,7 @@ This is proved by a detailed analysis of \(\leBred\) on B&ouml;hm trees.
 
 <div class="org-center">
 
-<div id="org15e10b4" class="figure">
+<div id="org2d4bf97" class="figure">
 <p><img src="roadmap3.png" alt="roadmap3.png" width="85%" />
 </p>
 </div>
@@ -796,7 +796,7 @@ We&rsquo;d like to find a new typing for \(M\) of the form
 </section>
 <section id="slide-8-2">
 <h3 id="8-2"><span class="section-number-3">8.2.</span> Repainting typings</h3>
-<div class="theorem" id="org336b4aa">
+<div class="theorem" id="orga1b05b9">
 <p>
 Suppose \(\vdash^k M : \alpha\) and \(\alpha' \leq_1^- \alpha\). Then there exists a typing
 \[
@@ -898,7 +898,7 @@ Repaintings propagate throughout a type derivation as shown. The process always 
 <p>
 So we get:   
 </p>
-<div class="theorem" id="orgf82c2d3">
+<div class="theorem" id="org17b6f4f">
 <p>
 If \(M \lepwc N\) then \(C[M] \lepwc C[N]\) for any context \(C[-]\) and hence \(M \leimp N\).
 </p>
@@ -910,7 +910,7 @@ If \(M \lepwc N\) then \(C[M] \lepwc C[N]\) for any context \(C[-]\) and hence \
 
 <div class="org-center">
 
-<div id="org761ec3d" class="figure">
+<div id="orgb119090" class="figure">
 <p><img src="roadmap4.png" alt="roadmap4.png" width="85%" />
 </p>
 </div>
